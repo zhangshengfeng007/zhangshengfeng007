@@ -23,25 +23,7 @@
 #include "magnetic.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
-/* USER CODE END Includes */
-
-/* Private typedef -----------------------------------------------------------*/
-/* USER CODE BEGIN PTD */
-
-/* USER CODE END PTD */
-
-/* Private define ------------------------------------------------------------*/
-/* USER CODE BEGIN PD */
-/* USER CODE END PD */
-
-/* Private macro -------------------------------------------------------------*/
-/* USER CODE BEGIN PM */
-
-/* USER CODE END PM */
-
-/* Private variables ---------------------------------------------------------*/
-
+// åˆ é™¤ä¸€éƒ¨åˆ†ä¿¡æ¯ï¼Œæµ‹è¯•ä¸Šä¼ åŠŸèƒ½
 /* USER CODE BEGIN PV */
 
 void Slope1_magnetic1_out(void);
@@ -590,7 +572,7 @@ void Slope2_magnetic2_out(void)
 	delay_1ms_timer_start();
 }
 
-/* VERTICAL_TYPE   ³£¹æÊıÁĞ Êä³ö 1--2--3--4--5--6--7 */
+/* VERTICAL_TYPE   ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ 1--2--3--4--5--6--7 */
 
 void Vertical_select_p_off(void)
 {
@@ -719,7 +701,7 @@ void Vertical_select_n_on(void)
 
 
 //=======================
-//--------debug °æ±¾£¬ÊúÏòµ¼Í¨ÊµÏÖ ¸ôÒ»ÁĞµ¼Í¨    2023 01 16 
+//--------debug ï¿½æ±¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¨Êµï¿½ï¿½ ï¿½ï¿½Ò»ï¿½Ğµï¿½Í¨    2023 01 16 
 
 #if 0     // 1--3--5--7--2 --4--3
 
