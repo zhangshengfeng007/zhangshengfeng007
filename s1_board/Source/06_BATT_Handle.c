@@ -142,14 +142,11 @@ void bat_check_in_charge_mode(uint16_t bat_V)
   {
     if(bat_V > CHARGE_M_LVL3_VAL)
     {
-      if((BAT_CHARGE_STATE_IN == GPIO_PIN_SET))//||(bat_V > 4150))
-      {
-        bat_data.disp_level = Bat_Level_Full;
-      }
-      else
+      if((bat_data.disp_level != Bat_Level3) && (bat_data.disp_level != Bat_Level_Full))
       {
         bat_data.disp_level = Bat_Level3;
       }
+
     }
     else if((bat_V <= CHARGE_M_LVL3_VAL)&&(bat_V > CHARGE_M_LVL2_VAL))
     {
@@ -165,7 +162,7 @@ void bat_check_in_charge_mode(uint16_t bat_V)
     }
   }
 }
-/*************************************************************************************
+/********************************************************************************
 * FunctionName	 : Get_Batt_Value()
 * Description    :
 * EntryParameter :
@@ -184,6 +181,42 @@ static uint16_t Get_Usb_Value(uint16_t adc_data)
   value = adc_data*6000/4096;		//res:140k+100k
   return value;
 }
+
+/********************************************
+ *充电状态检测 ：未充电，充电中，已充满
+ *
+**********************************************/
+void bat_charge_state_check(void)
+{
+  static uint8_t charge_limit_delay = 0;
+
+  if(0 == IS_DC5V_IN())
+  {
+    charge_limit_delay = 0;
+    Sys_Info.Charge_State = No_CHARGE_STA;
+    return;
+  }
+
+  if(bat_data.DC5v_adc_val < DC_4000mV_ADC_VAL) //usb电压超过 4.0v 判断为充电器接入
+  {
+    charge_limit_delay = 0;
+    Sys_Info.Charge_State = No_CHARGE_STA;
+    return;
+  }
+
+  if(charge_limit_delay >= 20)
+  {
+    charge_limit_delay = 20;
+    CHARGE_LIMIT_ENABLE;
+  }
+  if(IS_CHAGE_FULL()) //||(bat_V > 4150))
+  {
+    bat_data.disp_level = Bat_Level_Full;
+  }
+  Sys_Info.Charge_State = CHARGING_STA;
+
+}
+
 /*************************************************************************************
 * FunctionName	 : BatteryPowerJudgment()
 * Description    :
@@ -192,40 +225,10 @@ static uint16_t Get_Usb_Value(uint16_t adc_data)
 **************************************************************************************/
 void BatteryPowerJudgment(_sys_state_e state)
 {
-  static uint8_t charge_check = 0;
-  static uint32_t check_time = 0;
-
   bat_data.adc_val = ADC_Data.bat_val;
-  bat_data.DC5v_adc_val  = ADC_Data.Usb_Val;
+  bat_data.DC5v_adc_val = ADC_Data.Usb_Val;
 
-  if(USB_INPUT_CHECK_IN == GPIO_PIN_RESET)
-  {
-    if(bat_data.DC5v_adc_val > DC_4000mV_ADC_VAL) //usb电压超过 4.0v 判断为充电器接入
-    {
-      Sys_Info.Charge_State = CHARGING_STA;  // 2023 01 10
-
-      if(!charge_check)
-      {
-        check_time = HAL_GetTick();
-        charge_check = 1;
-      }
-      if(HAL_GetTick()-check_time > 2000)  // 充电器连接 2s之后，打开充电limit_en
-      {
-        CHARGE_LIMIT_ENABLE;
-      }
-    }
-    else
-    {
-      charge_check = 0;
-      Sys_Info.Charge_State = No_CHARGE_STA;
-    }
-  }
-  else
-  {
-    charge_check = 0;
-    Sys_Info.Charge_State = No_CHARGE_STA;
-  }
-
+  bat_charge_state_check();
   if(Sys_Info.Charge_State == No_CHARGE_STA)
   {
     if(state == MACHINEOFF)
