@@ -49,14 +49,14 @@
 
 _bat_data_t bat_data;
 /*************************************************************************************
-* FunctionName	 : PowerOnElectricQuantity()
+* FunctionName	 : bat_check_in_sleep_mode()
 * Description    :   --------------3.675v ------------------------3.805v -------------------------3.965v ----
 * describe :     : --------- |3.675v(+/-)range| --------------|3.805v(+/-)range|-------------|3.965v(+/-)range|----
 *                : -lvl0 --- if（not ==lvl0）lvl1 -----lvl1-- if(not lvl1) lvl2  ---lvl2 ------if(not lvl2) lvl3 --lvl3
 *
 * ReturnValue    : None 电池无RF 和 EMS输出时 电量判断标准
 **************************************************************************************/
-void PowerOnElectricQuantity(uint16_t bat_V)
+void bat_check_in_sleep_mode(uint16_t bat_V)
 {
   if((bat_V > (PERCENT_70_VAL - BAT_FLOAT_VAL))&&(bat_V < (PERCENT_70_VAL + BAT_FLOAT_VAL)))
   {
@@ -91,7 +91,7 @@ void PowerOnElectricQuantity(uint16_t bat_V)
   }
 }
 /*************************************************************************************
-* FunctionName	 : UsingElectricQuantity()
+* FunctionName	 : bat_check_in_normal_mode()
 * Description    :
 * describe :  ------------3.3v---------------------------3.45v------------------
 *             ---------|3.3v+/range|------------------| 3.45v +/ range| -----
@@ -99,7 +99,7 @@ void PowerOnElectricQuantity(uint16_t bat_V)
 *
 * ReturnValue    : None 有RF 或ems输出时，电量判断标准
 **************************************************************************************/
-void UsingElectricQuantity(uint16_t bat_V)
+void bat_check_in_normal_mode(uint16_t bat_V)
 {
   if((bat_V > USER_M_LVL2_VAL - BAT_FLOAT_VAL)&&(bat_V < USER_M_LVL2_VAL + BAT_FLOAT_VAL))
   {
@@ -115,7 +115,7 @@ void UsingElectricQuantity(uint16_t bat_V)
 	}
 }
 /*************************************************************************************
-* FunctionName	 : StateOfChargeBatteryVoltage()
+* FunctionName	 : bat_check_in_charge_mode()
 * Description    :
 * describe       :   ----3.76v --------------------------3.89v --------------------------4.05v---
 *           --------|3.76v(+/-)range| ------------|3.89v(+/-)range| ---------------|4.05v(+/-)range|-------|charge_state_pin|
@@ -124,7 +124,7 @@ void UsingElectricQuantity(uint16_t bat_V)
 * ReturnValue    : None  充电状态下 电池电量的判断标准
  **************************************************************************************/
 
-void StateOfChargeBatteryVoltage(uint16_t bat_V)
+void bat_check_in_charge_mode(uint16_t bat_V)
 {
   if((bat_V > (CHARGE_M_LVL3_VAL - BAT_FLOAT_VAL))&&(bat_V < (CHARGE_M_LVL3_VAL + BAT_FLOAT_VAL)))
   {
@@ -231,16 +231,16 @@ void BatteryPowerJudgment(_sys_state_e state)
     if(state == MACHINEOFF)
     {
 			if(Sys_Info.Adc_First_Run_Flage)
-      PowerOnElectricQuantity(bat_data.adc_val);   //检查电池电量
+      bat_check_in_sleep_mode(bat_data.adc_val);   //检查电池电量
     }
     else
     {
-      UsingElectricQuantity(bat_data.adc_val);     //正常输出时
+      bat_check_in_normal_mode(bat_data.adc_val);     //正常输出时
     }
   }
   else
   {
-    StateOfChargeBatteryVoltage(bat_data.adc_val); //充电时
+    bat_check_in_charge_mode(bat_data.adc_val); //充电时
   }
 }
 
