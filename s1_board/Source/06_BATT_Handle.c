@@ -33,19 +33,19 @@
 	ADC_VAL = pin_val * 4096 /2.5v
 */
 
-#define BAT_CHARGE_LEVEL_3  4050
-#define BAT_CHARGE_LEVEL_2  3890
-#define BAT_CHARGE_LEVEL_1  3760
+#define CHARGE_M_LVL3_VAL  4050
+#define CHARGE_M_LVL2_VAL  3890
+#define CHARGE_M_LVL1_VAL  3760
 
-#define BAT_USER_LEVEL_2  3450
-#define BAT_USER_LEVEL_1  3300
+#define USER_M_LVL2_VAL    3450
+#define USER_M_LVL1_VAL    3300
 
-#define BAT_NORMAL_10    (BAT_CHARGE_LEVEL_1-85)
-#define BAT_NORMAL_30    (BAT_CHARGE_LEVEL_2-85)//3800//3800
-#define BAT_NORMAL_70    (BAT_CHARGE_LEVEL_3-85)//3950//4000
-#define BAT_NORMAL_100   4200
+#define PERCENT_10_VAL    (CHARGE_M_LVL1_VAL - 85)
+#define PERCENT_30_VAL    (CHARGE_M_LVL2_VAL - 85)//3800//3800
+#define PERCENT_70_VAL    (CHARGE_M_LVL3_VAL - 85)//3950//4000
+#define PERCENT_100_VAL   4200
 
-#define BAT_FLOAT_VAL  30 ///电池电压容差范围
+#define BAT_FLOAT_VAL     30 ///电池电压容差范围
 
 _bat_data_t bat_data;
 /*************************************************************************************
@@ -58,29 +58,29 @@ _bat_data_t bat_data;
 **************************************************************************************/
 void PowerOnElectricQuantity(uint16_t bat_V)
 {
-  if((bat_V > (BAT_NORMAL_70 - BAT_FLOAT_VAL))&&(bat_V < (BAT_NORMAL_70 + BAT_FLOAT_VAL)))
+  if((bat_V > (PERCENT_70_VAL - BAT_FLOAT_VAL))&&(bat_V < (PERCENT_70_VAL + BAT_FLOAT_VAL)))
   {
     if(bat_data.disp_level != Bat_Level2) bat_data.disp_level = Bat_Level3;
   }
-  else if((bat_V > (BAT_NORMAL_30 - BAT_FLOAT_VAL))&&(bat_V < (BAT_NORMAL_30 + BAT_FLOAT_VAL)))
+  else if((bat_V > (PERCENT_30_VAL - BAT_FLOAT_VAL))&&(bat_V < (PERCENT_30_VAL + BAT_FLOAT_VAL)))
   {
     if(bat_data.disp_level != Bat_Level1) bat_data.disp_level = Bat_Level2;
   }
-  else if((bat_V > (BAT_NORMAL_10 - BAT_FLOAT_VAL))&&(bat_V < (BAT_NORMAL_10 + BAT_FLOAT_VAL)))
+  else if((bat_V > (PERCENT_10_VAL - BAT_FLOAT_VAL))&&(bat_V < (PERCENT_10_VAL + BAT_FLOAT_VAL)))
   {
     if(bat_data.disp_level != Bat_Level0) bat_data.disp_level = Bat_Level1;
   }
   else
   {
-    if(bat_V > BAT_NORMAL_70)
+    if(bat_V > PERCENT_70_VAL)
     {
       bat_data.disp_level = Bat_Level3;
     }
-    else if(bat_V > BAT_NORMAL_30)
+    else if(bat_V > PERCENT_30_VAL)
     {
       bat_data.disp_level = Bat_Level2;
     }
-    else if(bat_V > BAT_NORMAL_10)
+    else if(bat_V > PERCENT_10_VAL)
     {
       bat_data.disp_level = Bat_Level1;
     }
@@ -101,17 +101,17 @@ void PowerOnElectricQuantity(uint16_t bat_V)
 **************************************************************************************/
 void UsingElectricQuantity(uint16_t bat_V)
 {
-  if((bat_V > BAT_USER_LEVEL_2 - BAT_FLOAT_VAL)&&(bat_V < BAT_USER_LEVEL_2 + BAT_FLOAT_VAL))
+  if((bat_V > USER_M_LVL2_VAL - BAT_FLOAT_VAL)&&(bat_V < USER_M_LVL2_VAL + BAT_FLOAT_VAL))
   {
-    bat_data.disp_level = Bat_Level_SP20;//10%~20%
+    bat_data.disp_level = Bat_Level_SP20; //10%~20%
   }
-  else if((bat_V > BAT_USER_LEVEL_1 - BAT_FLOAT_VAL)&&(bat_V < BAT_USER_LEVEL_1 + BAT_FLOAT_VAL))
+  else if((bat_V > USER_M_LVL1_VAL - BAT_FLOAT_VAL)&&(bat_V < USER_M_LVL1_VAL + BAT_FLOAT_VAL))
   {
-    bat_data.disp_level = Bat_Level_SP10;//0%~10%
+    bat_data.disp_level = Bat_Level_SP10; //0%~10%
   }
-	else if(bat_V < BAT_USER_LEVEL_1)
+	else if(bat_V < USER_M_LVL1_VAL)
 	{
-		bat_data.disp_level = Bat_Level_SP10;//0%~10%
+		bat_data.disp_level = Bat_Level_SP10; //0%~10%
 	}
 }
 /*************************************************************************************
@@ -126,21 +126,21 @@ void UsingElectricQuantity(uint16_t bat_V)
 
 void StateOfChargeBatteryVoltage(uint16_t bat_V)
 {
-  if((bat_V > (BAT_CHARGE_LEVEL_3 - BAT_FLOAT_VAL))&&(bat_V < (BAT_CHARGE_LEVEL_3 + BAT_FLOAT_VAL)))
+  if((bat_V > (CHARGE_M_LVL3_VAL - BAT_FLOAT_VAL))&&(bat_V < (CHARGE_M_LVL3_VAL + BAT_FLOAT_VAL)))
   {
     if(bat_data.disp_level != Bat_Level2) bat_data.disp_level = Bat_Level3;
   }
-  else if((bat_V > (BAT_CHARGE_LEVEL_2 - BAT_FLOAT_VAL))&&(bat_V < (BAT_CHARGE_LEVEL_2 + BAT_FLOAT_VAL)))
+  else if((bat_V > (CHARGE_M_LVL2_VAL - BAT_FLOAT_VAL))&&(bat_V < (CHARGE_M_LVL2_VAL + BAT_FLOAT_VAL)))
   {
     if(bat_data.disp_level != Bat_Level1) bat_data.disp_level = Bat_Level2;
   }
-  else if((bat_V > (BAT_CHARGE_LEVEL_1 - BAT_FLOAT_VAL))&&(bat_V < (BAT_CHARGE_LEVEL_1 + BAT_FLOAT_VAL)))
+  else if((bat_V > (CHARGE_M_LVL1_VAL - BAT_FLOAT_VAL))&&(bat_V < (CHARGE_M_LVL1_VAL + BAT_FLOAT_VAL)))
   {
     if(bat_data.disp_level != Bat_Level0) bat_data.disp_level = Bat_Level1;
   }
   else
   {
-    if(bat_V > BAT_CHARGE_LEVEL_3)
+    if(bat_V > CHARGE_M_LVL3_VAL)
     {
       if((BAT_CHARGE_STATE_IN == GPIO_PIN_SET))//||(bat_V > 4150))
       {
@@ -151,17 +151,17 @@ void StateOfChargeBatteryVoltage(uint16_t bat_V)
         bat_data.disp_level = Bat_Level3;
       }
     }
-    else if((bat_V <= BAT_CHARGE_LEVEL_3)&&(bat_V > BAT_CHARGE_LEVEL_2))
+    else if((bat_V <= CHARGE_M_LVL3_VAL)&&(bat_V > CHARGE_M_LVL2_VAL))
     {
       bat_data.disp_level = Bat_Level2;
     }
-    else if((bat_V <= BAT_CHARGE_LEVEL_2)&&(bat_V > BAT_CHARGE_LEVEL_1))
+    else if((bat_V <= CHARGE_M_LVL2_VAL)&&(bat_V > CHARGE_M_LVL1_VAL))
     {
       bat_data.disp_level = Bat_Level1;
     }
     else /// < 10
     {
-      ;
+      bat_data.disp_level = Bat_Level0;
     }
   }
 }
