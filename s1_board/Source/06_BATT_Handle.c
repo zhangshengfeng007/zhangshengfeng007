@@ -1,5 +1,38 @@
 #include "includes.h"
 
+/*
+   å……ç”µæ£€æµ‹è„š ç¡¬ä»¶ç”µè·¯æ¥çº¿å›¾
+	-----DC_5V  ï¼ˆ4.8v--5.2vï¼‰
+          |
+	------140K
+	      |----charge_pin_adc
+	------100k
+	      |
+	------GND
+
+	ADCå‚è€ƒç”µå‹ 2.5v ---å¯¹åº”4096
+	charge_pin_vol = 5v*100/(100+140) = 2.0833v ï¼ˆ2.0v --2.16v ï¼‰
+
+	charge_pin_adc_val = charge_pin_vol * 4096 / 2.5(å‚è€ƒç”µå‹)
+	                   = 3412 (ç†è®ºå€¼) ï¼ˆ3276 -- 3583ï¼‰
+*/
+
+
+/*
+	ç”µæ±  ç”µé‡æ£€æµ‹æ§åˆ¶è„š ç¡¬ä»¶æ¥çº¿å›¾
+	---BAT (3.2V --4.2V)
+		|
+	---100K
+		|  ---BAT_ADC_PIN  (MAX-VAL 2.1V)
+	---100K
+		|
+	---GND
+
+	ADC å‚è€ƒç”µå‹ 2.5v ---å¯¹åº”4096
+
+	ADC_VAL = pin_val * 4096 /2.5v
+*/
+
 #define BAT_CHARGE_LEVEL_3  4050
 #define BAT_CHARGE_LEVEL_2  3890
 #define BAT_CHARGE_LEVEL_1  3760
@@ -12,64 +45,63 @@
 #define BAT_NORMAL_70    (BAT_CHARGE_LEVEL_3-85)//3950//4000
 #define BAT_NORMAL_100   4200
 
-#define BAT_LEV_TOLERANCE  30 ///µç³ØµçÑ¹Èİ²î·¶Î§
+#define BAT_LEV_TOLERANCE  30 ///ç”µæ± ç”µå‹å®¹å·®èŒƒå›´
 
-_Batt_State_Typedef Batt_State;
+_bat_data_t bat_data;
 /*************************************************************************************
 * FunctionName	 : PowerOnElectricQuantity()
 * Description    :
 * EntryParameter :
-* ReturnValue    : None
+* ReturnValue    : None ç”µæ± æ— RF å’Œ EMSè¾“å‡ºæ—¶ ç”µé‡åˆ¤æ–­æ ‡å‡†
 **************************************************************************************/
-////µçÁ¿ÅĞ¶Ï
-void PowerOnElectricQuantity(uint16_t bat_V)   //¿ª»ú¿ÕÔØ×´Ì¬
+void PowerOnElectricQuantity(uint16_t bat_V)
 {
   if((bat_V > (BAT_NORMAL_70 - BAT_LEV_TOLERANCE))&&(bat_V < (BAT_NORMAL_70 + BAT_LEV_TOLERANCE)))
   {
-    if(Batt_State.BatteryLevel != Batt_Level_Gear_2) Batt_State.BatteryLevel = Batt_Level_Gear_3;
+    if(bat_data.disp_level != Bat_Level2) bat_data.disp_level = Bat_Level3;
   }
   else if((bat_V > (BAT_NORMAL_30 - BAT_LEV_TOLERANCE))&&(bat_V < (BAT_NORMAL_30 + BAT_LEV_TOLERANCE)))
   {
-    if(Batt_State.BatteryLevel != Batt_Level_Gear_1) Batt_State.BatteryLevel = Batt_Level_Gear_2;
+    if(bat_data.disp_level != Bat_Level1) bat_data.disp_level = Bat_Level2;
   }
   else if((bat_V > (BAT_NORMAL_10 - BAT_LEV_TOLERANCE))&&(bat_V < (BAT_NORMAL_10 + BAT_LEV_TOLERANCE)))
   {
-    if(Batt_State.BatteryLevel != Batt_Level_Gear_0) Batt_State.BatteryLevel = Batt_Level_Gear_1;
+    if(bat_data.disp_level != Bat_Level0) bat_data.disp_level = Bat_Level1;
   }
   else
   {
-//    if(bat_V > BAT_NORMAL_70)     //50-75 ÁÁ3¸öµÆ
+//    if(bat_V > BAT_NORMAL_70)     //50-75 ï¿½ï¿½3ï¿½ï¿½ï¿½ï¿½
 //    {
-//      Batt_State.BatteryLevel = Batt_Level_Gear_3;
+//      bat_data.disp_level = Bat_Level3;
 //    }
-//    else if((bat_V <= BAT_NORMAL_70)&&(bat_V > BAT_NORMAL_30)) //25-50 ÁÁ2¸öµÆ
+//    else if((bat_V <= BAT_NORMAL_70)&&(bat_V > BAT_NORMAL_30)) //25-50 ï¿½ï¿½2ï¿½ï¿½ï¿½ï¿½
 //    {
-//      Batt_State.BatteryLevel = Batt_Level_Gear_2;
-//    }				
-//    else if((bat_V <= BAT_NORMAL_30)&&(bat_V > BAT_NORMAL_10)) //10-25 ÁÁÒ»¸öµÆ
-//    {
-//      Batt_State.BatteryLevel = Batt_Level_Gear_1;
+//      bat_data.disp_level = Bat_Level2;
 //    }
-//    else /// < 10 ËùÓĞµÆÉÁË¸
+//    else if((bat_V <= BAT_NORMAL_30)&&(bat_V > BAT_NORMAL_10)) //10-25 ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½
 //    {
-//      Batt_State.BatteryLevel = Batt_Level_Gear_0;
+//      bat_data.disp_level = Bat_Level1;
 //    }
-    
+//    else /// < 10 ï¿½ï¿½ï¿½Ğµï¿½ï¿½ï¿½Ë¸
+//    {
+//      bat_data.disp_level = Bat_Level0;
+//    }
+
     if(bat_V > BAT_NORMAL_70)
     {
-      Batt_State.BatteryLevel = Batt_Level_Gear_3;
+      bat_data.disp_level = Bat_Level3;
     }
     else if(bat_V > BAT_NORMAL_30)
     {
-      Batt_State.BatteryLevel = Batt_Level_Gear_2;
+      bat_data.disp_level = Bat_Level2;
     }
     else if(bat_V > BAT_NORMAL_10)
     {
-      Batt_State.BatteryLevel = Batt_Level_Gear_1;
+      bat_data.disp_level = Bat_Level1;
     }
     else
     {
-      Batt_State.BatteryLevel = Batt_Level_Gear_0;
+      bat_data.disp_level = Bat_Level0;
     }
   }
 }
@@ -77,44 +109,43 @@ void PowerOnElectricQuantity(uint16_t bat_V)   //¿ª»ú¿ÕÔØ×´Ì¬
 * FunctionName	 : UsingElectricQuantity()
 * Description    :
 * EntryParameter :
-* ReturnValue    : None
+* ReturnValue    : None æœ‰RF æˆ–emsè¾“å‡ºæ—¶ï¼Œç”µé‡åˆ¤æ–­æ ‡å‡†
 **************************************************************************************/
-////Ê¹ÓÃ¹ı³ÌÖĞµÍµçÁ¿ÅĞ¶Ï
 void UsingElectricQuantity(uint16_t bat_V)
 {
   if((bat_V > BAT_USER_LEVEL_2 - BAT_LEV_TOLERANCE)&&(bat_V < BAT_USER_LEVEL_2 + BAT_LEV_TOLERANCE))
   {
-    Batt_State.BatteryLevel = Batt_Level_SP20;//10%~20%
+    bat_data.disp_level = Bat_Level_SP20;//10%~20%
   }
   else if((bat_V > BAT_USER_LEVEL_1 - BAT_LEV_TOLERANCE)&&(bat_V < BAT_USER_LEVEL_1 + BAT_LEV_TOLERANCE))
   {
-    Batt_State.BatteryLevel = Batt_Level_SP10;//0%~10%
+    bat_data.disp_level = Bat_Level_SP10;//0%~10%
   }
 	else if(bat_V < BAT_USER_LEVEL_1)
 	{
-		Batt_State.BatteryLevel = Batt_Level_SP10;//0%~10%
+		bat_data.disp_level = Bat_Level_SP10;//0%~10%
 	}
 }
 /*************************************************************************************
 * FunctionName	 : StateOfChargeBatteryVoltage()
 * Description    :
 * EntryParameter :
-* ReturnValue    : None
-**************************************************************************************/
-////³äµç×´Ì¬µç³ØµçÑ¹ÅĞ¶Ï
+* ReturnValue    : None  å……ç”µçŠ¶æ€ä¸‹ ç”µæ± ç”µé‡çš„åˆ¤æ–­æ ‡å‡†
+ **************************************************************************************/
+
 void StateOfChargeBatteryVoltage(uint16_t bat_V)
 {
   if((bat_V > (BAT_CHARGE_LEVEL_3 - BAT_LEV_TOLERANCE))&&(bat_V < (BAT_CHARGE_LEVEL_3 + BAT_LEV_TOLERANCE)))
   {
-    if(Batt_State.BatteryLevel != Batt_Level_Gear_2) Batt_State.BatteryLevel = Batt_Level_Gear_3;
+    if(bat_data.disp_level != Bat_Level2) bat_data.disp_level = Bat_Level3;
   }
   else if((bat_V > (BAT_CHARGE_LEVEL_2 - BAT_LEV_TOLERANCE))&&(bat_V < (BAT_CHARGE_LEVEL_2 + BAT_LEV_TOLERANCE)))
   {
-    if(Batt_State.BatteryLevel != Batt_Level_Gear_1) Batt_State.BatteryLevel = Batt_Level_Gear_2;
+    if(bat_data.disp_level != Bat_Level1) bat_data.disp_level = Bat_Level2;
   }
   else if((bat_V > (BAT_CHARGE_LEVEL_1 - BAT_LEV_TOLERANCE))&&(bat_V < (BAT_CHARGE_LEVEL_1 + BAT_LEV_TOLERANCE)))
   {
-    if(Batt_State.BatteryLevel != Batt_Level_Gear_0) Batt_State.BatteryLevel = Batt_Level_Gear_1;
+    if(bat_data.disp_level != Bat_Level0) bat_data.disp_level = Bat_Level1;
   }
   else
   {
@@ -122,28 +153,33 @@ void StateOfChargeBatteryVoltage(uint16_t bat_V)
     {
       if((BAT_CHARGE_STATE_IN == GPIO_PIN_SET))//||(bat_V > 4150))
       {
-        Batt_State.BatteryLevel = Batt_Level_Full;
+        bat_data.disp_level = Bat_Level_Full;
       }
       else
       {
-        Batt_State.BatteryLevel = Batt_Level_Gear_3;
+        bat_data.disp_level = Bat_Level3;
       }
     }
-    else if((bat_V <= BAT_CHARGE_LEVEL_3)&&(bat_V > BAT_CHARGE_LEVEL_2)) 
+    else if((bat_V <= BAT_CHARGE_LEVEL_3)&&(bat_V > BAT_CHARGE_LEVEL_2))
     {
-      Batt_State.BatteryLevel = Batt_Level_Gear_2;
-    }				
+      bat_data.disp_level = Bat_Level2;
+    }
     else if((bat_V <= BAT_CHARGE_LEVEL_2)&&(bat_V > BAT_CHARGE_LEVEL_1))
     {
-      Batt_State.BatteryLevel = Batt_Level_Gear_1;
+      bat_data.disp_level = Bat_Level1;
     }
-    else /// < 10 ËùÓĞµÆÉÁË¸
+    else /// < 10 ï¿½ï¿½ï¿½Ğµï¿½ï¿½ï¿½Ë¸
     {
       ;
-    }		
+    }
   }
 }
-//------------------------------------------------------------------------------------------------
+/*************************************************************************************
+* FunctionName	 : Get_Batt_Value()
+* Description    :
+* EntryParameter :
+* ReturnValue    :  ç”µå‹ä» ADå€¼è½¬åŒ–ä¸ºå®é™…å€¼
+*********************************************************************************/
 uint16_t Get_Batt_Value(uint16_t adc_data)
 {
   uint16_t value;
@@ -164,19 +200,19 @@ uint16_t Get_Usb_Value(uint16_t adc_data)
 * ReturnValue    : None
 **************************************************************************************/
 void BatteryPowerJudgment(_sys_state_e state)
-{  
+{
   static uint8_t charge_check = 0;
   static uint32_t check_time = 0;
-	
-  Batt_State.BATT_TRUE_Value = Get_Batt_Value(ADC_Data.bat_val);
-  Batt_State.USB_TRUE_Value  = Get_Usb_Value(ADC_Data.Usb_Val);
-  
-  if(USB_INPUT_CHECK_IN == GPIO_PIN_RESET)  
+
+  bat_data.BATT_TRUE_Value = Get_Batt_Value(ADC_Data.bat_val);
+  bat_data.USB_TRUE_Value  = Get_Usb_Value(ADC_Data.Usb_Val);
+
+  if(USB_INPUT_CHECK_IN == GPIO_PIN_RESET)
   {
-    if(Batt_State.USB_TRUE_Value > 4000) //ÊäÈëÒı½ÅÀ­µÍ+ÊäÈëµçÑ¹´óÓÚ4VÅĞ¶ÏÎªUSB½ÓÈë
+    if(bat_data.USB_TRUE_Value > 4000) //usbç”µå‹è¶…è¿‡ 4.0v åˆ¤æ–­ä¸ºå……ç”µå™¨æ¥å…¥
     {
-      Sys_Info.Charge_State = CHARGING_STA;  // 2023 01 10 ¹Ø±Õ
-      
+      Sys_Info.Charge_State = CHARGING_STA;  // 2023 01 10
+
       if(!charge_check)
       {
         check_time = HAL_GetTick();
@@ -186,7 +222,7 @@ void BatteryPowerJudgment(_sys_state_e state)
       {
         CHARGE_LIMIT_ENABLE;
       }
-    }   //ÊäÈëÒı½ÅÀ­µÍ+ÊäÈëµçÑ¹Ğ¡ÓÚ4VÅĞ¶ÏÎªUSB½ÓÈë£¬OVP¶Ï¿ª
+    }
     else
     {
       charge_check = 0;
@@ -198,30 +234,22 @@ void BatteryPowerJudgment(_sys_state_e state)
     charge_check = 0;
     Sys_Info.Charge_State = No_CHARGE_STA;
   }
-  
+
   if(Sys_Info.Charge_State == No_CHARGE_STA)
   {
     if(state == MACHINEOFF)
     {
 			if(Sys_Info.Adc_First_Run_Flage)
-      PowerOnElectricQuantity(Batt_State.BATT_TRUE_Value);   //²é¿´µçÁ¿
+      PowerOnElectricQuantity(bat_data.BATT_TRUE_Value);   //æ£€æŸ¥ç”µæ± ç”µé‡
     }
     else
     {
-      UsingElectricQuantity(Batt_State.BATT_TRUE_Value);     //Ê¹ÓÃ¹ı³ÌÖĞ
+      UsingElectricQuantity(bat_data.BATT_TRUE_Value);     //æ­£å¸¸è¾“å‡ºæ—¶
     }
   }
   else
   {
-    StateOfChargeBatteryVoltage(Batt_State.BATT_TRUE_Value); //³äµç
+    StateOfChargeBatteryVoltage(bat_data.BATT_TRUE_Value); //å……ç”µæ—¶
   }
 }
 
-
-/*
-µç³Ø²»Í¬µÄ×´Ì¬½øĞĞÅĞ¶Ïµç³ØµçÁ¿µÄ·½Ê½ÓĞËùÇø±ğ
-1. µçÁ¿Ê¶±ğ×´Ì¬ ÔÚÎ´¿ª»úµÄÇé¿öÏÂ½øĞĞ
-2. ¹¤×÷×´Ì¬
-3. ³äµç×´Ì¬  ³äµçÖĞ  ³äµçÍê³É
-
-*/

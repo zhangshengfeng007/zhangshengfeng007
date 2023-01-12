@@ -1,54 +1,61 @@
 #ifndef __BATT_HANDLE_H
 #define __BATT_HANDLE_H
 
-#define BAT_CHARGE_STATE_IN   HAL_GPIO_ReadPin(CHARGE_STATE_GPIO_Port,CHARGE_STATE_Pin) ///≥‰µÁ◊¥Ã¨  ≥‰¬˙  ’˝‘⁄≥‰µÁ
-#define USB_INPUT_CHECK_IN    HAL_GPIO_ReadPin(USB_INPUT_CHECK_GPIO_Port,USB_INPUT_CHECK_Pin)
-#define CHARGE_LIMIT_ENABLE   HAL_GPIO_WritePin(CHARGE_ILMIT_GPIO_Port,CHARGE_ILMIT_Pin,GPIO_PIN_SET)
-#define CHARGE_LIMIT_DISABLE  HAL_GPIO_WritePin(CHARGE_ILMIT_GPIO_Port,CHARGE_ILMIT_Pin,GPIO_PIN_RESET)
+///ÂÖÖÁîµÁä∂ÊÄÅÂà§Êñ≠ËÑö
+// DC5V Êé•ÂÖ•+ËÑö‰Ωç‰∏∫È´òÁÇπÂπ≥Êó∂Ôºå‰∏∫ÂÖÖÊª°Áä∂ÊÄÅ
+#define BAT_CHARGE_STATE_IN   HAL_GPIO_ReadPin(CHARGE_STATE_GPIO_Port, CHARGE_STATE_Pin)
+#define IS_CHAGE_FULL()       (GPIO_PIN_SET == HAL_GPIO_ReadPin(CHARGE_STATE_GPIO_Port, CHARGE_STATE_Pin))
 
-//typedef enum
-//{
-//  Charge_None,
-//  Charge_Start,
-//}_Charge_State_Typedef;
+///DC5vÊé•ÂÖ•Âà§Êñ≠ËÑö
+// DC5V Êé•ÂÖ•Êó∂‰∏∫‰ΩéÁîµÂπ≥
+#define USB_INPUT_CHECK_IN    HAL_GPIO_ReadPin(USB_INPUT_CHECK_GPIO_Port, USB_INPUT_CHECK_Pin)
+#define IS_DC5V_IN()          (GPIO_PIN_RESET == HAL_GPIO_ReadPin(USB_INPUT_CHECK_GPIO_Port, USB_INPUT_CHECK_Pin))
 
-//typedef enum
-//{
-//  BATT_LEVEL_10,
-//  BATT_LEVEL_20,
-//  BATT_LEVEL_30,
-//  BATT_LEVEL_40,
-//  BATT_LEVEL_50,
-//  BATT_LEVEL_60,
-//  BATT_LEVEL_70,
-//  BATT_LEVEL_80,
-//  BATT_LEVEL_90,
-//  BATT_LEVEL_FULL
-//}_Batt_Level_Typedef;
+#define CHARGE_LIMIT_ENABLE   HAL_GPIO_WritePin(CHARGE_ILMIT_GPIO_Port, CHARGE_ILMIT_Pin, GPIO_PIN_SET)
+#define CHARGE_LIMIT_DISABLE  HAL_GPIO_WritePin(CHARGE_ILMIT_GPIO_Port, CHARGE_ILMIT_Pin, GPIO_PIN_RESET)
+
+typedef enum{
+	BAT_3200mV_ADC_VAL	= 2624,	// 2624 ---  1.6V
+	BAT_3250mV_ADC_VAL	= 2662,	// 2662 ---  1.625V
+	BAT_3300mV_ADC_VAL	= 2703,	// 2785 ---  1.65V
+	BAT_3350mV_ADC_VAL	= 2744,	// 2744 ---  1.675V
+	BAT_3400mV_ADC_VAL	= 2785,	// 2785 ---  1.7V
+	BAT_3450mV_ADC_VAL	= 2826,	// 2785 ---  1.725V
+	BAT_3500mV_ADC_VAL	= 2867,	// 2826 ---  1.75V
+	BAT_3550mV_ADC_VAL	= 2908,	// 2867 ---  1.775V
+	BAT_3600mV_ADC_VAL	= 2949,	// 2949 ---  1.8V
+	BAT_3650mV_ADC_VAL	= 2990,	// 2990 ---  1.825V
+	BAT_3700mV_ADC_VAL	= 3031,	// 3031 ---  1.85V
+	BAT_3750mV_ADC_VAL	= 3072,	// 3072 ---  1.875V
+	BAT_3800mV_ADC_VAL	= 3112,	// 3112 ---  1.9V
+	BAT_3850mV_ADC_VAL	= 3153,	// 3153 ---  1.925V
+	BAT_3900mV_ADC_VAL	= 3194,	// 3194 ---  1.95V
+	BAT_3950mV_ADC_VAL	= 3235, // 3235 ---  1.975V
+	BAT_4000mV_ADC_VAL	= 3276,	// 3276 ---  2.0V
+	BAT_4050mV_ADC_VAL	= 3317,	// 3317 ---  2.025V
+	BAT_4100mV_ADC_VAL	= 3358,	// 3358 ---  2.05V
+	BAT_4150mV_ADC_VAL	= 3399,	// 3399 ---  2.075V
+}Bat_adc_val_e;
 
 typedef enum
 {
-  Batt_Level_Gear_0 = 0,
-  Batt_Level_Gear_1 = 1,
-  Batt_Level_Gear_2 = 2,
-  Batt_Level_Gear_3 = 3,
-  Batt_Level_SP20 = 5,
-  Batt_Level_SP10 = 6,
-  Batt_Level_Full = 7,
-}_BatteryLevel_typedef;
+  Bat_Level0 = 0,
+  Bat_Level1 = 1,
+  Bat_Level2 = 2,
+  Bat_Level3 = 3,
+  Bat_Level_SP20 = 5,
+  Bat_Level_SP10 = 6,
+  Bat_Level_Full = 7,
+}_bat_level_e;
 
 typedef struct
 {
-//  _Charge_State_Typedef	  Charge_State;
-//  _Batt_Level_Typedef           Batt_Level;
-  _BatteryLevel_typedef         BatteryLevel;  // 0 1 2 3   µÁ≥ÿµÁ¡ø  5 µÁ¡ø £”‡20%   6  µÁ¡ø £”‡ 10%  7  µÁ≥ÿ¬˙µÁ¡ø
-  uint16_t BATT_TRUE_Value;
-  uint16_t USB_TRUE_Value;
-}_Batt_State_Typedef;
+  _bat_level_e  disp_level;
+  uint16_t  BATT_TRUE_Value;
+  uint16_t  USB_TRUE_Value;
+}_bat_data_t;
 
-extern _Batt_State_Typedef Batt_State;
+extern _bat_data_t bat_data;
 extern void BatteryPowerJudgment(_sys_state_e state);
-extern void LCD_output_transf(uint8_t *data);
 
 #endif
-
