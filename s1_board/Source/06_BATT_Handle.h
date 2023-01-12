@@ -35,7 +35,24 @@ typedef enum{
 	BAT_4050mV_ADC_VAL	= 3317,	// 3317 ---  2.025V
 	BAT_4100mV_ADC_VAL	= 3358,	// 3358 ---  2.05V
 	BAT_4150mV_ADC_VAL	= 3399,	// 3399 ---  2.075V
+  BAT_4200mV_ADC_VAL	= 3440,	// 3440 ---  2.1V
 }Bat_adc_val_e;
+
+typedef enum{
+  DC_4000mV_ADC_VAL	= 2736, //  1.67V  --- 1.67*4096/2.5 = 2736
+  DC_4100mV_ADC_VAL	= 2801, //  1.71V
+  DC_4200mV_ADC_VAL	= 2867, //  1.75V
+  DC_4300mV_ADC_VAL	= 2933, //  1.79V
+  DC_4400mV_ADC_VAL	= 2998, //  1.83V
+	DC_4500mV_ADC_VAL	= 3080,	//  1.88V
+	DC_4600mV_ADC_VAL	= 3129,	//  1.91V
+	DC_4700mV_ADC_VAL	= 3211,	//  1.96V
+	DC_4800mV_ADC_VAL	= 3276,	//  2.0V
+	DC_4900mV_ADC_VAL	= 3342,	//  2.04V
+	DC_5000mV_ADC_VAL	= 3407,	//  2.08V
+  DC_5400mV_ADC_VAL	= 3686,	//  2.25V  ----输入异常--电压过高
+}DC5v_adc_val_e;
+
 
 typedef enum
 {

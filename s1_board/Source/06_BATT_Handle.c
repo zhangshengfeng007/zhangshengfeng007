@@ -33,17 +33,17 @@
 	ADC_VAL = pin_val * 4096 /2.5v
 */
 
-#define CHARGE_M_LVL3_VAL  4050
-#define CHARGE_M_LVL2_VAL  3890
-#define CHARGE_M_LVL1_VAL  3760
+#define CHARGE_M_LVL3_VAL   (BAT_4050mV_ADC_VAL) //4050
+#define CHARGE_M_LVL2_VAL   (BAT_3900mV_ADC_VAL) //3890
+#define CHARGE_M_LVL1_VAL   (BAT_3750mV_ADC_VAL)//3760
 
-#define USER_M_LVL2_VAL    3450
-#define USER_M_LVL1_VAL    3300
+#define USER_M_LVL2_VAL    (BAT_3450mV_ADC_VAL) //3450
+#define USER_M_LVL1_VAL    (BAT_3300mV_ADC_VAL) //3300
 
 #define PERCENT_10_VAL    (CHARGE_M_LVL1_VAL - 85)
 #define PERCENT_30_VAL    (CHARGE_M_LVL2_VAL - 85)//3800//3800
 #define PERCENT_70_VAL    (CHARGE_M_LVL3_VAL - 85)//3950//4000
-#define PERCENT_100_VAL   4200
+#define PERCENT_100_VAL   (BAT_4200mV_ADC_VAL)//4200
 
 #define BAT_FLOAT_VAL     30 ///电池电压容差范围
 
@@ -195,12 +195,12 @@ void BatteryPowerJudgment(_sys_state_e state)
   static uint8_t charge_check = 0;
   static uint32_t check_time = 0;
 
-  bat_data.adc_val = Get_Batt_Value(ADC_Data.bat_val);
-  bat_data.DC5v_adc_val  = Get_Usb_Value(ADC_Data.Usb_Val);
+  bat_data.adc_val = ADC_Data.bat_val;
+  bat_data.DC5v_adc_val  = ADC_Data.Usb_Val;
 
   if(USB_INPUT_CHECK_IN == GPIO_PIN_RESET)
   {
-    if(bat_data.DC5v_adc_val > 4000) //usb电压超过 4.0v 判断为充电器接入
+    if(bat_data.DC5v_adc_val > DC_4000mV_ADC_VAL) //usb电压超过 4.0v 判断为充电器接入
     {
       Sys_Info.Charge_State = CHARGING_STA;  // 2023 01 10
 
