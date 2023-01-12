@@ -51,8 +51,8 @@ typedef enum
 typedef struct
 {
   _bat_level_e  disp_level;
-  uint16_t  BATT_TRUE_Value;
-  uint16_t  USB_TRUE_Value;
+  uint16_t  adc_val;
+  uint16_t  DC5v_adc_val;
 }_bat_data_t;
 
 extern _bat_data_t bat_data;
