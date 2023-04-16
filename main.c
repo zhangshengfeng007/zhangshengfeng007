@@ -8,7 +8,7 @@ int main(void)
 	{
 
 	}	
-printf("hello world \r\n“);
+	printf("hello world \r\n");
 
 
 }
