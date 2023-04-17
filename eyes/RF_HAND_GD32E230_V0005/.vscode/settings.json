@@ -1,0 +1,10 @@
+{
+    "C_Cpp.errorSquiggles": "disabled",
+    "files.associations": {
+        "task_app.h": "c",
+        "common.h": "c",
+        "app_include.h": "c",
+        "sys_app.h": "c",
+        "test_app.h": "c"
+    }
+}
