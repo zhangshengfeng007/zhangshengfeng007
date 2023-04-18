@@ -1,0 +1,23 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"task_app.h": "c",
+			"common.h": "c",
+			"app_include.h": "c",
+			"sys_app.h": "c",
+			"test_app.h": "c",
+			"string.h": "c",
+			"drv_uart.h": "c",
+			"drv_adc.h": "c",
+			"drv_power.h": "c",
+			"err_check_app.h": "c"
+		},
+		"cortex-debug.armToolchainPath": "${userRoot}/.eide/tools/gcc_arm\\bin",
+		"cortex-debug.JLinkGDBServerPath": "${userRoot}/.eide/tools/jlink\\JLinkGDBServerCL.exe"
+	}
+}

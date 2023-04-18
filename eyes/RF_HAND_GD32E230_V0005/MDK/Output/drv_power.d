@@ -1,0 +1,43 @@
+./output/drv_power.o: ..\UserDriver\drv_power.c ..\UserDriver\drv_power.h \
+  ..\UserApp\common.h D:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdlib.h \
+  D:\Keil_v5\ARM\ARMCLANG\Bin\..\include\string.h \
+  D:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdio.h \
+  ..\CMSIS\GD\GD32E23x\Include\gd32e23x.h \
+  D:\Keil_v5\ARM\PACK\ARM\CMSIS\5.6.0\CMSIS\Core\Include\core_cm23.h \
+  D:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdint.h \
+  D:\Keil_v5\ARM\PACK\ARM\CMSIS\5.6.0\CMSIS\Core\Include\cmsis_version.h \
+  D:\Keil_v5\ARM\PACK\ARM\CMSIS\5.6.0\CMSIS\Core\Include\cmsis_compiler.h \
+  D:\Keil_v5\ARM\PACK\ARM\CMSIS\5.6.0\CMSIS\Core\Include\cmsis_armclang.h \
+  D:\Keil_v5\ARM\ARMCLANG\Bin\..\include\arm_compat.h \
+  D:\Keil_v5\ARM\ARMCLANG\Bin\..\include\arm_acle.h \
+  ..\CMSIS\GD\GD32E23x\Include\system_gd32e23x.h \
+  ..\Core\gd32e23x_libopt.h ..\Peripherals\Include\gd32e23x_adc.h \
+  ..\Peripherals\Include\gd32e23x_crc.h \
+  ..\Peripherals\Include\gd32e23x_dbg.h \
+  ..\Peripherals\Include\gd32e23x_dma.h \
+  ..\Peripherals\Include\gd32e23x_exti.h \
+  ..\Peripherals\Include\gd32e23x_fmc.h \
+  ..\Peripherals\Include\gd32e23x_gpio.h \
+  ..\Peripherals\Include\gd32e23x_syscfg.h \
+  ..\Peripherals\Include\gd32e23x_i2c.h \
+  ..\Peripherals\Include\gd32e23x_fwdgt.h \
+  ..\Peripherals\Include\gd32e23x_pmu.h \
+  ..\Peripherals\Include\gd32e23x_rcu.h \
+  ..\Peripherals\Include\gd32e23x_rtc.h \
+  ..\Peripherals\Include\gd32e23x_spi.h \
+  ..\Peripherals\Include\gd32e23x_timer.h \
+  ..\Peripherals\Include\gd32e23x_usart.h \
+  ..\Peripherals\Include\gd32e23x_wwdgt.h \
+  ..\Peripherals\Include\gd32e23x_misc.h \
+  ..\Peripherals\Include\gd32e23x_cmp.h ..\UserDriver\drv_adc.h \
+  ..\UserDriver\drv_gpio.h D:\Keil_v5\ARM\ARMCLANG\Bin\..\include\math.h \
+  ..\UserApp\device_app.h ..\UserApp\common.h ..\UserApp\app_include.h \
+  ..\UserDriver\drv_delay.h ..\UserDriver\drv_gpio.h \
+  ..\UserDriver\drv_key.h ..\UserDriver\drv_power.h \
+  ..\UserDriver\drv_motor.h ..\UserDriver\drv_adc.h \
+  ..\UserDriver\drv_rf.h ..\UserDriver\drv_ems.h \
+  ..\UserDriver\drv_sensor.h ..\UserDriver\drv_flash.h \
+  ..\UserDriver\drv_uart.h ..\UserApp\task_app.h ..\UserApp\device_app.h \
+  ..\UserApp\key_app.h ..\UserApp\test_app.h \
+  ..\UserDriver\drv_ems_rf_en_pin.h ..\UserDriver\drv_led.h \
+  ..\UserApp\led_app.h ..\UserApp\err_check_app.h

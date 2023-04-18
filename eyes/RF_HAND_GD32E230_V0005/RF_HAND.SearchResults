@@ -1,0 +1,5 @@
+---- Length Æ¥Åä (5 in 1 ÎÄ¼þ) ----
+Sys_app.c (core):	uint8_t Length = 0;
+Sys_app.c (core):		Length = bufer[1];
+Sys_app.c (core):		Crc = crc16_compute(bufer,Length-2);
+Sys_app.c (core):	if(bufer[Length-2]==((Crc>>8)& 0xff) && bufer[Length-1]==(Crc & 0xff))
