@@ -65,6 +65,8 @@ void Sys_state_Ctrl(Sys_State_Type State)
 				Device_Data_Write();   // 因为写入flash时，会引起读取ADC异常
 			}
 			// Delay_ms(5);
+			Device.IdleCnt = 0;
+			Device.UseCount = 0;
 			POW_OFF;
 			break;
 		}
