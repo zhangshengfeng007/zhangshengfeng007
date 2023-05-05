@@ -198,16 +198,13 @@ void Device_Data_Read(void)
 	u32 temp = 0;
 	s32 stemp = 0;
 
-	RF.UnLoad_ADC_Val  = REG32(UNLOAD_ADC_VAL_ADDR);
-	printf("read UnLoad_ADC_Val =%d\r\n", RF.UnLoad_ADC_Val);
-
 	temp = REG32(LEVEL_ADDR);
 	if ((temp < LEVEL1) || (temp > LEVEL3))
 	{
-		RF.Ntc_Offset = 30;   // 读取异常， 默认值
+		RF.Ntc_Offset = 10;   // 读取异常， 默认值
 		Test.Aging_finish_flag = 0;
 		Device.Level = LEVEL1;
-		RF.UnLoad_ADC_Val = T9_2V1_ADC_VAL;
+		RF.UnLoad_ADC_Val = T9_0V70_ADC_VAL; // 2023 04 23 默认值写为 0.70mv
 		return;
 	}
 	Device.Level = temp;
@@ -219,7 +216,7 @@ void Device_Data_Read(void)
 	}
 	else
 	{
-		RF.Ntc_Offset = 30;
+		RF.Ntc_Offset = 10;
 	}
 
 	Test.Aging_finish_flag = REG32(AGING_FINISH_FLAG_ADDR);
@@ -228,6 +225,9 @@ void Device_Data_Read(void)
 	{
 		Test.Aging_finish_flag = 0;
 	}
+
+	RF.UnLoad_ADC_Val  = REG32(UNLOAD_ADC_VAL_ADDR);
+	printf("read UnLoad_ADC_Val =%d\r\n", RF.UnLoad_ADC_Val);
 
 }
 
