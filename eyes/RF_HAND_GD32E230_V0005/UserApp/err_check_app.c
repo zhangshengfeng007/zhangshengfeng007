@@ -99,8 +99,9 @@ void bat_temp_err_check(void)
 			switch(Test.mode_sta)
 			{
 				case Aging_Model_SAT:
+				case Inset_Life_Test_STA:
 				{
-					if(Test.Aging_ems_rf_flag)
+					if(Test.EMS_RF_out_flag)
 					{
 						tmp_max_val = 600;
 						tmp_min_val = -100;
@@ -181,7 +182,7 @@ void bat_val_err_check(void)
 		}
 		case SYS_TEST:
 		{
-			if((Power.BatLevel == BAT_LEVEL_EMETY) && (Test.Aging_ems_rf_flag))
+			if((Power.BatLevel == BAT_LEVEL_EMETY) && (Test.EMS_RF_out_flag))
 			{
 				bat_val_err_cnt ++;
 				if(bat_val_err_cnt > 5)
@@ -236,6 +237,7 @@ void rf_temp_err_check(void)
 {
 	static u8 rf_temp_err_cnt = 0;
 	static u8 rf_temp_normal_cnt = 0;
+	u16 rf_temp_err_val;
 
 	switch (Device.State)
 	{
@@ -270,7 +272,12 @@ void rf_temp_err_check(void)
 
 		default:
 		{
-			if(RF.Temp >= 500)
+			rf_temp_err_val = 450;
+			if((SYS_TEST == Device.State)&&((Read_Flume_Temp_STA == Test.mode_sta)||(Ntc_Set_STA == Test.mode_sta)))
+			{
+				rf_temp_err_val = 480;
+			}
+			if(RF.Temp >= rf_temp_err_val)
 			{
 				rf_temp_err_cnt++;
 				if(rf_temp_err_cnt > 5)
