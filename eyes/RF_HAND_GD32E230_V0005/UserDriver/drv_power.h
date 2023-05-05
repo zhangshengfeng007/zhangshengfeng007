@@ -22,15 +22,25 @@
 #define BAT_0V_05_ADC_VAL  			42
 #define BAT_0V_10_ADC_VAL  			84
 #define BAT_CHARGE_0V_15_ADC_VAL  	126  // 充电时，用万用表测到T2处电压浮动 0.1v左右，实际电池电压上浮 0.15v
-#define BAT_CHARGE_0V_20_ADC_VAL  	180
+#define BAT_CHARGE_0V_20_ADC_VAL  	165 //180
+
+#define BAT_0V_25_ADC_VAL  			210
+#define BAT_0V_30_ADC_VAL  			248
+#define BAT_0V_40_ADC_VAL  			332
+
+
 
 #define BAT_3V0_ADC_VAL  			2482
+#define BAT_3V1_ADC_VAL  			2565
+
 #define BAT_3V2_ADC_VAL  			2647
 #define BAT_3V3_ADC_VAL  			2703
 #define BAT_3V4_ADC_VAL  			2813
+#define BAT_3V5_ADC_VAL  			2896
 
 #define BAT_3V6_ADC_VAL  			2978
 #define BAT_3V7_ADC_VAL  			3061
+#define BAT_3V8_ADC_VAL  			3144
 
 #define BAT_3V9_ADC_VAL  			3227
 #define BAT_4V1_ADC_VAL  			3392
