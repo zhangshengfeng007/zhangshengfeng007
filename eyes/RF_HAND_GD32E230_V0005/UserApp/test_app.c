@@ -670,7 +670,7 @@ void Test_Order_Process(void)
 
 		case Comm_Default_Par:
 		{
-			RF.Ntc_Offset = 10;
+			RF.Ntc_Offset = 0;
 			Device.Level = 1;
 			Test.Aging_finish_flag = 0;
 			Device_Data_Write();
