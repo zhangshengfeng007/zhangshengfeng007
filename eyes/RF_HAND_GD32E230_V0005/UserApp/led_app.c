@@ -108,15 +108,15 @@ static void sys_on_bat_leds_disp(void)
 		}
 
 		case BAT_LEVEL_LOW20:
+		case BAT_LEVEL_LOW10:
 		{
 			// 红灯呼吸
 			Bat_Led_Low_Breathe();
 			Bat_Led_Full_Control(DISABLE);
 			break;
 		}
-
-		case BAT_LEVEL_LOW10:
 		case BAT_LEVEL_LOW5:
+		case BAT_LEVEL_LOW3:
 		{
 			// 红灯常亮
 			Bat_Led_Low_Control(ENABLE);
@@ -163,6 +163,7 @@ static void sys_wakeup_bat_leds_disp(void)
 		}
 		case BAT_LEVEL_LOW10:
 		case BAT_LEVEL_LOW5:
+		case BAT_LEVEL_LOW3:
 		case BAT_LEVEL_EMETY:
 		{
 			// 红灯闪烁
@@ -438,11 +439,11 @@ static void Aging_EMS_RF_disp(void)
 */
 static void test_Aging_disp(void)
 {
-	if(Test.Aging_charge_flag)
+	if(Test.Charge_flag)
 	{
 		Aging_charge_disp();
 	}
-	else if ((Test.Aging_ems_rf_flag) && (Test.Aging_ems_rf_cnt < AGING_EMS_RF_MAX_CNT))
+	else if ((Test.EMS_RF_out_flag) && (Test.Ems_RF_cnt < AGING_EMS_RF_MAX_CNT))
 	{
 		Aging_EMS_RF_disp();
 	}
@@ -454,9 +455,106 @@ static void test_Aging_disp(void)
 
 /*
 *************************************************************
-* 功能说明: 电源指示灯处理,需要周期调用
-* 形    参: 无
-* 返 回 值: 无 10ms调用一次
+* ????: ???????,?????? ??????
+* ?    ?: ?
+* ? ? ?: ? 10ms????
+*           1. ???????,?????
+*           2.  ems???,??LEVEL3 ??
+*           3.  ???,   ?? level2 ??
+*       10ms ????
+*************************************************************
+*/
+static void Inset_life_charge_disp(void)
+{
+	disp_data.trigle_delay_cnt ++;
+	if(disp_data.trigle_delay_cnt > 100)
+	{
+		disp_data.trigle_delay_cnt = 0;
+		if(disp_data.trigle_flag)
+		{
+			LED_2D_OFF;
+			LED_LASER_OFF;
+			disp_data.trigle_flag = 0;
+			//printf("\r\n charge_leds_off \r\n");
+		}
+		else
+		{
+			//LED_1D_ON;
+			LED_2D_ON;
+			LED_3D_ON;
+			Bat_Led_Low_Control(ENABLE);
+			Bat_Led_Full_Control(ENABLE);
+			disp_data.trigle_flag = 1;
+			//printf("\r\n charge_leds_on \r\n");
+		}
+	}
+}
+
+/*
+*************************************************************
+* ????: ???????,?????? ??????
+* ?    ?: ?
+* ? ? ?: ? 10ms????
+*           1. ???????,?????
+*           2.  ems???,??LEVEL3 ??
+*           3.  ???,   ?? level2 ??
+*       10ms ????
+*************************************************************
+*/
+static void Inset_Life_EMS_RF_disp(void)
+{
+	disp_data.trigle_delay_cnt ++;
+	if(disp_data.trigle_delay_cnt > 100)
+	{
+		disp_data.trigle_delay_cnt = 0;
+		if(disp_data.trigle_flag)
+		{
+			LED_3D_OFF;
+			disp_data.trigle_flag = 0;
+		}
+		else
+		{
+			//LED_1D_ON;
+			LED_2D_ON;
+			LED_3D_ON;
+			LED_LASER_ON;
+			Bat_Led_Low_Control(ENABLE);
+			Bat_Led_Full_Control(ENABLE);
+			disp_data.trigle_flag = 1;
+		}
+	}
+}
+
+/*
+*************************************************************
+* ????: ???????,?????? ??????
+* ?    ?: ?
+* ? ? ?: ? 10ms????
+*           1.  ??? 1,???????
+*           2.  ems???,??LEVEL3 ??
+*           3.  ???,   ?? level2 ??
+*       10ms ????
+*************************************************************
+*/
+static void Inset_Life_disp(void)
+{
+	if(Test.Charge_flag)
+	{
+		Inset_life_charge_disp();
+	}
+	else
+	{
+		Inset_Life_EMS_RF_disp();
+	}
+	LED_1D_OFF;
+}
+
+
+/*
+*************************************************************
+* ????: ???????,??????
+* ?    ?: ?
+* ? ? ?: ? 10ms????
 *************************************************************
 */
 void Power_Led_Process(void)
@@ -511,6 +609,11 @@ void Power_Led_Process(void)
 				case Aging_Model_SAT:
 				{
 					test_Aging_disp();
+					break;
+				}
+				case Inset_Life_Test_STA: // ????
+				{
+					Inset_Life_disp();
 					break;
 				}
 
