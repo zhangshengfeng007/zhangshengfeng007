@@ -235,7 +235,7 @@ void EMS_Load_Detection(void)
 	static u8 unactive_cnt = 0;
 	static u16 check_active_delay = 0;
 	// u16 RF_Load_adc_val = T9_2V1_ADC_VAL;
-	u16 RF_Load_adc_val = RF.UnLoad_ADC_Val + T9_0V5_ADC_VAL;
+	u16 RF_Load_adc_val = RF.UnLoad_ADC_Val + T9_0V25_ADC_VAL;   // ¥¯‘ÿµÁ—π > ø’‘ÿµÁ—π 0.25v
 
 	check_active_delay ++;
 	if(check_active_delay < 1500)
@@ -244,7 +244,6 @@ void EMS_Load_Detection(void)
 	}
 	check_active_delay = 1500;
 
-
 	if(Ems.State == Func_DISABLE)
 	{
 		return;
@@ -252,21 +251,13 @@ void EMS_Load_Detection(void)
 
 	Debug_data.dbg_val = adc_value[3];
 	RF.POWER_DETECT_ADC_Val = adc_value[3];
-	if(Power.adc_val < BAT_3V7_ADC_VAL)
-	{
-		// RF_Load_adc_val = T9_2V5_ADC_VAL;
-		RF_Load_adc_val = RF.UnLoad_ADC_Val + T9_0V5_ADC_VAL * 2;
-	}
 
+	Debug_data.load_biaozhun_val =  RF_Load_adc_val;
 	if(adc_value[3] >= RF_Load_adc_val)
 	{
 		active_cnt ++;
 		if(active_cnt > 5)
 		{
-			if(0 ==	RF.Load)
-			{
-				// printf("check load active\r\n");
-			}
 			RF.Load = 1;
 			active_cnt = 11;
 		}

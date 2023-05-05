@@ -4,7 +4,20 @@
 /* Includes ------------------------------------------------------------------*/
 #include "common.h"
 
-#define T9_0V5_ADC_VAL   600
+
+//T9处电压 1.6v   ---// 约为    1.6*4096/3.3 =   1985
+
+#define T9_0V05_ADC_VAL  57
+#define T9_0V15_ADC_VAL  186   //   0.15 * 4096 / 3.3 =   186
+
+#define T9_0V20_ADC_VAL  248
+#define T9_0V25_ADC_VAL  310
+
+#define T9_0V30_ADC_VAL  372
+#define T9_0V40_ADC_VAL  496
+#define T9_0V50_ADC_VAL  600
+#define T9_0V70_ADC_VAL  848
+
 #define T9_2V0_ADC_VAL   2482
 
 #define T9_2V1_ADC_VAL   2606
