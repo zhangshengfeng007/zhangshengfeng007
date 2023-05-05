@@ -23,16 +23,19 @@ typedef struct{
 	Sys_State_Type State;	//机器状态
 	Err_Type Err_State;		//错误状态
 	Sys_level_e Level;			// 1-3
-	Sys_Dir_e LevelDir;		//档位加减方向
-	u16 RF_Time;		//每个输出周期的输出时间
-	u16 EMS_Time;		//每个输出周期的输出时间
-	u16 OutCount;		//输出计数
-	u16 IdleCnt;		//无操作自动关机计数，单位S
-	u16 UseCount;		//使用自动关机计数，单位S
-	u16 Bat_Lower_3v2_cnt;		//电池电压低于3.2v 计数
-	u16 WakeCount;			//唤醒后关机计数，单位S
-	u16 Err_Count;			//唤醒后关机计数，单位S
-	u8 sysoff_disp_flag;		//切换到 sys off 标志位
+	Sys_Dir_e LevelDir;
+	u16 RF_Time;
+	u16 EMS_Time;
+	u16 OneCycle;
+
+	u16 OutCount;
+	u16 IdleCnt;
+	u16 UseCount;
+	u16 Bat_Lower_3v2_cnt;
+	u16 WakeCount;
+	u16 Err_Count;
+	u8 sysoff_disp_flag;
+	u16 charge_run_cnt;
 }Device_Type;
 
 extern Device_Type Device;
