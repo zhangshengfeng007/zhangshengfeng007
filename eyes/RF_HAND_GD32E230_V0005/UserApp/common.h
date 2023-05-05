@@ -39,10 +39,10 @@
 #define _RF_LEVEL3_TIME_	14	// 3??RF?????Å≥??MS
 
 
-#define _EMS_LEVEL1_TIME_	 1	// 1??EMS?????Å≥??MS
-#define _EMS_LEVEL2_TIME_	 1   //2	// 2??EMS?????Å≥??MS
-#define _EMS_LEVEL3_TIME_	 1   //3	// 3??EMS?????Å≥??MS
-#define _OUT_TIME_			 30 //40  //25	// Å±??????Å≥??MS
+#define _EMS_LEVEL1_TIME_	 1
+#define _EMS_LEVEL2_TIME_	 1
+#define _EMS_LEVEL3_TIME_	 2
+#define _OUT_TIME_			 22
 
 #if _DEBUG_
 #define pr(...) printf(__VA_ARGS__)
@@ -90,6 +90,7 @@ typedef enum {
 typedef enum {
 	BAT_LEVEL_NONE = 0,
 	BAT_LEVEL_EMETY,
+	BAT_LEVEL_LOW3,
 	BAT_LEVEL_LOW5,
 	BAT_LEVEL_LOW10,
 	BAT_LEVEL_LOW20,
@@ -107,6 +108,8 @@ typedef enum {
 typedef struct
 {
 	int dbg_val;
+	int load_biaozhun_val;
+	int load_cur_val;
 	/* data */
 }Debug_data_t;
 
