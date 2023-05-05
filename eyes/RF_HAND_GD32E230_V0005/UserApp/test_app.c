@@ -87,7 +87,8 @@ void Test_Mode_Device_Out_Process(void)
 		return;
 	}
 
-	RF_T = Temp_ctrl_RF_time();
+	// RF_T = Temp_ctrl_RF_time();
+	RF_T = Ctrl_RF_time_depend_on_level();
 	MsCnt++;
 
 	switch(Test.mode_sta)
@@ -168,7 +169,7 @@ void Test_Mode_Device_Out_Process(void)
 
 		case Aging_Model_SAT:   //Aging_Model_SAT == Test.mode_sta
 		{
-			if(0 == Test.Aging_ems_rf_flag)
+			if(0 == Test.EMS_RF_out_flag)
 			{
 				Ems_Control(Func_DISABLE);
 				RF_Control(Func_DISABLE);
@@ -176,10 +177,10 @@ void Test_Mode_Device_Out_Process(void)
 			}
 
 			// if ((Power.BatLevel <= BAT_LEVEL_LOW20))   // 当电压低于20%时，不再输出
-			if(Power.adc_val <= BAT_3V7_ADC_VAL)
+			if(Power.adc_val <= BAT_3V6_ADC_VAL)
 			{
-				Test.Aging_ems_rf_flag = 0;
-				Test.Aging_charge_flag = 1;
+				Test.EMS_RF_out_flag = 0;
+				Test.Charge_flag = 1;
 				printf("bat low to charge \r\n");
 				break;
 			}
@@ -188,18 +189,18 @@ void Test_Mode_Device_Out_Process(void)
 			if(test_1s_cnt > 1000)
 			{
 				test_1s_cnt = 0;
-				Test.Aging_ems_rf_cnt ++;
-				//  printf("Aling_mode: run =%d,finish_flag = %d \r\n", Test.Aging_ems_rf_cnt, Test.Aging_finish_flag);
+				Test.Ems_RF_cnt ++;
+				//  printf("Aling_mode: run =%d,finish_flag = %d \r\n", Test.Ems_RF_cnt, Test.Aging_finish_flag);
 			}
 
-			if(Test.Aging_ems_rf_cnt < AGING_EMS_RF_MAX_CNT)
+			if(Test.Ems_RF_cnt < AGING_EMS_RF_MAX_CNT)
 			{
 				test_ems_rf_ctrl(RF_T);
 			}
-			else if(Test.Aging_charge_cnt < AGING_CHARGE_MAX_CNT)
+			else if(Test.Charge_cnt < AGING_CHARGE_MAX_CNT)
 			{
-				Test.Aging_ems_rf_flag = 0;
-				Test.Aging_ems_rf_cnt = AGING_EMS_RF_MAX_CNT;
+				Test.EMS_RF_out_flag = 0;
+				Test.Ems_RF_cnt = AGING_EMS_RF_MAX_CNT;
 			}
 			else
 			{
@@ -211,6 +212,48 @@ void Test_Mode_Device_Out_Process(void)
 			}
 			break;
 		}
+
+		case Inset_Life_Test_STA:   //Aging_Model_SAT == Test.mode_sta
+		{
+			if(0 == Test.EMS_RF_out_flag)
+			{
+				Ems_Control(Func_DISABLE);
+				RF_Control(Func_DISABLE);
+				break;
+			}
+
+			// if ((Power.BatLevel <= BAT_LEVEL_LOW20))   // 当电压低于20%时，不再输出
+			if(Power.adc_val <= BAT_3V6_ADC_VAL)
+			{
+				Test.EMS_RF_out_flag = 0;
+				Test.Charge_flag = 1;
+				printf("bat low to charge \r\n");
+				break;
+			}
+
+			test_1s_cnt ++;
+			if(test_1s_cnt > 1000)
+			{
+				test_1s_cnt = 0;
+				Test.Ems_RF_cnt ++;
+				//  printf("Aling_mode: run =%d,finish_flag = %d \r\n", Test.Ems_RF_cnt, Test.Aging_finish_flag);
+			}
+
+			if(Test.Ems_RF_cnt < INSET_LIFE_EMS_RF_MAX_CNT)       // 电量充足时，由时间控制输出
+			{
+				test_ems_rf_ctrl(RF_T);
+				Test.Charge_cnt  = 0;
+			}
+			else //if(Test.Charge_cnt < INSET_LIFE_CHARGE_MAX_CNT)
+			{
+				Test.Charge_flag = 1;
+				Test.EMS_RF_out_flag = 0;
+				Test.Ems_RF_cnt = 0;
+			}
+
+			break;
+		}
+
 
 		default:
 		{
@@ -549,9 +592,9 @@ void Test_Order_Process(void)
 					Test.State = Func_ENABLE;
 					Device.State = SYS_TEST;
 					LED_LASER_ON;
-					Test.Aging_ems_rf_flag = 1;
-					Test.Aging_ems_rf_cnt = 0;
-					Test.Aging_charge_cnt = 0;
+					Test.EMS_RF_out_flag = 1;
+					Test.Ems_RF_cnt = 0;
+					Test.Charge_cnt = 0;
 				}
 				else if (0x01 == bufer[5])
 				{
@@ -565,9 +608,9 @@ void Test_Order_Process(void)
 			{
 				Test.mode_sta = None_STA;
 				Device.State = SYS_ON;
-				Test.Aging_ems_rf_flag = 1;
-				Test.Aging_ems_rf_cnt = 0;
-				Test.Aging_charge_cnt = 0;
+				Test.EMS_RF_out_flag = 1;
+				Test.Ems_RF_cnt = 0;
+				Test.Charge_cnt = 0;
 
 			}
 			bufer[0]=0x10;
@@ -627,7 +670,7 @@ void Test_Order_Process(void)
 
 		case Comm_Default_Par:
 		{
-			RF.Ntc_Offset = 30;
+			RF.Ntc_Offset = 10;
 			Device.Level = 1;
 			Test.Aging_finish_flag = 0;
 			Device_Data_Write();

@@ -32,6 +32,7 @@ static void KeyPower_CallBack(Key_Event Event)
 				{
 					if (Power.BatLevel > BAT_LEVEL_LOW10)
 					{
+						printf("Wake_up Power.BatLevel: %d \r\n", Power.BatLevel);
 						Sys_state_Ctrl(SYS_ON);
 						Motor_Start_Time(_LONG_TIME_);
 					}
@@ -53,13 +54,31 @@ static void KeyPower_CallBack(Key_Event Event)
 					POW_OFF;
 					break;
 				}
-				case SYS_ON:
+
 				case SYS_TEST:
+				{
+					if((Aging_Model_SAT == Test.mode_sta)&&(Test.Ems_RF_cnt + Test.Charge_cnt < 30))
+					{
+						MOTOR_ON;
+						Delay_ms(_SHORT_TIME_);
+						Device.Level = LEVEL3;
+						Test.mode_sta = Inset_Life_Test_STA;
+						break;
+					}
+				}
+
+				case SYS_ON:
 				default:
 				{
 					MOTOR_ON;
 					Delay_ms(_LONG_TIME_);
 
+					LED_1D_OFF;
+					LED_2D_OFF;
+					LED_3D_OFF;
+					LED_LASER_OFF;
+					Bat_Led_Low_Control(DISABLE);
+					Bat_Led_Full_Control(DISABLE);
 					Sys_state_Ctrl(SYS_OFF);
 				}
 			}
@@ -79,9 +98,14 @@ static void KeyPower_CallBack(Key_Event Event)
 				}
 				case SYS_CHARGE:
 				{
+					if(Device.charge_run_cnt > 30)
+					{
+						break;
+					}
+
 					if(0 == KeyPower.press_cnt)
 					{
-						KeyPower.count_press_delay = 500;
+						KeyPower.count_press_delay = 1000;
 					}
 					if(KeyPower.count_press_delay)
 					{
@@ -89,13 +113,14 @@ static void KeyPower_CallBack(Key_Event Event)
 						if(KeyPower.press_cnt == 5)
 						{
 							// printf("key_press_enter test mode \r\n");
+							KeyPower.press_cnt = 0;
 							Test.mode_sta = Aging_Model_SAT;
 							Test.State = Func_ENABLE;
 							Device.State = SYS_TEST;
 							LED_LASER_ON;
-							Test.Aging_ems_rf_flag = 1;
-							Test.Aging_ems_rf_cnt = 0;
-							Test.Aging_charge_cnt = 0;
+							Test.EMS_RF_out_flag = 1;
+							Test.Ems_RF_cnt = 0;
+							Test.Charge_cnt = 0;
 													// enter_test_mode
 						}
 					}
@@ -140,13 +165,14 @@ static void KeyPower_CallBack(Key_Event Event)
 
 				if(0 == KeyPower.press_cnt)
 				{
-					KeyPower.count_press_delay = 500;
+					KeyPower.count_press_delay = 1000;
 				}
 				if(KeyPower.count_press_delay)
 				{
 					KeyPower.press_cnt ++;
-					if(KeyPower.press_cnt == 5)
+					if(KeyPower.press_cnt == 8)
 					{
+						KeyPower.press_cnt = 0;
 						Sys_state_Ctrl(SYS_ADJUST_RELOAD);
 						//Device.State = SYS_ADJUST_RELOAD;
 												// enter_test_mode
