@@ -44,7 +44,7 @@ void Listen_Task0(void)
 
 	if((RF.State == Func_DISABLE) && (Ems.State == Func_DISABLE))
 	{
-		if(RF.duty_time + Device.EMS_Time + 4 < _OUT_TIME_)
+		if(RF.duty_time + Device.EMS_Time + 2 < _OUT_TIME_)
 		{
 			Bat_Level_Detection();
 		}
