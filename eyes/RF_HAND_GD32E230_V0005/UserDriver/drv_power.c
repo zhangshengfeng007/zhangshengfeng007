@@ -54,7 +54,7 @@ void Power_Charge_Control(Charge_Type cmd)
 *************************************************************
 * 功能说明: BAT 温度读取,需要周期调用
 * 形    参: ntc 需要更新的温度变量
-* 返 回 值: 无
+* 返 回 值: 无    NTC B值 = 3950 // 3435 （厂商提供）
 *************************************************************
 */
 void Bat_Temp_Read(void)
@@ -91,7 +91,8 @@ void Bat_Temp_Read(void)
 		arr[4] =  arr[4]*10000/(4095-arr[4]);
 
 		//计算温度,1位小数点
-		Power.BatTemp = ((1/( log(arr[4]/10000.0)/3950.0 + 0.003354)) - 273.15)*10;
+		//Power.BatTemp = ((1/( log(arr[4]/10000.0)/3950.0 + 0.003354)) - 273.15)*10;
+		Power.BatTemp = ((1/( log(arr[4]/10000.0)/3435.0 + 0.003354)) - 273.15)*10;
 	}
 	else
 	{
@@ -109,7 +110,7 @@ void Bat_Temp_Read(void)
 * 形    参: 无
 * 返 回 值: 无
 *
-*   1ms 调用一次
+*   50ms 调用一次
 
 		  GND
 *************************************************************/
@@ -119,10 +120,67 @@ static void bat_val_3v2_check(u32 bat_val)
 	static u8 High_lvl_change_delay = 0;
 	static u8 LOW_lvl_change_delay = 0;
 
-	if(Power.Last_Bat_Level == BAT_LEVEL_LOW10)
+	if(Power.Last_Bat_Level == BAT_LEVEL_LOW5)
 	{
 		if(bat_val <= BAT_3V2_ADC_VAL - BAT_0V_05_ADC_VAL)
-		{   
+		{
+			High_lvl_change_delay ++;
+			if(High_lvl_change_delay > 100)
+			{
+				High_lvl_change_delay = 0;
+				Power.BatLevel = BAT_LEVEL_LOW3;
+			}
+		}
+		else
+		{
+			High_lvl_change_delay = 0;
+		}
+		LOW_lvl_change_delay = 0;
+	}
+	else if(Power.BatLevel == BAT_LEVEL_EMETY)
+	{
+		High_lvl_change_delay = 0;
+		if(bat_val > BAT_3V1_ADC_VAL)
+		{
+			LOW_lvl_change_delay ++;
+			if(LOW_lvl_change_delay > 100)
+			{
+				LOW_lvl_change_delay = 0;
+				Power.BatLevel = BAT_LEVEL_LOW3;
+			}
+		}
+		else
+		{
+			LOW_lvl_change_delay = 0;
+		}
+	}
+	else
+	{
+		Power.BatLevel = BAT_LEVEL_LOW3;
+		High_lvl_change_delay = 0;
+		LOW_lvl_change_delay = 0;
+	}
+}
+
+/*
+*************************************************************
+* 功能说明: 电池电量检测,需要周期调用 3.2v附近电压测试
+* 形    参: 无
+* 返 回 值: 无
+*
+*   50ms 调用一次
+
+		  GND
+*************************************************************/
+
+static void bat_val_3v3_check(u32 bat_val)
+{
+	static u8 High_lvl_change_delay = 0;
+	static u8 LOW_lvl_change_delay = 0;
+	if(Power.Last_Bat_Level == BAT_LEVEL_LOW10)
+	{
+		if(bat_val <= BAT_3V3_ADC_VAL - BAT_0V_05_ADC_VAL)
+		{
 			High_lvl_change_delay ++;
 			if(High_lvl_change_delay > 100)
 			{
@@ -135,12 +193,11 @@ static void bat_val_3v2_check(u32 bat_val)
 			High_lvl_change_delay = 0;
 		}
 		LOW_lvl_change_delay = 0;
-
 	}
-	else if(Power.BatLevel = BAT_LEVEL_EMETY)
+	else if(Power.Last_Bat_Level == BAT_LEVEL_LOW3)
 	{
 		High_lvl_change_delay = 0;
-		if(bat_val > BAT_3V0_ADC_VAL + BAT_0V_05_ADC_VAL)
+		if(bat_val > BAT_3V2_ADC_VAL + BAT_0V_05_ADC_VAL)
 		{
 			LOW_lvl_change_delay ++;
 			if(LOW_lvl_change_delay > 100)
@@ -157,28 +214,29 @@ static void bat_val_3v2_check(u32 bat_val)
 	else
 	{
 		Power.BatLevel = BAT_LEVEL_LOW5;
+		LOW_lvl_change_delay = 0;
+		High_lvl_change_delay = 0;
 	}
 }
-
-/*
-*************************************************************
+/*************************************************************
 * 功能说明: 电池电量检测,需要周期调用 3.2v附近电压测试
 * 形    参: 无
 * 返 回 值: 无
 *
-*   1ms 调用一次
+*   50ms 调用一次
 
 		  GND
 *************************************************************/
 
-static void bat_val_3v3_check(u32 bat_val)
+static void bat_val_3v4_check(u32 bat_val)
 {
 	static u8 High_lvl_change_delay = 0;
 	static u8 LOW_lvl_change_delay = 0;
+
 	if(Power.Last_Bat_Level == BAT_LEVEL_LOW20)
 	{
-		if(bat_val <= BAT_3V3_ADC_VAL - BAT_0V_05_ADC_VAL)
-		{   
+		if(bat_val <= BAT_3V4_ADC_VAL - BAT_0V_05_ADC_VAL)
+		{
 			High_lvl_change_delay ++;
 			if(High_lvl_change_delay > 100)
 			{
@@ -195,7 +253,7 @@ static void bat_val_3v3_check(u32 bat_val)
 	else if(Power.Last_Bat_Level == BAT_LEVEL_LOW5)
 	{
 		High_lvl_change_delay = 0;
-		if(bat_val > BAT_3V2_ADC_VAL + BAT_0V_05_ADC_VAL)
+		if(bat_val > BAT_3V3_ADC_VAL + BAT_0V_05_ADC_VAL)
 		{
 			LOW_lvl_change_delay ++;
 			if(LOW_lvl_change_delay > 100)
@@ -209,32 +267,33 @@ static void bat_val_3v3_check(u32 bat_val)
 			LOW_lvl_change_delay = 0;
 		}
 	}
-	else
-	{
+	 else
+	 {
 		Power.BatLevel = BAT_LEVEL_LOW10;
 		LOW_lvl_change_delay = 0;
 		High_lvl_change_delay = 0;
-	}
+	 }
 }
+
 /*************************************************************
-* 功能说明: 电池电量检测,需要周期调用 3.2v附近电压测试
+* 功能说明: 电池电量检测
 * 形    参: 无
 * 返 回 值: 无
 *
-*   1ms 调用一次
+*   50ms 调用一次
 
 		  GND
 *************************************************************/
 
-static void bat_val_3v4_check(u32 bat_val)
+static void bat_val_3v5_check(u32 bat_val)
 {
 	static u8 High_lvl_change_delay = 0;
 	static u8 LOW_lvl_change_delay = 0;
 
 	if(Power.Last_Bat_Level == BAT_LEVEL_PRE_70)
 	{
-		if(bat_val <= BAT_3V4_ADC_VAL - BAT_0V_05_ADC_VAL)
-		{   
+		if(bat_val <= BAT_3V5_ADC_VAL - BAT_0V_05_ADC_VAL)
+		{
 			High_lvl_change_delay ++;
 			if(High_lvl_change_delay > 100)
 			{
@@ -251,7 +310,7 @@ static void bat_val_3v4_check(u32 bat_val)
 	else if(Power.Last_Bat_Level == BAT_LEVEL_LOW10)
 	{
 		High_lvl_change_delay = 0;
-		if(bat_val > BAT_3V3_ADC_VAL + BAT_0V_05_ADC_VAL)
+		if(bat_val > BAT_3V4_ADC_VAL + BAT_0V_05_ADC_VAL)
 		{
 			LOW_lvl_change_delay ++;
 			if(LOW_lvl_change_delay > 100)
@@ -272,12 +331,15 @@ static void bat_val_3v4_check(u32 bat_val)
 		High_lvl_change_delay = 0;
 	 }
 }
+
+
+
 /*************************************************************
 * 功能说明: 电池电量检测,需要周期调用 3.2v附近电压测试
 * 形    参: 无
 * 返 回 值: 无
 *
-*   1ms 调用一次
+*   50ms 调用一次
 
 		  GND
 *************************************************************/
@@ -290,7 +352,7 @@ static void bat_val_3v9_check(u32 bat_val)
 	if(Power.Last_Bat_Level == BAT_LEVEL_MID)
 	{
 		if(bat_val <= BAT_3V9_ADC_VAL - BAT_0V_05_ADC_VAL)
-		{   
+		{
 			High_lvl_change_delay ++;
 			if(High_lvl_change_delay > 100)
 			{
@@ -309,7 +371,7 @@ static void bat_val_3v9_check(u32 bat_val)
 	else if(Power.Last_Bat_Level == BAT_LEVEL_LOW20)
 	{
 		High_lvl_change_delay = 0;
-		if(bat_val > BAT_3V4_ADC_VAL + BAT_0V_10_ADC_VAL)
+		if(bat_val > BAT_3V5_ADC_VAL + BAT_0V_05_ADC_VAL)
 		{
 			LOW_lvl_change_delay ++;
 			if(LOW_lvl_change_delay > 100)
@@ -336,7 +398,7 @@ static void bat_val_3v9_check(u32 bat_val)
 * 形    参: 无
 * 返 回 值: 无
 *
-*   1ms 调用一次
+*   50ms 调用一次
 
 		  GND
 *************************************************************/
@@ -389,6 +451,21 @@ static void bat_val_4v1_check(u32 bat_val)
 		 200k
 		  |
 		  GND
+
+*  	14430-800mAh-3.7v	电池 （电池分级-厂家提供）
+
+*   电压V              容量（mAh）     百分比（%）
+*    4.2               832              100
+*    4.05              750              90
+*    3.95              666              80
+*    3.85              583              70
+*    3.75              500              60
+*    3.65              417              50
+*    3.6               333              40
+*    3.55              250              30
+*    3.5               167              20  //----------------
+*    3.4                84              10
+*    3.3                42              5   //----------------
 *************************************************************
 */
 void Bat_Level_Detection(void)
@@ -431,7 +508,7 @@ void Bat_Level_Detection(void)
 			}
 			case SYS_TEST:
 			{
-				if(Test.Aging_charge_flag)
+				if(Test.Charge_flag)
 				{
 					if(Power.adc_val < BAT_4V1_ADC_VAL)
 					{
@@ -460,10 +537,16 @@ void Bat_Level_Detection(void)
 			bat_val_3v3_check(Power.adc_val );
 		}
 
-		else if(Power.adc_val  <= BAT_3V4_ADC_VAL)
+		else if(Power.adc_val  <= BAT_3V4_ADC_VAL)        //
 		{
-			bat_val_3v4_check(Power.adc_val);
+			bat_val_3v4_check(Power.adc_val );
 		}
+
+		else if(Power.adc_val  <= BAT_3V5_ADC_VAL)
+		{
+			bat_val_3v5_check(Power.adc_val);
+		}
+
 		else if(Power.adc_val  <= BAT_3V9_ADC_VAL)
 		{
 			bat_val_3v9_check(Power.adc_val );
