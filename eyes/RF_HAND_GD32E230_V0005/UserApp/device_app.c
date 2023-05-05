@@ -201,7 +201,7 @@ void Device_Data_Read(void)
 	temp = REG32(LEVEL_ADDR);
 	if ((temp < LEVEL1) || (temp > LEVEL3))
 	{
-		RF.Ntc_Offset = 10;   // 读取异常， 默认值
+		RF.Ntc_Offset = 0;   // 读取异常， 默认值
 		Test.Aging_finish_flag = 0;
 		Device.Level = LEVEL1;
 		RF.UnLoad_ADC_Val = T9_0V70_ADC_VAL; // 2023 04 23 默认值写为 0.70mv
@@ -216,7 +216,7 @@ void Device_Data_Read(void)
 	}
 	else
 	{
-		RF.Ntc_Offset = 10;
+		RF.Ntc_Offset = 0;
 	}
 
 	Test.Aging_finish_flag = REG32(AGING_FINISH_FLAG_ADDR);
@@ -242,6 +242,7 @@ void Device_Data_Read(void)
 *      2.缓慢升温阶段： 当NTC在升温阶段达到一个值时，说明外部已经到达42°C
 *      3.恒温阶段：     当
 *   用恒温水槽测试，温度NTC和水温，最终差距3°C
+*                  用恒温水槽测试升温时间：机器从室温（约25°C）,上升到42°C,约2min~3min
 *************************************************************
 */
  u16 Temp_ctrl_RF_time(void)
@@ -346,6 +347,82 @@ void Device_Data_Read(void)
 	return Time;
 }
 
+
+/*
+*************************************************************
+* 功能说明: 主输出周期处理函数,总输出时间25MS , 1ms进入一次
+*
+*
+* 目的: 1. 三个档位之间，rf输出需要有明显测差异（产品需求，也是合理需求）
+		2. 温度升温快，稳定在预期值
+* NTC传导特性：NTC温度传递的 迟滞性，
+* 进行的操作：
+*      1.快速升温阶段： 刚开机阶段，温度NTC值较低，增大RF的输出时间，
+*      2.缓慢升温阶段： 当NTC在升温阶段达到一个值时，说明外部已经到达42°C
+*      3.恒温阶段：     当
+*   用恒温水槽测试，温度NTC和水温，最终差距3°C
+*                  用恒温水槽测试升温时间：机器从室温（约25°C）,上升到42°C,约2min~3min
+*************************************************************
+*/
+ u16 Ctrl_RF_time_depend_on_level(void)
+{
+	u16 Time = 0;
+
+	if (RF.Temp <= 375)
+	{
+		Time = Device.RF_Time;
+	}
+	else if (RF.Temp <= 390)
+	{
+		Time = Device.RF_Time /2;
+	}
+	else if (RF.Temp <= 405)
+	{
+		Time = Device.RF_Time /3;
+	}
+	else if (RF.Temp <= 415)
+	{
+		//Time = Device.RF_Time /2;
+		// Time = Device.RF_Time;
+		Time = Device.RF_Time /4;
+	}
+	else
+	{
+		Time = 0;
+	}
+	RF.duty_time = Time;
+	return Time;
+}
+
+
+/*
+*************************************************************
+* 功能说明:
+*
+* 实际测试中发现：
+* 1. 当仅有ems输出时，温度仍然会上升。即ems也有升温的功能
+* 2. 又想维持ems的体感不变，所以根据温度控制 一个周期的时间
+*
+*************************************************************
+*/
+ u16 Temp_Ctrl_OneCycle(void)
+{
+	u16 Time = _OUT_TIME_;
+
+	if (RF.Temp >= 430)
+	{
+		Time = _OUT_TIME_ + _OUT_TIME_ + _OUT_TIME_;
+	}
+	else if (RF.Temp >= 415)
+	{
+		Time = _OUT_TIME_ + _OUT_TIME_;
+	}
+	else if (RF.Temp >= 405)
+	{
+		Time = _OUT_TIME_ + 10;
+	}
+	return Time;
+}
 /*
 *************************************************************
 * 功能说明: 主输出周期处理函数,总输出时间25MS
@@ -361,7 +438,10 @@ void Device_Out_Process(void)
 
 	static u8 Ems_1ms_out_cnt;
 
+	static u8 bat_low_sleep_delay_cnt = 0;
+
 	u16 RF_T = 0;
+	u16 Cycle_T = 0;
 
 	if (Power.BatLevel <= BAT_LEVEL_LOW5)
 	{
@@ -372,10 +452,17 @@ void Device_Out_Process(void)
 		{
 			Device.IdleCnt ++;
 			Device.Bat_Lower_3v2_cnt = 0;
+
+			bat_low_sleep_delay_cnt ++;
+			if(bat_low_sleep_delay_cnt > 3)
+			{
+				Device.IdleCnt = _AUTO_OFF_;
+			}
 		}
 
 		return;
 	}
+	bat_low_sleep_delay_cnt = 0;
 	Device.Bat_Lower_3v2_cnt = 0;
 
 	MsCnt++;
@@ -391,7 +478,10 @@ void Device_Out_Process(void)
 			Motor_Start_Time(200);
 			// printf("\r\n rf_load motor_on:\r\n");
 		}
-		RF_T = Temp_ctrl_RF_time();
+		//RF_T = Temp_ctrl_RF_time();
+		RF_T = Ctrl_RF_time_depend_on_level();
+		Cycle_T = Temp_Ctrl_OneCycle();
+		Debug_data.dbg_val = Cycle_T;
 		// 输出时间计数
 		if (MsCnt >= 1000)
 		{
@@ -399,24 +489,6 @@ void Device_Out_Process(void)
 			Device.UseCount++;
 		}
 
-		// 输出控制 ems + 1ms + rf + 空闲时间ms = _OUT_TIME_
-		// if (Device.OutCount == 0)
-		// {
-		// 	Ems_Control(Func_ENABLE);
-		// }
-		// else if (Device.OutCount == Device.EMS_Time)
-		// {
-		// 	Ems_Control(Func_DISABLE);
-		// }
-		// else if (Device.OutCount == (Device.EMS_Time + 1))
-		// {
-		// 	RF_Control(Func_ENABLE);
-		// }
-		// else if (Device.OutCount == (Device.EMS_Time + 1 + RF_T))
-		// {
-		// 	RF_Control(Func_DISABLE);
-		// }
-		// --------------------------Ems_Time_change_flag
 
 		if (Device.OutCount == 0)
 		{
@@ -436,7 +508,7 @@ void Device_Out_Process(void)
 		}
         //-----------------------------
 		Device.OutCount++;
-		if (Device.OutCount >= _OUT_TIME_)
+		if (Device.OutCount >= Cycle_T)  //_OUT_TIME_
 		{
 			Device.OutCount = 0;
 			Ems_1ms_out_cnt ++;
@@ -444,7 +516,7 @@ void Device_Out_Process(void)
 			{
 				case LEVEL2:
 				{
-					if(Ems_1ms_out_cnt > 2)
+					if(Ems_1ms_out_cnt > 4)
 					{
 						Ems_1ms_out_cnt = 0;
 						Device.EMS_Time = _EMS_LEVEL2_TIME_ + 1;
@@ -457,15 +529,15 @@ void Device_Out_Process(void)
 				}
 				case LEVEL3:
 				{
-					// if(Ems_1ms_out_cnt > 1)
+					if(Ems_1ms_out_cnt > 4)
 					{
 						Ems_1ms_out_cnt = 0;
 						Device.EMS_Time = _EMS_LEVEL3_TIME_ + 1;
 					}
-					// else
-					// {
-					// 	Device.EMS_Time = _EMS_LEVEL3_TIME_;
-					// }
+					else
+					{
+						Device.EMS_Time = _EMS_LEVEL3_TIME_;
+					}
 					break;
 				}
 				case LEVEL1:
@@ -627,6 +699,27 @@ void Device_AutoOff_Process(void)
 			break;
 		}
 
+/*
+1.因为机器不同，对应的空载和带载电压不同，这里只是写了其中一种情况。
+
+ 	电池电压         空载电压V0      带载电压V1       记录到Flash的基准值
+	4.2v     		1.6v             2.3v            V0
+
+	4.1v   			1.73v            2.3v            V0-0.15v
+	4.0v   			1.75v            2.35v           V0-0.15v
+	3.9v   			1.75v            2.4v            V0-0.15v
+
+	3.8v   			1.85v            2.45v           V0-0.25v
+	3.7v   			1.92v            2.5v            V0-0.30v
+
+	3.6v   			2.0v             2.65v           V0-0.40v
+	3.5v   			2.0v             2.7v            V0-0.40v
+
+	3.4v   			2.1v             2.8v            V0-0.50v
+	3.3v   			2.3v             2.9v            V0-0.70v
+	3.2v   			2.3v             2.95v           V0-0.70v
+
+*/
 		case SYS_ADJUST_RELOAD:
 		{
 			adjust_rf_delay ++;
@@ -634,12 +727,40 @@ void Device_AutoOff_Process(void)
 			{
 				adjust_rf_delay = 0;
 
-				RF.UnLoad_ADC_Val = RF.POWER_DETECT_ADC_Val;
-				if(Power.adc_val < BAT_3V7_ADC_VAL)
-				{
-					RF.UnLoad_ADC_Val -= T9_0V5_ADC_VAL;
+				// if(Power.adc_val > BAT_4V1_ADC_VAL)
+				// {
+				// 	RF.UnLoad_ADC_Val = RF.POWER_DETECT_ADC_Val;
+				// }
+				// else if(Power.adc_val > BAT_3V8_ADC_VAL)
+				// {
+				// 	RF.UnLoad_ADC_Val = RF.POWER_DETECT_ADC_Val - T9_0V15_ADC_VAL;
+				// }
+				// else if(Power.adc_val > BAT_3V7_ADC_VAL)
+				// {
 
+				// 	RF.UnLoad_ADC_Val = RF.POWER_DETECT_ADC_Val - T9_0V25_ADC_VAL;
+				// }
+				// else if (Power.adc_val > BAT_3V6_ADC_VAL)
+				// {
+				// 	RF.UnLoad_ADC_Val = RF.POWER_DETECT_ADC_Val - T9_0V30_ADC_VAL;
+				// }
+				// else if (Power.adc_val > BAT_3V4_ADC_VAL)
+				// {
+				// 	RF.UnLoad_ADC_Val = RF.POWER_DETECT_ADC_Val - T9_0V40_ADC_VAL;
+				// }
+				// else if (Power.adc_val > BAT_3V3_ADC_VAL)
+				// {
+				// 	RF.UnLoad_ADC_Val = RF.POWER_DETECT_ADC_Val - T9_0V50_ADC_VAL;
+				// }
+				// else if (Power.adc_val > BAT_3V2_ADC_VAL)
+				// {
+				// 	RF.UnLoad_ADC_Val = RF.POWER_DETECT_ADC_Val - T9_0V70_ADC_VAL;
+				// }
+				// else
+				{
+					RF.UnLoad_ADC_Val = RF.POWER_DETECT_ADC_Val;
 				}
+
 				Device_Data_Write();
 				Sys_state_Ctrl(SYS_ON);
 				Level_Leds_Force_refresh();
@@ -670,17 +791,17 @@ void Test_mode_Charge_Ctrl(void)
 	{
 		case Aging_Model_SAT:
 		{
-			if(Test.Aging_ems_rf_flag)
+			if(Test.EMS_RF_out_flag)
 			{
-				if((Test.Aging_finish_flag) && (Power.adc_val < BAT_3V7_ADC_VAL))
+				if((Test.Aging_finish_flag) && (Power.adc_val < BAT_3V6_ADC_VAL))
 				{
-					Test.Aging_charge_flag = 1;
-					Test.Aging_ems_rf_flag = 0;
+					Test.Charge_flag = 1;
+					Test.EMS_RF_out_flag = 0;
 					Power_Charge_Control(CHARGE_START);
 				}
 				else
 				{
-					Test.Aging_charge_flag = 0;
+					Test.Charge_flag = 0;
 					Power_Charge_Control(CHARGE_FINISH);
 				}
 				break;
@@ -689,33 +810,93 @@ void Test_mode_Charge_Ctrl(void)
 			if(Charge_100ms_cnt > 10)
 			{
 				Charge_100ms_cnt = 0;
-				Test.Aging_charge_cnt ++;
+				Test.Charge_cnt ++;
 
 				if (SensorPPR.State)
 				{
 					DC5V_not_online_cnt ++;
-					if(DC5V_not_online_cnt > 5)    // 如果该充电的时候灭有连接充电器，则进入关机状态
+					if(DC5V_not_online_cnt > 20)    // 如果该充电的时候灭有连接充电器，则进入关机状态
 					{
 						Sys_state_Ctrl(SYS_WAKE);
 					}
+				}
+				else
+				{
+					DC5V_not_online_cnt = 0;
 				}
 
 			}
 			if(Power.adc_val > BAT_3V9_ADC_VAL)
 			{
 				Power_Charge_Control(CHARGE_FINISH);
-				Test.Aging_charge_cnt = AGING_CHARGE_MAX_CNT;
-				Test.Aging_ems_rf_flag = 1;
-				Test.Aging_charge_flag = 0;
+				Test.Charge_cnt = AGING_CHARGE_MAX_CNT;
+				Test.EMS_RF_out_flag = 1;
+				Test.Charge_flag = 0;
 			}
 			else
 			{
 				Power_Charge_Control(CHARGE_START);
-				Test.Aging_charge_flag = 1;
-				Test.Aging_ems_rf_flag = 0;
+				Test.Charge_flag = 1;
+				Test.EMS_RF_out_flag = 0;
 			}
 			break;
 		}
+
+		case Inset_Life_Test_STA:
+		{
+			if(Test.EMS_RF_out_flag)
+			{
+				if(Power.adc_val < BAT_3V6_ADC_VAL)
+				{
+					Test.Charge_flag = 1;
+					Test.EMS_RF_out_flag = 0;
+					Power_Charge_Control(CHARGE_START);
+				}
+				else
+				{
+					Test.Charge_flag = 0;
+					Power_Charge_Control(CHARGE_FINISH);
+				}
+				break;
+			}
+
+			Charge_100ms_cnt ++;
+			if(Charge_100ms_cnt > 10)
+			{
+				Charge_100ms_cnt = 0;
+				Test.Charge_cnt ++;
+
+				if (SensorPPR.State)
+				{
+					DC5V_not_online_cnt ++;
+					if(DC5V_not_online_cnt > 20)    // 如果该充电的时候灭有连接充电器，则进入关机状态
+					{
+						Sys_state_Ctrl(SYS_WAKE);
+					}
+				}
+				else
+				{
+					DC5V_not_online_cnt = 0;
+				}
+			}
+			if(Power.adc_val > BAT_3V9_ADC_VAL)
+			{
+				Power_Charge_Control(CHARGE_FINISH);
+				if(Test.Charge_cnt > INSET_LIFE_CHARGE_MAX_CNT)
+				{
+					Test.EMS_RF_out_flag = 1;
+					Test.Charge_flag = 0;
+				}
+			}
+			else
+			{
+				Power_Charge_Control(CHARGE_START);
+				Test.Charge_flag = 1;
+				Test.EMS_RF_out_flag = 0;
+			}
+			break;
+		}
+
 		default:
 		{
 			break;
@@ -737,6 +918,7 @@ void Test_mode_Charge_Ctrl(void)
 void Normal_mode_Charge_Ctrl(void)
 {
 	static u8 ChargeConut = 0; // 启动充电后，延时一段时间再检测是否充满
+	static u8 charge_100MS_cnt;
 
 	// USB插入
 	if (SensorPPR.State == 0)
@@ -780,10 +962,17 @@ void Normal_mode_Charge_Ctrl(void)
 				}
 			}
 		}
+		charge_100MS_cnt ++;
+		if(charge_100MS_cnt >= 10)
+		{
+			charge_100MS_cnt = 0;
+			Device.charge_run_cnt ++;
+		}
 	}
 	else if (Device.State == SYS_CHARGE)
 	{
 		Sys_state_Ctrl(SYS_WAKE);
+		Device.charge_run_cnt = 0;
 	}
 }
 
