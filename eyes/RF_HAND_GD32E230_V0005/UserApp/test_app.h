@@ -73,6 +73,10 @@ typedef enum
 #define AGING_CHARGE_MAX_CNT   1200//1200     // 20分钟
 #define AGING_EMS_RF_MAX_CNT   600//600      // 10分钟
 
+#define INSET_LIFE_CHARGE_MAX_CNT   600//1200     // 10 分钟
+#define INSET_LIFE_EMS_RF_MAX_CNT   240//600      //  4 分钟
+
+
 typedef struct{
 	Func_Type State;
 	Test_STATE_e mode_sta;
@@ -81,10 +85,10 @@ typedef struct{
 	u16 Adj_Cnt;		  //校准计数
 	int Aging_run_cnt;     // 老化测试运行时长，按 秒计算
 
-	uint8_t Aging_ems_rf_flag; // 老化模式，ems_rf输出标志位
-	uint8_t Aging_charge_flag; // 老化模式，ems_rf输出标志位
-	int Aging_ems_rf_cnt;     // 老化测试射频时长，按 秒计算，运行10min
-	int Aging_charge_cnt;     // 老化测试运行时长，按 秒计算，运行20min
+	uint8_t EMS_RF_out_flag; // 老化模式，ems_rf输出标志位
+	uint8_t Charge_flag; // 老化模式，ems_rf输出标志位
+	int Ems_RF_cnt;     // 老化测试射频时长，按 秒计算，运行10min
+	int Charge_cnt;     // 老化测试运行时长，按 秒计算，运行20min
 	uint8_t Aging_finish_flag; // 老化测试完毕标志位
 
 }Test_Type;

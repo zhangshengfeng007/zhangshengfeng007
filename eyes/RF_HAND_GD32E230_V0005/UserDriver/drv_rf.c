@@ -37,15 +37,15 @@ TEST_NTC_t test_ntc_data;
 
 //20~C --50~C *1000  : pull_up 10kR,
 //
-const u16 NTC_ADC_ARRAY[]=
-{
-	2274, 2252, 2229, 2206, 2183, 2161, 2138, 2115, 2092, 2070,  // 20 --24.5
-	2048, 2025, 2003, 1980, 1955, 1936, 1914, 1888, 1870, 1848,  // 25 --29.5
-	1827, 1805, 1784, 1762, 1741, 1720, 1699, 1678, 1658, 1637,  // 30 --34.5
-	1617, 1597, 1576, 1556, 1537, 1517, 1498, 1478, 1459, 1440,  // 35 --39.5
-	1421, 1403, 1384, 1366, 1347, 1329, 1312, 1294, 1277, 1259,  // 40 --44.5
-	1242, 1225, 1208, 1192, 1175, 1159, 1143, 1127, 1112, 1096,  // 45 --49.5
-};
+//const u16 NTC_ADC_ARRAY[]=
+//{
+//	2274, 2252, 2229, 2206, 2183, 2161, 2138, 2115, 2092, 2070,  // 20 --24.5
+//	2048, 2025, 2003, 1980, 1955, 1936, 1914, 1888, 1870, 1848,  // 25 --29.5
+//	1827, 1805, 1784, 1762, 1741, 1720, 1699, 1678, 1658, 1637,  // 30 --34.5
+//	1617, 1597, 1576, 1556, 1537, 1517, 1498, 1478, 1459, 1440,  // 35 --39.5
+//	1421, 1403, 1384, 1366, 1347, 1329, 1312, 1294, 1277, 1259,  // 40 --44.5
+//	1242, 1225, 1208, 1192, 1175, 1159, 1143, 1127, 1112, 1096,  // 45 --49.5
+//};
 
 
 /*
@@ -250,51 +250,52 @@ void RF_Temp_Read(void)
 	if(arr[4] < 3800)
 	{
 
-		// 二分法查表
-		p_tail = sizeof(NTC_ADC_ARRAY) / sizeof(NTC_ADC_ARRAY[0]);
-		cur_index = 0;
-		last_index = p_tail;
-		p_head = 0;
-		for (i = 0; i < sizeof(NTC_ADC_ARRAY) / sizeof(NTC_ADC_ARRAY[0]); i++)
-		{
-			if((arr[4] >= NTC_ADC_ARRAY[cur_index]))
-			{
-				if((0 == cur_index)||(1 == cur_index))
-				{
-					break;
-				}
+//		// 二分法查表
+//		p_tail = sizeof(NTC_ADC_ARRAY) / sizeof(NTC_ADC_ARRAY[0]);
+//		cur_index = 0;
+//		last_index = p_tail;
+//		p_head = 0;
+//		for (i = 0; i < sizeof(NTC_ADC_ARRAY) / sizeof(NTC_ADC_ARRAY[0]); i++)
+//		{
+//			if((arr[4] >= NTC_ADC_ARRAY[cur_index]))
+//			{
+//				if((0 == cur_index)||(1 == cur_index))
+//				{
+//					break;
+//				}
 
-				if(arr[4] <= NTC_ADC_ARRAY[cur_index - 1])
-				{
-					cur_index = cur_index - 1;
-					break;
-				}
-				tmp = cur_index;
-				cur_index = (cur_index + p_head) / 2;
-				last_index = tmp;
-			}
-			else
-			{
-				if((p_tail == cur_index) || (p_tail -1 == cur_index))
-				{
-					break;
-				}
-				if(arr[4] >= NTC_ADC_ARRAY[cur_index + 1])
-				{
-					cur_index = cur_index + 1;
-					break;
-				}
-				tmp = cur_index;
-				cur_index = (cur_index + last_index) / 2;
-				p_head = tmp;    //  last_index
-			}
-		}
+//				if(arr[4] <= NTC_ADC_ARRAY[cur_index - 1])
+//				{
+//					cur_index = cur_index - 1;
+//					break;
+//				}
+//				tmp = cur_index;
+//				cur_index = (cur_index + p_head) / 2;
+//				last_index = tmp;
+//			}
+//			else
+//			{
+//				if((p_tail == cur_index) || (p_tail -1 == cur_index))
+//				{
+//					break;
+//				}
+//				if(arr[4] >= NTC_ADC_ARRAY[cur_index + 1])
+//				{
+//					cur_index = cur_index + 1;
+//					break;
+//				}
+//				tmp = cur_index;
+//				cur_index = (cur_index + last_index) / 2;
+//				p_head = tmp;    //  last_index
+//			}
+//		}
 		// //计算电阻
-		// arr[4] =  arr[4]*10000/(4095-arr[4]);
+		 arr[4] =  arr[4]*10000/(4095-arr[4]);
 
 		//计算温度,1位小数点
-		// RF.Sc_Temp = ((1/( log(arr[4]/10000.0)/3950.0 + 0.003354)) - 273.15)*10;
-		RF.Sc_Temp = 200 + cur_index * 5;
+//		 RF.Sc_Temp = ((1/( log(arr[4]/10000.0)/3950.0 + 0.003354)) - 273.15)*10;
+		RF.Sc_Temp = ((1/( log(arr[4]/10000.0)/3380.0 + 0.003354)) - 273.15)*10;
+//		RF.Sc_Temp = 200 + cur_index * 5;
 		RF.Temp = RF.Sc_Temp + RF.Ntc_Offset;
 	}
 	else
