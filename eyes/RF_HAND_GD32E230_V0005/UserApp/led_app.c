@@ -1,6 +1,6 @@
 /***********************************************************
  * @file    sys_app.c
- * @brief  主应用程序
+ * @brief  ?????
  * @version V1.0
  * @date    2022.11.21
  ***********************************************************/
@@ -13,9 +13,9 @@ LED_DISP_t disp_data;
 
 /*
 *************************************************************
-* 功能说明: LED强制刷新一次
-* 形    参: cmd 开关
-* 返 回 值: 无
+* ????: LED??????
+* ?    ?: cmd ??
+* ? ? ?: ?
 *************************************************************
 */
 void Level_Leds_Force_refresh(void)
@@ -49,9 +49,9 @@ void Level_Leds_Force_refresh(void)
 
 /*
 *************************************************************
-* 功能说明: 档位灯开关
-* 形    参: cmd 开关
-* 返 回 值: 无
+* ????: ?????
+* ?    ?: cmd ??
+* ? ? ?: ?
 *************************************************************
 */
 void Level_Leds_Control(LEVEL_LEDS_e cmd)
@@ -87,9 +87,9 @@ void Level_Leds_Control(LEVEL_LEDS_e cmd)
 
 /*
 *************************************************************
-* 功能说明:  系统正常工作时，电源指示灯处理,需要周期调用
-* 形    参: 无
-* 返 回 值: 无
+* ????:  ???????,???????,??????
+* ?    ?: ?
+* ? ? ?: ?
 *************************************************************
 */
 static void sys_on_bat_leds_disp(void)
@@ -101,7 +101,7 @@ static void sys_on_bat_leds_disp(void)
 		case BAT_LEVEL_MID:
 		case BAT_LEVEL_PRE_70:
 		{
-			// 	// 白灯常亮
+			// 	// ????
 			Bat_Led_Low_Control(DISABLE);
 			Bat_Led_Full_Control(ENABLE);
 			break;
@@ -110,7 +110,7 @@ static void sys_on_bat_leds_disp(void)
 		case BAT_LEVEL_LOW20:
 		case BAT_LEVEL_LOW10:
 		{
-			// 红灯呼吸
+			// ????
 			Bat_Led_Low_Breathe();
 			Bat_Led_Full_Control(DISABLE);
 			break;
@@ -118,7 +118,7 @@ static void sys_on_bat_leds_disp(void)
 		case BAT_LEVEL_LOW5:
 		case BAT_LEVEL_LOW3:
 		{
-			// 红灯常亮
+			// ????
 			Bat_Led_Low_Control(ENABLE);
 			Bat_Led_Full_Control(DISABLE);
 			break;
@@ -133,9 +133,9 @@ static void sys_on_bat_leds_disp(void)
 
 /*
 *************************************************************
-* 功能说明:  系统被短按唤醒时，电源指示灯处理,需要周期调用
-* 形    参: 无
-* 返 回 值: 无
+* ????:  ????????,???????,??????
+* ?    ?: ?
+* ? ? ?: ?
 *************************************************************
 */
 static void sys_wakeup_bat_leds_disp(void)
@@ -148,7 +148,7 @@ static void sys_wakeup_bat_leds_disp(void)
 		case BAT_LEVEL_MID:
 		case BAT_LEVEL_PRE_70:
 		{
-			// 白灯常亮
+			// ????
 			Bat_Led_Low_Control(DISABLE);
 			Bat_Led_Full_Control(ENABLE);
 			break;
@@ -156,7 +156,7 @@ static void sys_wakeup_bat_leds_disp(void)
 
 		case BAT_LEVEL_LOW20:
 		{
-			// 红灯常亮
+			// ????
 			Bat_Led_Low_Control(ENABLE);
 			Bat_Led_Full_Control(DISABLE);
 			break;
@@ -166,7 +166,7 @@ static void sys_wakeup_bat_leds_disp(void)
 		case BAT_LEVEL_LOW3:
 		case BAT_LEVEL_EMETY:
 		{
-			// 红灯闪烁
+			// ????
 			i ++;
 			Bat_Led_Full_Control(DISABLE);
 			if (i % 50 == 0)
@@ -196,9 +196,9 @@ static void sys_wakeup_bat_leds_disp(void)
 
 /*
 *************************************************************
-* 功能说明:  系统充电时，电源指示灯处理,需要周期调用
-* 形    参: 无
-* 返 回 值: 无
+* ????:  ?????,???????,??????
+* ?    ?: ?
+* ? ? ?: ?
 *************************************************************
 */
 static void sys_charge_bat_leds_disp(void)
@@ -209,13 +209,13 @@ static void sys_charge_bat_leds_disp(void)
 		{
 			if (Power.BatLevel > BAT_LEVEL_LOW20)
 			{
-				// 白灯呼吸
+				// ????
 				Bat_Led_Low_Control(DISABLE);
 				Bat_Led_Full_Breathe();
 			}
 			else
 			{
-				// 红灯呼吸
+				// ????
 				Bat_Led_Low_Breathe();
 				Bat_Led_Full_Control(DISABLE);
 			}
@@ -223,11 +223,11 @@ static void sys_charge_bat_leds_disp(void)
 		}
 		case CHARGE_FINISH:
 		{
-			// 白灯常亮
+			// ????
 			Bat_Led_Low_Control(DISABLE);
 			Bat_Led_Full_Control(ENABLE);
 		}
-		default:    // 充电暂停时，led不刷新
+		default:    // ?????,led???
 		{
 			break;
 		}
@@ -236,9 +236,9 @@ static void sys_charge_bat_leds_disp(void)
 
 /*
 *************************************************************
-* 功能说明:  系统关机时，电源指示灯处理,需要周期调用
-* 形    参: 无
-* 返 回 值: 无
+* ????:  ?????,???????,??????
+* ?    ?: ?
+* ? ? ?: ?
 *************************************************************
 */
 static void sys_off_bat_leds_disp(void)
@@ -250,12 +250,12 @@ static void sys_off_bat_leds_disp(void)
 
 /*
 *************************************************************
-* 功能说明:  系统出错时，电源指示灯处理,需要周期调用
-* 形    参: 无
-* 返 回 值: 无 10ms 调用一次
-*           1. NTC异常，    档位1灯亮
-*           2. 电池温度异常，档位2灯亮
-*           3. 电池电压异常，档位3灯亮
+* ????:  ?????,???????,??????
+* ?    ?: ?
+* ? ? ?: ? 10ms ????
+*           1. NTC??,    ??1??
+*           2. ??????,??2??
+*           3. ??????,??3??
 *
 *************************************************************
 */
@@ -317,9 +317,9 @@ static void sys_Err_leds_disp(void)
 
 /*
 *************************************************************
-* 功能说明: 电源指示灯处理,需要周期调用
-* 形    参: 无
-* 返 回 值: 无 10ms调用一次
+* ????: ???????,??????
+* ?    ?: ?
+* ? ? ?: ? 10ms????
 *************************************************************
 */
 static void test_leds_disp(void)
@@ -355,13 +355,13 @@ static void test_leds_disp(void)
 
 /*
 *************************************************************
-* 功能说明: 电源指示灯处理,需要周期调用 老化测试显示
-* 形    参: 无
-* 返 回 值: 无 10ms调用一次
-*           1. 老化测试完毕后，所有灯闪烁
-*           2.  ems输出时，档位LEVEL3 闪烁
-*           3.  充电时，   档位 level2 闪烁
-*       10ms 调用一次
+* ????: ???????,?????? ??????
+* ?    ?: ?
+* ? ? ?: ? 10ms????
+*           1. ???????,?????
+*           2.  ems???,??LEVEL3 ??
+*           3.  ???,   ?? level2 ??
+*       10ms ????
 *************************************************************
 */
 static void Aging_charge_disp(void)
@@ -392,13 +392,13 @@ static void Aging_charge_disp(void)
 
 /*
 *************************************************************
-* 功能说明: 电源指示灯处理,需要周期调用 老化测试显示
-* 形    参: 无
-* 返 回 值: 无 10ms调用一次
-*           1. 老化测试完毕后，所有灯闪烁
-*           2.  ems输出时，档位LEVEL3 闪烁
-*           3.  充电时，   档位 level2 闪烁
-*       10ms 调用一次
+* ????: ???????,?????? ??????
+* ?    ?: ?
+* ? ? ?: ? 10ms????
+*           1. ???????,?????
+*           2.  ems???,??LEVEL3 ??
+*           3.  ???,   ?? level2 ??
+*       10ms ????
 *************************************************************
 */
 static void Aging_EMS_RF_disp(void)
@@ -428,13 +428,13 @@ static void Aging_EMS_RF_disp(void)
 
 /*
 *************************************************************
-* 功能说明: 电源指示灯处理,需要周期调用 老化测试显示
-* 形    参: 无
-* 返 回 值: 无 10ms调用一次
-*           1. 老化测试完毕后，所有灯闪烁
-*           2.  ems输出时，档位LEVEL3 闪烁
-*           3.  充电时，   档位 level2 闪烁
-*       10ms 调用一次
+* ????: ???????,?????? ??????
+* ?    ?: ?
+* ? ? ?: ? 10ms????
+*           1. ???????,?????
+*           2.  ems???,??LEVEL3 ??
+*           3.  ???,   ?? level2 ??
+*       10ms ????
 *************************************************************
 */
 static void test_Aging_disp(void)
@@ -452,6 +452,7 @@ static void test_Aging_disp(void)
 		test_leds_disp();
 	}
 }
+
 
 /*
 *************************************************************
@@ -606,7 +607,7 @@ void Power_Led_Process(void)
 					break;
 				}
 
-				case Aging_Model_SAT:
+				case Aging_Model_SAT:      // ????
 				{
 					test_Aging_disp();
 					break;
