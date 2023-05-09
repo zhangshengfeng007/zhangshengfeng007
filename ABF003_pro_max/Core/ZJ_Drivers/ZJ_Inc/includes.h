@@ -1,0 +1,46 @@
+#ifndef __INCLUDES_H
+#define __INCLUDES_H
+
+#include "stm32g0xx_hal.h"
+#include "Key_Process.h"
+#include "Key_Read.h"
+#include "base_time.h"
+#include "Led_Display.h"
+#include "Handle.h"
+#include "Montor_Control.h"
+#include "ir_led.h"
+#include "Battery.h"
+#include "ntc.h"
+#include "skin.h"
+#include "mbi5020.h"
+#include "rf.h"
+#include "eeprom.h"
+#include "ems.h"
+#include "Test_Mode.h"
+#include "lis2dw12_reg.h"
+#include "lis2dw12_tap.h"
+#include "tim.h"
+#include "main.h"
+#include "adc.h"
+#include "dma.h"
+#include "tim.h"
+#include "usart.h"
+#include "gpio.h"
+#include "spi.h"
+#include "iwdg.h"
+#include "rtc.h"
+#include "stm32g0xx_hal.h"
+#include "stdint.h"
+#include "stdio.h"
+# include "string.h"
+#include "stm32g0xx_hal_tim.h"
+#include "FreeRTOS.h"
+#include "speed.h"
+#include <iic.h>
+#include <math.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <math.h>
+#include <stdbool.h>
+#endif
