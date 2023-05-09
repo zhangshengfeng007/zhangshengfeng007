@@ -7,19 +7,19 @@ extern TIM_HandleTypeDef htim1;
 _EMS_HANDLE_TypeDef EMS_Handle;
 _PID_HANDLE_TypeDef PID;
 
-#if ARF001				  // µÂ»Ô´ï½µ±¾
-#define EMS_Freq 1000	  // ÖÜÆÚ Ê±¼ä
-#define duty 30			  // Âö¿í 30
-#define interval 35		  // ÉÏÏÂÂö¿í¼ä¸ôÊ±¼ä
+#if ARF001				  // ï¿½Â»Ô´ï½µï¿½ï¿½
+#define EMS_Freq 1000	  // ï¿½ï¿½ï¿½ï¿½ Ê±ï¿½ï¿½
+#define duty 30			  // ï¿½ï¿½ï¿½ï¿½ 30
+#define interval 35		  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
 #define channel_p_start 5 //
 #define channel_p_stop channel_p_start + duty
 #define channel_n_start channel_p_stop + interval
 #define channel_n_stop channel_n_start + duty
 
 #else
-#define EMS_Freq 250	  // ÖÜÆÚ Ê±¼ä
-#define duty 11			  // Âö¿í
-#define interval 30		  // ÉÏÏÂÂö¿í¼ä¸ôÊ±¼ä
+#define EMS_Freq 250	  // ï¿½ï¿½ï¿½ï¿½ Ê±ï¿½ï¿½
+#define duty 11			  // ï¿½ï¿½ï¿½ï¿½
+#define interval 30		  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
 #define channel_p_start 5 //
 #define channel_p_stop channel_p_start + duty
 #define channel_n_start channel_p_stop + interval
@@ -107,7 +107,7 @@ void Ems_Osc_On(void)
 }
 /**************************************************************************************
  * FunctionName   : Ems_Boost_Off(void)
- * Description    : µçÔ´¹Ø±Õ
+ * Description    : ï¿½ï¿½Ô´ï¿½Ø±ï¿½
  * EntryParameter : None
  * ReturnValue    : None
  **************************************************************************************/
@@ -117,7 +117,7 @@ void Ems_Boost_Off(void)
 }
 /**************************************************************************************
  * FunctionName   : Ems_Boost_On(void)
- * Description    : µçÔ´¿ªÆô
+ * Description    : ï¿½ï¿½Ô´ï¿½ï¿½ï¿½ï¿½
  * EntryParameter : None
  * ReturnValue    : None
  **************************************************************************************/
@@ -173,7 +173,7 @@ uint16_t acquire_adc_value(uint8_t channel, uint16_t *data)
 }
 /*************************************************************************************
  * FunctionName	: EF_Frequency_conversion(void)
- * Description		: EMS±äÆµ
+ * Description		: EMSï¿½ï¿½Æµ
  * EntryParameter:
  * ReturnValue		:
  **************************************************************************************/
@@ -213,7 +213,7 @@ void EMS_Frequency_conversion(uint8_t PSC)
 }
 /**************************************************************************************
  * FunctionName   : Set_Ems_level(void)
- * Description    : ÉèÖÃEMSµµÎ»
+ * Description    : ï¿½ï¿½ï¿½ï¿½EMSï¿½ï¿½Î»
  * EntryParameter : None
  * ReturnValue    : None
  **************************************************************************************/
@@ -266,7 +266,7 @@ void Set_Ems_level(_Sys_Info_TypeDef *EmsLevel)
 			if (EMS_Handle.Run_Flag)
 			{
 				EMS_Handle.EMS_Cnt++;
-#if EMS_Mode // EMS???2s?????£ EMS_Handle.vol_value+1V -> EMS_Handle.vol_value-> EMS_Handle.vol_value-1V ???
+#if EMS_Mode // EMS???2s?????ï¿½ï¿½ EMS_Handle.vol_value+1V -> EMS_Handle.vol_value-> EMS_Handle.vol_value-1V ???
 				if (EMS_Handle.EMS_Cnt <= EMS_1000_ms)
 				{
 					EMS_Handle.vol_value += EMS_VOL_Constant;
@@ -284,7 +284,7 @@ void Set_Ems_level(_Sys_Info_TypeDef *EmsLevel)
 					EMS_Handle.EMS_Cnt = 0;
 				}
 #else
-				if (EMS_Handle.EMS_Cnt > 50) // EMS±äÆµ 1 KHZ ~ 4 KHZ
+				if (EMS_Handle.EMS_Cnt > 50) // EMSï¿½ï¿½Æµ 1 KHZ ~ 4 KHZ
 				{
 					EMS_Handle.EMS_Cnt = 0;
 					EMS_PSC++;
@@ -292,7 +292,7 @@ void Set_Ems_level(_Sys_Info_TypeDef *EmsLevel)
 					EMS_Frequency_conversion(EMS_PSC);
 				}
 
-				//					if(EMS_Handle.EMS_Cnt<100)//EMS±äÆµ 1 KHZ ~ 3 KHZ
+				//					if(EMS_Handle.EMS_Cnt<100)//EMSï¿½ï¿½Æµ 1 KHZ ~ 3 KHZ
 				//					{
 				//						EMS_PSC=0;
 				//					}
@@ -343,7 +343,7 @@ void Ems_Init(void)
 	Ems_Boost_On();
 	EMS_Handle.Run_Flag = 1;
 	PID.Flag = 1;
-	//	VBAT_DET_ON(); //Ê¹ÄÜ V33V5020
+	//	VBAT_DET_ON(); //Ê¹ï¿½ï¿½ V33V5020
 	VBAT_OUT_ON(); //
 	EMS_Pwm_Start();
 }
@@ -359,13 +359,13 @@ void Ems_DeInit(void)
 	Ems_Boost_Off();
 	EMS_Handle.Run_Flag = 0;
 	PID.Flag = 0;
-	//	VBAT_DET_OFF(); //Ê¹ÄÜ V33V5020
+	//	VBAT_DET_OFF(); //Ê¹ï¿½ï¿½ V33V5020
 	//	VBAT_OUT_OFF(); //
 	EMS_Pwm_Stop();
 }
 /**************************************************************************************
  * FunctionName   : Touch_Skin_EMS_Freq_Conversion(void)
- * Description    : Æ¤·ô½Ó´¥ºó£¬EMSÂö¿í»ºÂýÉý¸ß
+ * Description    : Æ¤ï¿½ï¿½ï¿½Ó´ï¿½ï¿½ï¿½EMSï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
  * EntryParameter : None
  * ReturnValue    : None
  **************************************************************************************/
@@ -402,11 +402,11 @@ void Touch_Skin_EMS_Freq_Conversion(void)
 }
 
 /*********************************************************
- º¯ÊýÃû: PID_IncreaseCalc
- Ãè  Êö: ÔöÁ¿Ê½PID
- ÊäÈëÖµ:
- Êä³öÖµ: ÎÞ
- ·µ»ØÖµ: ÎÞ
+ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: PID_IncreaseCalc
+ ï¿½ï¿½  ï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½Ê½PID
+ ï¿½ï¿½ï¿½ï¿½Öµ:
+ ï¿½ï¿½ï¿½Öµ: ï¿½ï¿½
+ ï¿½ï¿½ï¿½ï¿½Öµ: ï¿½ï¿½
  **********************************************************/
 int PID_IncreaseCalc(_PID_HANDLE_TypeDef *vPID)
 {
@@ -415,7 +415,7 @@ int PID_IncreaseCalc(_PID_HANDLE_TypeDef *vPID)
 	float iValue = 0;
 	float dValue = 0;
 
-	vPID->CurErr = vPID->TargetVal - vPID->CurrentVal; // µ±Ç°Æ«²î
+	vPID->CurErr = vPID->TargetVal - vPID->CurrentVal; // ï¿½ï¿½Ç°Æ«ï¿½ï¿½
 
 	pValue = (vPID->Kp) * (vPID->CurErr - vPID->LastErr);
 	iValue = (vPID->Ki) * vPID->CurErr;
@@ -424,7 +424,7 @@ int PID_IncreaseCalc(_PID_HANDLE_TypeDef *vPID)
 	PID_Out = pValue + iValue + dValue;
 
 	vPID->PreErr = vPID->LastErr;
-	vPID->LastErr = vPID->CurErr; // µ±Ç°Æ«²î±ä³ÉÉÏÒ»´ÎÆ«²î
+	vPID->LastErr = vPID->CurErr; // ï¿½ï¿½Ç°Æ«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Æ«ï¿½ï¿½
 
 	return PID_Out;
 }
@@ -434,7 +434,7 @@ int PID_IncreaseCalc(_PID_HANDLE_TypeDef *vPID)
 //		PID.Kd = 0.05;
 /**************************************************************************************
  * FunctionName   : Ems_Boost_Process(void)
- * Description    : EMS µ÷Ñ¹
+ * Description    : EMS ï¿½ï¿½Ñ¹
  * EntryParameter : None
  * ReturnValue    : None
  **************************************************************************************/
@@ -450,6 +450,12 @@ void Ems_Boost_Process(void)
 	{
 		PID.CurrentVal = filter((uint16_t *)&ADC_Value, 0, ADC_CHANNEL_NUM, ADC_ADD_COUNT);
 		PID.TargetVal = EMS_Handle.vol_value;
+		// 				// 2023 05 06 å½“ç”µæ± ç”µåŽ‹åä½Ž + å½“å‰æ¡£ä½ä¸º5æ¡£æ—¶ï¼Œè‡ªåŠ¨é™ä½Žä¸º4æ¡£emsè¾“å‡º
+		// if((5 == SysInfo.Save_Data.upkeep_level) && (BAT_20_40_STATUS ==SysInfo.Batt_Value.State))
+		// {
+		// 	PID.TargetVal = EMS_VOL_LEVEL4;
+		// }				 //---------------------------------------
+
 		PID_Value = PID_IncreaseCalc(&PID);
 		PID.temp += PID_Value;
 
@@ -458,7 +464,8 @@ void Ems_Boost_Process(void)
 			PID.temp = 0;
 		}
 
-		if (PID.temp > 2000)
+		//if (PID.temp > 2000) //è°ƒè¯•æ—¶å‘çŽ°å½“ temp=1950æ—¶ï¼Œå‡åŽ‹å€¼ä¼šå¾ˆä½Ž
+		if (PID.temp > 1900)
 		{
 
 			PID.temp = 1700;
@@ -481,7 +488,7 @@ void Ems_Boost_Process(void)
 				PID.temp = 580;
 				break;
 			case 5:
-				PID.temp = 700;
+				PID.temp = 580;
 				break;
 			default:
 				break;
