@@ -21,15 +21,15 @@
 
 #if ARF001
 
-#if TEST_MODE	
-/*********************²âÊÔ***********************/	
+#if TEST_MODE
+/*********************ï¿½ï¿½ï¿½ï¿½***********************/
 	#define PidConstant       114
 	#define	EMS_VOL_LEVEL1			(1228 + PidConstant)//1228 21.5V
 	#define	EMS_VOL_LEVEL2			(1326 + PidConstant)//1351
 	#define	EMS_VOL_LEVEL3			(1444 + PidConstant)//1474
 	#define	EMS_VOL_LEVEL4			(1560 + PidConstant)//1597
-	#define	EMS_VOL_LEVEL5			(1700  + PidConstant)//1720	
-	
+	#define	EMS_VOL_LEVEL5			(1700  + PidConstant)//1720
+
 #else
 	#define EMS_VOL_Constant  85 // 85 1.5 V  114 2 V
 	#define PidConstant       -171//30
@@ -38,18 +38,18 @@
 	#define	EMS_VOL_LEVEL3			(1556 + PidConstant)//27.331 V
 	#define	EMS_VOL_LEVEL4			(1720 + PidConstant)//30.211 V
 	#define	EMS_VOL_LEVEL5			(1884 + PidConstant)//33.092 V
-//	#define	EMS_VOL_LEVEL5			(1884 -224)//33.092 V	
+//	#define	EMS_VOL_LEVEL5			(1884 -224)//33.092 V
 #endif
-	
+
 /******************************************/
 #else
 	#define PidConstant       10
-	#define	EMS_VOL_LEVEL1			(1228 + PidConstant)//1228 21.5V
-	#define	EMS_VOL_LEVEL2			(1326 + PidConstant)//1351
-	#define	EMS_VOL_LEVEL3			(1444 + PidConstant)//1474
-	#define	EMS_VOL_LEVEL4			(1560 + PidConstant)//1597
-	#define	EMS_VOL_LEVEL5			(1700  + PidConstant)//1720
-	
+	#define	EMS_VOL_LEVEL1			(1220 + PidConstant)//(1228 + PidConstant)(VPP = 35V)
+	#define	EMS_VOL_LEVEL2			(1320 + PidConstant)//(1326 + PidConstant)//(VPP = 39V)
+	#define	EMS_VOL_LEVEL3			(1420 + PidConstant)//(1444 + PidConstant)//(VPP = 43V)
+	#define	EMS_VOL_LEVEL4			(1520 + PidConstant) //(1560 + PidConstant)//(VPP = 46V)
+	#define	EMS_VOL_LEVEL5			(1620  + PidConstant)//1720  ----1620 --(VPP = 49V)
+
 
 #endif
 
@@ -71,7 +71,7 @@ void Touch_Skin_EMS_Freq_Conversion(void);
 void EMS_Pwm_Stop(void);
 void EMS_Pwm_Start(void);
 void Ems_DeInit(void);
-void Ems_Init(void);	
+void Ems_Init(void);
 void EMS_Frequency_conversion(uint8_t PSC);
 #endif
 
