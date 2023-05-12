@@ -4,7 +4,7 @@
 
 #define NORMAL_TEMP 	40
 #define OVER_TEMP 		42
-#define STOP_TEMP 		44
+#define STOP_TEMP 		46//44
 
 #define TEMP_TAB_INDEX  15
 #define NTC_CHANNEL 1
