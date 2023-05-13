@@ -160,14 +160,7 @@ void Mode_Twink1hz_Display(uint16_t stayTime)
 			{
 				Upkeep_LED_ON();
 			}
-
-			//				if(SysInfo.Check_Protect_Flage && !SysInfo.OverTemp_Flag) //??????????
-			//if ((SysInfo.Check_Protect_Flage)||(SysInfo.OverTemp_Flag == 0x02)) // �???????
-			{
-				IRled_start();
-			}
-			// printf ("\n\r led_1khz: on  \n\r");	 //??
-
+			IRled_start();
 		}
 	}
 	else
@@ -191,7 +184,6 @@ void Mode_Twink1hz_Display(uint16_t stayTime)
 			{
 				IRled_stop();
 			}
-			// printf ("\n\r led_1khz :off\n\r");	 //??
 		}
 	}
 }
@@ -556,6 +548,49 @@ switch(LED->Mode)
 		if((SysInfo.Check_Protect_Flage)|| (SysInfo.OverTemp_Flag == 0x02)) // 20230512 ?????????45??c?????u???)
 		{
 			Mode_Twink1hz_Display(50);
+		}
+		else
+		{
+			switch(SysInfo.WorkState)
+			{
+				case upkeep_mode:
+				{
+					if (SysInfo.Power_Value.state == System_ON)
+					{
+						Upkeep_LED_ON();
+					}
+					else
+					{
+						if (SysInfo.Test_Mode.Test_Mode_Flag != ON)
+						{
+							Upkeep_LED_OFF();
+						}
+					}
+					break;
+				}
+				case repair_mode:
+				{
+					if (SysInfo.Power_Value.state == System_ON)
+					{
+						Repair_LED_ON();
+					}
+					else
+					{
+						if (SysInfo.Test_Mode.Test_Mode_Flag != ON)
+						{
+							Repair_LED_OFF();
+						}
+					}
+					break;
+				}
+				default:
+				{
+					Upkeep_LED_OFF();
+					Repair_LED_OFF();
+					break;
+				}
+			}
+
 		}
 		break;
 	}
