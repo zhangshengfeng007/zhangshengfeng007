@@ -610,7 +610,7 @@ void EMS_Procedure_Run(void)
 		else if (SysInfo.Mode_Switch_Flag == 0x03) // �������ģʽ
 		{
 			RF_Call_Data();
-			IRled_stop(); // �ر�������
+			//IRled_stop(); // �ر�������
 			RF_DeInit();
 			Ems_DeInit();
 			VBAT_DET_ON(); // ʹ�� V33V5020
@@ -640,7 +640,7 @@ void EMS_Procedure_Run(void)
 		else if (SysInfo.Mode_Switch_Flag == 0x03) // �������ģʽ
 		{
 			RF_Call_Data();
-			IRled_stop();  // �ر�������
+			//IRled_stop();  // �ر�������
 			RF_DeInit();
 			Ems_DeInit();
 			VBAT_DET_ON(); // ʹ��V33V5020
@@ -677,7 +677,7 @@ void RF_Procedure_Run(void)
 		else if (SysInfo.Mode_Switch_Flag == 0x03) // �������ģʽ
 		{
 			RF_Call_Data();
-			IRled_stop(); // �ر�������
+			//IRled_stop(); // �ر�������
 			RF_DeInit();
 			Ems_DeInit();
 			VBAT_DET_ON(); // ʹ�� V33V5020
@@ -703,7 +703,7 @@ void RF_Procedure_Run(void)
 		else if (SysInfo.Mode_Switch_Flag == 0x03) // �������ģʽ
 		{
 			RF_Call_Data();
-			IRled_stop(); // �ر�������
+			//IRled_stop(); // �ر�������
 			RF_DeInit();
 			Ems_DeInit();
 			VBAT_DET_ON(); // ʹ�� V33V5020

@@ -545,9 +545,14 @@ switch(LED->Mode)
 			Led_Lock_Flag = 1;
 			LED->state = 0;
 		}
-		if((SysInfo.Check_Protect_Flage)|| (SysInfo.OverTemp_Flag == 0x02)) // 20230512 ?????????45??c?????u???)
+
+
+		if((SysInfo.Check_Protect_Flage)|| (SysInfo.OverTemp_Flag == 0x02)) // 20230512
 		{
-			Mode_Twink1hz_Display(50);
+			if (SysInfo.Power_Value.state == System_ON)
+			{
+				Mode_Twink1hz_Display(50);
+			}
 		}
 		else
 		{
@@ -558,6 +563,7 @@ switch(LED->Mode)
 					if (SysInfo.Power_Value.state == System_ON)
 					{
 						Upkeep_LED_ON();
+						IRled_start();
 					}
 					else
 					{
@@ -573,6 +579,7 @@ switch(LED->Mode)
 					if (SysInfo.Power_Value.state == System_ON)
 					{
 						Repair_LED_ON();
+						IRled_start();
 					}
 					else
 					{

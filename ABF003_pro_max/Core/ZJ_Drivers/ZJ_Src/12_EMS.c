@@ -355,7 +355,7 @@ void Ems_Init(void)
  **************************************************************************************/
 void Ems_DeInit(void)
 {
-	IRled_stop();
+	//IRled_stop();
 	Ems_Boost_Off();
 	EMS_Handle.Run_Flag = 0;
 	PID.Flag = 0;
