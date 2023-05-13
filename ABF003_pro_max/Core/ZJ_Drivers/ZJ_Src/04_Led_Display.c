@@ -57,7 +57,7 @@ void led_scan(uint8_t bit_flag)
 }
 /**************************************************************************************
  * FunctionName   : Twink_Display(uint8_t BitFlag,uint16_t stayTime)
- * Description    : ³äµçµçÁ¿Ö¸Ê¾µÆÉÁË¸
+ * Description    : ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸Ê¾ï¿½ï¿½ï¿½ï¿½Ë¸
  * EntryParameter :
  * ReturnValue    : None
  **************************************************************************************/
@@ -96,7 +96,7 @@ void Twink_Display(uint8_t BitFlag, uint16_t stayTime)
 }
 /**************************************************************************************
  * FunctionName   : Twink1hz_Display(uint8_t BitFlag,uint16_t stayTime)
- * Description    : µÍµçµµÎ»µÆºôÎü
+ * Description    : ï¿½ÍµçµµÎ»ï¿½Æºï¿½ï¿½ï¿½
  * EntryParameter :
  * ReturnValue    : None
  **************************************************************************************/
@@ -151,54 +151,53 @@ void Mode_Twink1hz_Display(uint16_t stayTime)
 		{
 			Mode_Twink1hzState = 0;
 			Mode_Twink1hzcnt = 0;
+
+			if (SysInfo.WorkState == repair_mode)
+			{
+				Repair_LED_ON();
+			}
+			else
+			{
+				Upkeep_LED_ON();
+			}
+
+			//				if(SysInfo.Check_Protect_Flage && !SysInfo.OverTemp_Flag) //??????????
+			//if ((SysInfo.Check_Protect_Flage)||(SysInfo.OverTemp_Flag == 0x02)) // ï¿½???????
+			{
+				IRled_start();
+			}
+			// printf ("\n\r led_1khz: on  \n\r");	 //??
+
 		}
 	}
 	else
 	{
 		Mode_Twink1hzcnt++;
-		if (Mode_Twink1hzcnt == stayTime || Mode_Twink1hzcnt > stayTime)
+		if (Mode_Twink1hzcnt >= stayTime)
 		{
 			Mode_Twink1hzState = 1;
 			Mode_Twink1hzcnt = stayTime;
-		}
-	}
 
-	if (Mode_Twink1hzState)
-	{
-		if (SysInfo.WorkState == repair_mode)
-		{
-			Repair_LED_ON();
-		}
-		else
-		{
-			Upkeep_LED_ON();
-		}
+			if (SysInfo.WorkState == repair_mode)
+			{
+				Repair_LED_OFF();
+			}
+			else
+			{
+				Upkeep_LED_OFF();
+			}
 
-		//				if(SysInfo.Check_Protect_Flage && !SysInfo.OverTemp_Flag) //??????????
-		if (SysInfo.Check_Protect_Flage) // Ã»ÓÐ¼ì²âµ½Î»ÒÆ
-		{
-			IRled_start();
-		}
-	}
-	else
-	{
-		if (SysInfo.WorkState == repair_mode)
-		{
-			Repair_LED_OFF();
-		}
-		else
-		{
-			Upkeep_LED_OFF();
-		}
-		if (SysInfo.Check_Protect_Flage) // Ã»ÓÐ¼ì²âµ½Î»ÒÆ
-		{
-			IRled_stop();
+			if (SysInfo.OverTemp_Flag == 0x02) // ï¿½???????
+			{
+				IRled_stop();
+			}
+			// printf ("\n\r led_1khz :off\n\r");	 //??
 		}
 	}
 }
 /**************************************************************************************
  * FunctionName   : LedStay_Display(uint8_t BitFlag,uint16_t stayTime)
- * Description    : ¶¨Ê±Ï¨ÃðÖ¸Ê¾µÆ
+ * Description    : ï¿½ï¿½Ê±Ï¨ï¿½ï¿½Ö¸Ê¾ï¿½ï¿½
  * EntryParameter :
  * ReturnValue    : None
  **************************************************************************************/
@@ -220,7 +219,7 @@ void LedStay_Display(uint8_t BitFlag, uint16_t stayTime)
 }
 /**************************************************************************************
  * FunctionName   : LED_Flicker(uint16_t stayTime)
- * Description    : µçÁ¿²éÑ¯¡¢È±µç1µµµµÎ»µÆÉÁË¸5´Î
+ * Description    : ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¯ï¿½ï¿½È±ï¿½ï¿½1ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½Ë¸5ï¿½ï¿½
  * EntryParameter :
  * ReturnValue    : None
  **************************************************************************************/
@@ -254,28 +253,10 @@ uint8_t LED_Flicker(uint16_t stayTime)
  * EntryParameter :
  * ReturnValue    : None
  **************************************************************************************/
-uint8_t Led_Display(_LED_VALUE_TypeDef *LED)
+static void charge_led_disp(uint8_t level)
 {
-	static uint16_t TimerCnt;
-	static uint8_t Led_Lock_Flag, Flicker_Cnt = 5;
-
-	if (Led_Lock_Flag)
+	switch (level)
 	{
-		if (++TimerCnt > (LED->StayTime))
-		{
-			LED->Level = 0X5A;
-			Led_Lock_Flag = 0;
-		}
-	}
-	else
-	{
-		TimerCnt = 0;
-	}
-
-	if ((LED->Mode) == Batt_Charging) // ³äµçÄ£Ê½
-	{
-		switch (LED->Level)
-		{
 		case 0x00:
 			Twink_Display(0x01, 50);
 			break; // BAT_00_00_STATUS
@@ -300,38 +281,152 @@ uint8_t Led_Display(_LED_VALUE_TypeDef *LED)
 			break; // BAT_100_100_STATUS
 		default:
 			led_scan(0x00);
-			break; // ²»ÏÔÊ¾
-		}
+			break; // ?????
 	}
-	else if ((LED->Mode) == Batt_Low_20) // µÍµçLEDµÆ±£³ÖÏàÓ¦µµÎ»µÄ1HzÆµÂÊ³ÖÐøÉÁË¸
+}
+/**************************************************************************************
+ * FunctionName   : ??????20%?,led????
+ * Description    :
+ * EntryParameter :
+ * ReturnValue    : None
+ **************************************************************************************/
+static void bat_lower_percent_20_disp(uint8_t level)
+{
+	switch (level)
 	{
-		switch (LED->Level)
-		{
-		case 0x00:
-			led_scan(0x00);
-			break; // BAT_00_00_STATUS
-		case 0x01:
-			Twink1hz_Display(0x01, 50);
-			break; // 1µµ
-		case 0x02:
-			Twink1hz_Display(0x03, 50);
-			break; // 2µµ
-		case 0x03:
-			Twink1hz_Display(0x07, 50);
-			break; // 3µµ
-		case 0x04:
-			Twink1hz_Display(0x0f, 50);
-			break; // 4µµ
-		case 0x05:
-			Twink1hz_Display(0x1f, 50);
-			break; // 5µµ
-		default:
-			led_scan(0x00);
-			break; // ²»ÏÔÊ¾
-		}
-		Mode_Twink1hz_Display(50);
+	case 0x00:
+		led_scan(0x00);
+		break; // BAT_00_00_STATUS
+	case 0x01:
+		Twink1hz_Display(0x01, 50);
+		break; // 1??
+	case 0x02:
+		Twink1hz_Display(0x03, 50);
+		break; // 2??
+	case 0x03:
+		Twink1hz_Display(0x07, 50);
+		break; // 3??
+	case 0x04:
+		Twink1hz_Display(0x0f, 50);
+		break; // 4??
+	case 0x05:
+		Twink1hz_Display(0x1f, 50);
+		break; // 5??
+	default:
+		led_scan(0x00);
+		break; // ?????
 	}
-	else if ((LED->Mode) == Batt_Low_0) // È±µç£¬1µµLEDµÆ1HzÆµÂÊÉÁË¸5´Î
+	Mode_Twink1hz_Display(50);
+
+}
+/**************************************************************************************
+ * FunctionName   : ???????,led????
+ * Description    :
+ * EntryParameter :
+ * ReturnValue    : None
+ **************************************************************************************/
+static void bat_lower_percent_00_disp(uint8_t level)
+{
+
+
+
+}
+
+/**************************************************************************************
+ * FunctionName   : ?????,?????,led????
+ * Description    :
+ * EntryParameter :
+ * ReturnValue    : None
+ **************************************************************************************/
+static void work_level_display(uint8_t level)
+{
+	switch (level)
+	{
+		case 0x00:
+		case 0x01:
+		{
+			led_scan(0x01);
+			break; // 1??
+		}
+		case 0x02:
+		{
+			led_scan(0x03);
+			break; // 2??
+		}
+		case 0x03:
+		{
+			led_scan(0x07);
+			break; // 3??
+		}
+		case 0x04:
+		{
+			led_scan(0x0f);
+			break; // 4??
+		}
+
+		case 0x05:
+		{
+			led_scan(0x1f);
+			break; // 5??
+		}
+		default:
+		{
+			led_scan(0x00);
+			break; // ?????
+		}
+
+	}
+}
+
+
+/**************************************************************************************
+ * FunctionName   : Led_Display(_LED_VALUE_TypeDef * LED)
+ * Description    :
+ * EntryParameter :
+ * ReturnValue    : None
+ **************************************************************************************/
+uint8_t Led_Display(_LED_VALUE_TypeDef *LED)
+{
+	static uint16_t TimerCnt = 0;
+	static uint8_t Led_Lock_Flag, Flicker_Cnt = 5;
+
+	if (Led_Lock_Flag)
+	{
+		if (++TimerCnt > (LED->StayTime))
+		{
+			LED->Level = 0X5A;
+			Led_Lock_Flag = 0;
+		}
+	}
+	else
+	{
+		TimerCnt = 0;
+	}
+
+	if((System_OFF == SysInfo.Power_Value.state)&&(0 == LED->StayTime))
+	{
+		led_scan(0);
+		IRled_stop();
+		Repair_LED_OFF();
+		Upkeep_LED_OFF();
+		TimerCnt = 0;
+		return 0;
+	}
+
+//-------------------------
+switch(LED->Mode)
+{
+	case Batt_Charging:
+	{
+		charge_led_disp(LED->Level);
+		break;
+	}
+	case Batt_Low_20:
+	{
+		bat_lower_percent_20_disp(LED->Level);
+		break;
+	}
+	case Batt_Low_0:
 	{
 		if ((LED->Counts) != Flicker_Cnt)
 		{
@@ -340,43 +435,24 @@ uint8_t Led_Display(_LED_VALUE_TypeDef *LED)
 				LED->Counts++;
 			}
 		}
-		//		else
-		//		{
-		//			SysInfo.Power_Value.state = System_OFF ;
-		//		}
+		break;
 	}
-	else // ·Ç³äµçÄ£Ê½
+	default:
 	{
-		switch (LED->Level)
-		{
-		case 0x00:
-			led_scan(0x01);
-			break; // 1µµ
-		case 0x01:
-			led_scan(0x01);
-			break; // 1µµ
-		case 0x02:
-			led_scan(0x03);
-			break; // 2µµ
-		case 0x03:
-			led_scan(0x07);
-			break; // 3µµ
-		case 0x04:
-			led_scan(0x0f);
-			break; // 4µµ
-		case 0x05:
-			led_scan(0x1f);
-			break; // 5µµ
-		default:
-			led_scan(0x00);
-			break; // ²»ÏÔÊ¾
-		}
+		work_level_display(LED->Level);
 		if (LED->state)
 		{
 			Led_Lock_Flag = 1;
 			LED->state = 0;
 		}
+		if(SysInfo.OverTemp_Flag == 0x02) // 20230512 ?????????45??c?????u???
+		{
+			Mode_Twink1hz_Display(50);
+		}
+		break;
 	}
+}
+
 	return 0;
 }
 
