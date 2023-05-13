@@ -16,26 +16,26 @@
 //	return ch;
 // }
 
-// ¼ÓÈëÒÔÏÂ´úÂë,Ö§³Öprintfº¯Êý,¶ø²»ÐèÒªÑ¡Ôñuse MicroLIB
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â´ï¿½ï¿½ï¿½,Ö§ï¿½ï¿½printfï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÒªÑ¡ï¿½ï¿½use MicroLIB
 #if 1
 #pragma import(__use_no_semihosting)
-// ±ê×¼¿âÐèÒªµÄÖ§³Öº¯Êý
+// ï¿½ï¿½×¼ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½Ö§ï¿½Öºï¿½ï¿½ï¿½
 struct __FILE
 {
 	int handle;
 };
 
 FILE __stdout;
-// ¶¨Òå_sys_exit()ÒÔ±ÜÃâÊ¹ÓÃ°ëÖ÷»úÄ£Ê½
+// ï¿½ï¿½ï¿½ï¿½_sys_exit()ï¿½Ô±ï¿½ï¿½ï¿½Ê¹ï¿½Ã°ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½
 void _sys_exit(int x)
 {
 	x = x;
 }
-// ÖØ¶¨Òåfputcº¯Êý
+// ï¿½Ø¶ï¿½ï¿½ï¿½fputcï¿½ï¿½ï¿½ï¿½
 int fputc(int ch, FILE *f)
 {
 	while ((USART1->ISR & 0X40) == 0)
-		; // Ñ­»··¢ËÍ,Ö±µ½·¢ËÍÍê±Ï
+		; // Ñ­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,Ö±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	USART1->TDR = (uint8_t)ch;
 	return ch;
 //HAL_UART_Transmit_DMA(&huart1, (uint8_t *)&ch, 1);
@@ -55,11 +55,11 @@ void Led_Process_Run(void)
 	static uint8_t Batt_State = 1, Batt_Cnt;
 	static uint16_t ChargeCnt = 0;
 
-	if (SysInfo.Batt_Value.Usb_flag) // ³äµçÄ£Ê½
+	if (SysInfo.Batt_Value.Usb_flag) // ï¿½ï¿½ï¿½Ä£Ê½
 	{
 		if (++ChargeCnt >= 50)
 		{
-			if (!Flag) // USB½ÓÈë¸´Î»£¬¼ì²âÒ»´ÎµçÁ¿
+			if (!Flag) // USBï¿½ï¿½ï¿½ë¸´Î»ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½Îµï¿½ï¿½ï¿½
 			{
 				Led_Value.Level = SysInfo.Save_Data.BattState;
 				BOOST_5V_OFF();
@@ -67,7 +67,7 @@ void Led_Process_Run(void)
 			Flag = 1;
 			Led_Value.StayTime = 50;
 			Led_Value.Mode = Batt_Charging;
-			if (ChargeCnt > 6000) // 60sË¢ÐÂÒ»´Î
+			if (ChargeCnt > 6000) // 60sË¢ï¿½ï¿½Ò»ï¿½ï¿½
 			{
 				if (SysInfo.Batt_Value.State >= Led_Value.Level + 1)
 				{
@@ -87,14 +87,14 @@ void Led_Process_Run(void)
 	}
 	else
 	{
-		if (SysInfo.Batt_Value.Power_Display_Flag) // ²éÑ¯µçÁ¿
+		if (SysInfo.Batt_Value.Power_Display_Flag) // ï¿½ï¿½Ñ¯ï¿½ï¿½ï¿½ï¿½
 		{
 			BAT_ADC_ENABLE();
 			if (++Cnt >= 26)
 			{
 				SysInfo.Batt_Value.Power_Display_Flag = 0;
 				Cnt = 0;
-				SysInfo.Save_Data.BattState = *(__IO uint32_t *)(EEPROM_STRAT_ADDR + 128); // ¶ÁÈ¡¹Ø»úÇ°µÄµçÁ¿
+				SysInfo.Save_Data.BattState = *(__IO uint32_t *)(EEPROM_STRAT_ADDR + 128); // ï¿½ï¿½È¡ï¿½Ø»ï¿½Ç°ï¿½Äµï¿½ï¿½ï¿½
 				if (SysInfo.Save_Data.BattState == BAT_00_00_STATUS)
 				{
 					Led_Value.Level = 0x01;
@@ -110,7 +110,7 @@ void Led_Process_Run(void)
 				SysInfo.Power_Value.BattState = 0;
 			}
 		}
-		else if (SysInfo.Power_Value.state == System_ON || SysInfo.Flag) // µµÎ»Ö¸Ê¾µÆ
+		else if (SysInfo.Power_Value.state == System_ON || SysInfo.Flag) // ï¿½ï¿½Î»Ö¸Ê¾ï¿½ï¿½
 		{
 			SysInfo.Flag = 0;
 			if (SysInfo.WorkState == repair_mode)
@@ -139,24 +139,24 @@ void Led_Process_Run(void)
 				Led_Value.Mode = Batt_Normal;
 			}
 		}
-		else if (!SysInfo.Batt_Value.Usb_flag && Flag) // ²»³äµçÄ£Ê½ ¹¤×÷×´Ì¬ÏÂ£¬ÏÔÊ¾µµÎ»µÆ
+		else if (!SysInfo.Batt_Value.Usb_flag && Flag) // ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½ ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½Â£ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½Î»ï¿½ï¿½
 		{
 			Flag = 0;
 			Led_Value.StayTime = 100;
 			Led_Value.Mode = Batt_Normal;
 			Led_Value.state = 1;
 		}
-		else if (SysInfo.Power_Value.BattState) // ¿ª»ú²éÑ¯µçÁ¿ µçÁ¿È±µç²»¿ª»ú
+		else if (SysInfo.Power_Value.BattState) // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¯ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½È±ï¿½ç²»ï¿½ï¿½ï¿½ï¿½
 		{
 			Batt_Cnt++;
 			if (Batt_Cnt > 13)
 			{
 				Batt_Cnt = 0;
-				//				SysInfo.Save_Data.BattState  = *(__IO uint32_t*)( EEPROM_STRAT_ADDR+128 );		//¶ÁÈ¡¹Ø»úÇ°µÄµçÁ¿
+				//				SysInfo.Save_Data.BattState  = *(__IO uint32_t*)( EEPROM_STRAT_ADDR+128 );		//ï¿½ï¿½È¡ï¿½Ø»ï¿½Ç°ï¿½Äµï¿½ï¿½ï¿½
 				Batt_State = SysInfo.Batt_Value.State;
-				if ((SysInfo.Save_Data.BattState == BAT_00_00_STATUS) || (Batt_State == BAT_00_00_STATUS)) // È±µç£¬¹Ø»ú
+				if ((SysInfo.Save_Data.BattState == BAT_00_00_STATUS) || (Batt_State == BAT_00_00_STATUS)) // È±ï¿½ç£¬ï¿½Ø»ï¿½
 				{
-					//					Led_Value.Mode = Batt_Low_0 ; //È±µç£¬1µµLEDµÆ1HzÆµÂÊÉÁË¸5´Î
+					//					Led_Value.Mode = Batt_Low_0 ; //È±ï¿½ç£¬1ï¿½ï¿½LEDï¿½ï¿½1HzÆµï¿½ï¿½ï¿½ï¿½Ë¸5ï¿½ï¿½
 					//					Led_Value.Counts =0;
 					if (Batt_State == BAT_00_00_STATUS)
 					{
@@ -190,7 +190,7 @@ void System_Data_Save(void)
 	if (SysInfo.Save_Data.save_Data_flag && !SysInfo.Montor_Flag)
 	{
 		SysInfo.Save_Data.save_Data_flag = 0;
-		Write_Parameter_To_Eeprom(); // ¹Ø»ú±£´æµµÎ»
+		Write_Parameter_To_Eeprom(); // ï¿½Ø»ï¿½ï¿½ï¿½ï¿½æµµÎ»
 	}
 }
 
@@ -202,12 +202,12 @@ void System_Data_Save(void)
  **************************************************************************************/
 void RF_Call_Data(void)
 {
-	/**********¹Ø±ÕEMSÏà¹Øº¯Êý************/
+	/**********ï¿½Ø±ï¿½EMSï¿½ï¿½Øºï¿½ï¿½ï¿½************/
 	//	Ems_Osc_Off();
 	Ems_Boost_Off();
 	EMS_Pwm_Stop();
 
-	/**********¹Ø±ÕRFÏà¹Øº¯Êý************/
+	/**********ï¿½Ø±ï¿½RFï¿½ï¿½Øºï¿½ï¿½ï¿½************/
 	RF_Osc_Off();
 	RF_Stop();
 	//	VBAT_OUT_OFF();
@@ -215,7 +215,7 @@ void RF_Call_Data(void)
 }
 /**************************************************************************************
  * FunctionName   : System_Standby_Run(void)
- * Description    : ´ý»ú×´Ì¬»òÀë¿ªÆ¤·ô£¬60sºó×Ô¶¯´¥·¢¹Ø»ú£¬¿ª»úµÚÒ»´Î½Ó´¥µ½Æ¤·ô£¬Âí´ïÕñ¶¯
+ * Description    : ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ë¿ªÆ¤ï¿½ï¿½ï¿½ï¿½60sï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½Î½Ó´ï¿½ï¿½ï¿½Æ¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
  * EntryParameter : None
  * ReturnValue    : None
  **************************************************************************************/
@@ -224,17 +224,17 @@ void System_Standby_Run(void)
 	uint8_t Get_60s_Flag = 0;
 	static uint8_t Batt_Cnt;
 	Get_60s_Flag = Cosmetic_Time_Count();
-	if (Get_60s_Flag) // 60sÎÞ½Ó´¥£¬¹Ø»ú
+	if (Get_60s_Flag) // 60sï¿½Þ½Ó´ï¿½ï¿½ï¿½ï¿½Ø»ï¿½
 	{
 		Get_60s_Flag = 0;
-		SysInfo.Sleep_Flag = 1; // ¹Ø»ú±êÖ¾Î»
-		//			Write_Parameter_To_Eeprom();  //¹Ø»ú±£´æµµÎ»
+		SysInfo.Sleep_Flag = 1; // ï¿½Ø»ï¿½ï¿½ï¿½Ö¾Î»
+		//			Write_Parameter_To_Eeprom();  //ï¿½Ø»ï¿½ï¿½ï¿½ï¿½æµµÎ»
 	}
-	if (SysInfo.Batt_Value.State == BAT_00_00_STATUS && SysInfo.Power_Value.state == System_ON) // È±µç£¬¹Ø»ú
+	if (SysInfo.Batt_Value.State == BAT_00_00_STATUS && SysInfo.Power_Value.state == System_ON) // È±ï¿½ç£¬ï¿½Ø»ï¿½
 	{
 		if (++Batt_Cnt > 20)
 		{
-			SysInfo.Sleep_Flag = 1; // ¹Ø»ú±êÖ¾Î»
+			SysInfo.Sleep_Flag = 1; // ï¿½Ø»ï¿½ï¿½ï¿½Ö¾Î»
 			Batt_Cnt = 0;
 			SysInfo.Save_Data.BattState = SysInfo.Batt_Value.State;
 		}
@@ -243,22 +243,22 @@ void System_Standby_Run(void)
 	{
 		Batt_Cnt = 0;
 	}
-	//		if(SysInfo.Skin_Touch_Montor_Flag && SysInfo.Skin_Touch_Flag) //¿ª»úµÚÒ»´Î½Ó´¥µ½Æ¤·ô
+	//		if(SysInfo.Skin_Touch_Montor_Flag && SysInfo.Skin_Touch_Flag) //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½Î½Ó´ï¿½ï¿½ï¿½Æ¤ï¿½ï¿½
 	//		{
 	//			SysInfo.Skin_Touch_Montor_Flag = 0;
-	//			SysInfo.Montor_Flag = 1; //»»Çø¡¢Âí´ïÕñ¶¯
-	//			SysInfo.StayTime = 20;	 //Õñ¶¯Ê±³¤0.2s
+	//			SysInfo.Montor_Flag = 1; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	//			SysInfo.StayTime = 20;	 //ï¿½ï¿½Ê±ï¿½ï¿½0.2s
 	//		}
 }
 /**************************************************************************************
 * FunctionName   : Vibration_Reminder_Counts_Run(void)
-* Description    : Õð¶¯ÌáÐÑ¼ÆÊ±
-1¡¢½ôÖÂÌáÀ­Ä£Ê½£º»»ÇøÌáÐÑ£º120s¡¢240s;Ä£Ê½ÔËÐÐÍê³É:300s£¬½øÈë´ý»úÄ£Ê½£¬60sÎÞ²Ù×÷£¬½øÈëÐÝÃßÄ£Ê½£»
-2¡¢µ­ÎÆÐÞ¸´Ä£Ê½£º»»ÇøÌáÐÑ£º240s¡¢480s;Ä£Ê½ÔËÐÐÍê³É:600s£¬½øÈë´ý»úÄ£Ê½£¬60sÎÞ²Ù×÷£¬½øÈëÐÝÃßÄ£Ê½£»
+* Description    : ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¼ï¿½Ê±
+1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ£ï¿½120sï¿½ï¿½240s;Ä£Ê½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½:300sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½ï¿½ï¿½60sï¿½Þ²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½ï¿½ï¿½
+2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½Ä£Ê½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ£ï¿½240sï¿½ï¿½480s;Ä£Ê½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½:600sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½ï¿½ï¿½60sï¿½Þ²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½ï¿½ï¿½
 * EntryParameter : None
 * ReturnValue    : None
 **************************************************************************************/
-void Vibration_Reminder_Counts_Run(void) // 10msÔËÐÐÒ»´Î
+void Vibration_Reminder_Counts_Run(void) // 10msï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
 {
 	static uint8_t LockFlag, Error_Time_Flag;
 	static uint16_t StandyCnt,NoTouch_Cnt;
@@ -266,7 +266,7 @@ void Vibration_Reminder_Counts_Run(void) // 10msÔËÐÐÒ»´Î
 	if (SysInfo.Skin_Touch_Flag)
 	{
 		NoTouch_Cnt = 0;
-		if (RF_Handle.Run_Flag) // RFÔËÐÐ¼ÆÊ±
+		if (RF_Handle.Run_Flag) // RFï¿½ï¿½ï¿½Ð¼ï¿½Ê±
 		{
 			if (++SysInfo.Mode_Cnt >= Timer_RF) // 1s
 			{
@@ -275,22 +275,22 @@ void Vibration_Reminder_Counts_Run(void) // 10msÔËÐÐÒ»´Î
 
 				if (SysInfo.WorkState == upkeep_mode)
 				{
-					SysInfo.Mode_Switch_Flag = 0x02; // EMSÄ£Ê½¿ªÆô
+					SysInfo.Mode_Switch_Flag = 0x02; // EMSÄ£Ê½ï¿½ï¿½ï¿½ï¿½
 				}
 				else
 				{
-					SysInfo.Mode_Switch_Flag = 0x01; // RFÄ£Ê½¿ªÆô
+					SysInfo.Mode_Switch_Flag = 0x01; // RFÄ£Ê½ï¿½ï¿½ï¿½ï¿½
 				}
 			}
 		}
 #if ARF001
-		if (EMS_Handle.Run_Flag) // EMSÔËÐÐ¼ÆÊ±
+		if (EMS_Handle.Run_Flag) // EMSï¿½ï¿½ï¿½Ð¼ï¿½Ê±
 		{
 			if (++SysInfo.Mode_Cnt >= Timer_EMS) // 2s
 			{
 				SysInfo.Mode_Cnt = 0;
 				LockFlag |= 0x02;
-				SysInfo.Mode_Switch_Flag = 0x01; // RFÄ£Ê½¿ªÆô
+				SysInfo.Mode_Switch_Flag = 0x01; // RFÄ£Ê½ï¿½ï¿½ï¿½ï¿½
 			}
 			Error_Time_Flag = 1;
 		}
@@ -303,7 +303,7 @@ void Vibration_Reminder_Counts_Run(void) // 10msÔËÐÐÒ»´Î
 	}
 	else
 	{
-		SysInfo.Mode_Switch_Flag = 0x01; // RFÄ£Ê½¿ªÆô
+		SysInfo.Mode_Switch_Flag = 0x01; // RFÄ£Ê½ï¿½ï¿½ï¿½ï¿½
 		SysInfo.Mode_Cnt = 0;
 		LockFlag = 0;
     if(++NoTouch_Cnt > 1000 )
@@ -311,14 +311,14 @@ void Vibration_Reminder_Counts_Run(void) // 10msÔËÐÐÒ»´Î
 			NoTouch_Cnt = 0;
       if(SysInfo.Power_Value.state == System_ON)
 			{
-				SysInfo.Temp_Protect_Flage = 1; //¿ª»ú¼°Àë¿ªÆ¤·ô10s ¹ýÎÂÎÂ¶È¼õ2¡æ±êÖ¾Î»
+				SysInfo.Temp_Protect_Flage = 1; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ë¿ªÆ¤ï¿½ï¿½10s ï¿½ï¿½ï¿½ï¿½ï¿½Â¶È¼ï¿½2ï¿½ï¿½ï¿½Ö¾Î»
 			}
 
 		}
 	}
 	/************************************************************************************************
-1¡¢½ôÖÂÌáÀ­Ä£Ê½£º»»ÇøÌáÐÑ£º120s¡¢240s;Ä£Ê½ÔËÐÐÍê³É:300s£¬½øÈë´ý»úÄ£Ê½£¬60sÎÞ²Ù×÷£¬½øÈëÐÝÃßÄ£Ê½£»
-2¡¢µ­ÎÆÐÞ¸´Ä£Ê½£º»»ÇøÌáÐÑ£º240s¡¢480s;Ä£Ê½ÔËÐÐÍê³É:600s£¬½øÈë´ý»úÄ£Ê½£¬60sÎÞ²Ù×÷£¬½øÈëÐÝÃßÄ£Ê½£»
+1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ£ï¿½120sï¿½ï¿½240s;Ä£Ê½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½:300sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½ï¿½ï¿½60sï¿½Þ²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½ï¿½ï¿½
+2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½Ä£Ê½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ£ï¿½240sï¿½ï¿½480s;Ä£Ê½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½:600sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½ï¿½ï¿½60sï¿½Þ²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½ï¿½ï¿½
 	*************************************************************************************************/
 
 	if ((LockFlag == 0x03 && SysInfo.WorkState == upkeep_mode) ||
@@ -327,12 +327,12 @@ void Vibration_Reminder_Counts_Run(void) // 10msÔËÐÐÒ»´Î
 		LockFlag = 0;
 		SysInfo.Reminder_Cnt++;
 		SysInfo.Check_Protect_Flage = 1;
-//		SysInfo.Period_Flag = 1; 
+//		SysInfo.Period_Flag = 1;
 		if (((SysInfo.Reminder_Cnt == EMS_Reminder_120S || SysInfo.Reminder_Cnt == EMS_Reminder_240S) && SysInfo.WorkState == upkeep_mode) ||
 			((SysInfo.Reminder_Cnt == RF_Reminder_240S || SysInfo.Reminder_Cnt == RF_Reminder_480S) && SysInfo.WorkState == repair_mode))
 		{
-			SysInfo.Montor_Flag = 1; // »»Çø¡¢Âí´ïÕñ¶¯
-			SysInfo.StayTime = 20;	 // Õñ¶¯Ê±³¤0.2s
+			SysInfo.Montor_Flag = 1; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			SysInfo.StayTime = 20;	 // ï¿½ï¿½Ê±ï¿½ï¿½0.2s
 		}
 		else
 		{
@@ -340,11 +340,11 @@ void Vibration_Reminder_Counts_Run(void) // 10msÔËÐÐÒ»´Î
 				(SysInfo.Reminder_Cnt == RF_Reminder_600S && SysInfo.WorkState == repair_mode))
 			{
 				SysInfo.Reminder_Cnt = 0;
-				SysInfo.Montor_Flag = 1; // »»Çø¡¢Âí´ïÕñ¶¯
-				SysInfo.StayTime = 100;	 // Õñ¶¯Ê±³¤1.0s
+				SysInfo.Montor_Flag = 1; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+				SysInfo.StayTime = 100;	 // ï¿½ï¿½Ê±ï¿½ï¿½1.0s
 				SysInfo.Mode_Switch_Flag = 0x03;
 				Error_Time_Flag = 0;
-//				SysInfo.Skin_Touch_Flag = 0; // ÏµÍ³½Ó´¥±êÖ¾Î»
+//				SysInfo.Skin_Touch_Flag = 0; // ÏµÍ³ï¿½Ó´ï¿½ï¿½ï¿½Ö¾Î»
 			}
 		}
 	}
@@ -354,14 +354,14 @@ void Vibration_Reminder_Counts_Run(void) // 10msÔËÐÐÒ»´Î
 		if (++StandyCnt > 5)
 		{
 			SysInfo.Mode_Switch_Flag = 0x00;
-			SysInfo.Sleep_Flag = 1; // ¹Ø»ú±êÖ¾Î»
+			SysInfo.Sleep_Flag = 1; // ï¿½Ø»ï¿½ï¿½ï¿½Ö¾Î»
 		}
 
 		if (SysInfo.Test_Mode.Ageing_Mode == 0x01)
 		{
 			StandyCnt = 0;
 			SysInfo.Mode_Switch_Flag = 0x01;
-			SysInfo.Sleep_Flag = 0; // ¹Ø»ú±êÖ¾Î»
+			SysInfo.Sleep_Flag = 0; // ï¿½Ø»ï¿½ï¿½ï¿½Ö¾Î»
 		}
 	}
 	else
@@ -371,7 +371,7 @@ void Vibration_Reminder_Counts_Run(void) // 10msÔËÐÐÒ»´Î
 }
 /**************************************************************************************
  * FunctionName   : Set_OverTemp_Parameter(void)
- * Description    :  ¹ýÎÂ²ÎÊýÉèÖÃ
+ * Description    :  ï¿½ï¿½ï¿½Â²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
  * EntryParameter : None
  * ReturnValue    : None
  **************************************************************************************/
@@ -379,7 +379,7 @@ void Set_OverTemp_Parameter(void)
 {
 	static uint16_t TimeCnt_30s, Mode_Cnt;
 //  static uint8_t Restore_Flag;
-	if (SysInfo.StayTime_30s_Flag) // ÇÐ»»µµÎ»ºó,ÔÚ¸ÃµµÎ»Î¬³Ö30s,±ÜÃâÒòÎÂ¶È¹ý¸ß£¬µ¼ÖÂÇÐ»»µµÎ»Ò»Ö±Î¬³Ö1µµÔËÐÐ Ö÷ÒªÕë¶ÔEMS
+	if (SysInfo.StayTime_30s_Flag) // ï¿½Ð»ï¿½ï¿½ï¿½Î»ï¿½ï¿½,ï¿½Ú¸Ãµï¿½Î»Î¬ï¿½ï¿½30s,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¶È¹ï¿½ï¿½ß£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð»ï¿½ï¿½ï¿½Î»Ò»Ö±Î¬ï¿½ï¿½1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Òªï¿½ï¿½ï¿½EMS
 	{
 		if (++TimeCnt_30s > 3000)
 		{
@@ -388,47 +388,47 @@ void Set_OverTemp_Parameter(void)
 		}
 	}
 
-	if (!SysInfo.OverTemp_Flag && !SysInfo.Check_Protect_Flage) // ¹ýÎÂºó»Ö¸´Õý³££¬²ÎÊý»Ö¸´Õý³£
+	if (!SysInfo.OverTemp_Flag && !SysInfo.Check_Protect_Flage) // ï¿½ï¿½ï¿½Âºï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½
 	{
 		if (SysInfo.WorkState == upkeep_mode)
 		{
 			SysInfo.upkeep_level = SysInfo.Save_Data.upkeep_level;
-			if (SysInfo.Power_Value.state == System_ON)
-			{
-				Upkeep_LED_ON();
-			}
-			else
-			{
-				if (SysInfo.Test_Mode.Test_Mode_Flag != ON)
-				{
-					Upkeep_LED_OFF();
-				}
-			}
+			// if (SysInfo.Power_Value.state == System_ON)
+			// {
+			// 	Upkeep_LED_ON();
+			// }
+			// else
+			// {
+			// 	if (SysInfo.Test_Mode.Test_Mode_Flag != ON)
+			// 	{
+			// 		Upkeep_LED_OFF();
+			// 	}
+			// }
 		}
 		else if (SysInfo.WorkState == repair_mode)
 		{
 			SysInfo.repair_level = SysInfo.Save_Data.repair_level;
-			if (SysInfo.Power_Value.state == System_ON)
-			{
-				Repair_LED_ON();
-			}
-			else
-			{
-				if (SysInfo.Test_Mode.Test_Mode_Flag != ON)
-				{
-					Repair_LED_OFF();
-				}
-			}
+			// if (SysInfo.Power_Value.state == System_ON)
+			// {
+			// 	Repair_LED_ON();
+			// }
+			// else
+			// {
+			// 	if (SysInfo.Test_Mode.Test_Mode_Flag != ON)
+			// 	{
+			// 		Repair_LED_OFF();
+			// 	}
+			// }
 		}
 		else
 			;
 
-		if (!SysInfo.Check_Protect_Flage) // ¼ì²âµ½´«¸ÐÆ÷ÒÆ¶¯
+		if (!SysInfo.Check_Protect_Flage) // ï¿½ï¿½âµ½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½
 		{
-			if (SysInfo.Power_Value.state == System_ON)
-			{
-				IRled_start();
-			}
+			// if (SysInfo.Power_Value.state == System_ON)
+			// {
+			// 	IRled_start();
+			// }
 		}
 		Mode_Cnt = 0;
     if(SysInfo.Restore_Flag && SysInfo.Power_Value.state == System_ON)
@@ -437,13 +437,13 @@ void Set_OverTemp_Parameter(void)
 			SysInfo.Mode_Switch_Flag = 0x01 ;
 		}
 	}
-	//	else if(SysInfo.OverTemp_Flag && !SysInfo.StayTime_30s_Flag)//¹ýÎÂ²ÎÊýÉèÖÃ
-	else if (SysInfo.OverTemp_Flag || SysInfo.Check_Protect_Flage) // ¹ýÎÂ²ÎÊýÉèÖÃ »ò ´«¸ÐÆ÷Î´ÒÆ¶¯£¬Íê³Éµ±Ç°ÖÜÆÚÄÜÁ¿Êä³öºó£¬RF½µÎª1µµ£¬EMS²»½µµµ£¬Ä£Ê½µÆ¼°ËíµÀµÆÉÁ£¨1SÁÁÃð£©
+	//	else if(SysInfo.OverTemp_Flag && !SysInfo.StayTime_30s_Flag)//ï¿½ï¿½ï¿½Â²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	else if (SysInfo.OverTemp_Flag || SysInfo.Check_Protect_Flage) // ï¿½ï¿½ï¿½Â²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î´ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½Éµï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½RFï¿½ï¿½Îª1ï¿½ï¿½ï¿½ï¿½EMSï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½ï¿½Æ¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½1Sï¿½ï¿½ï¿½ï¿½
 	{
 #if TEMP_TEST_MODE
     if(SysInfo.OverTemp_Flag == 0x01 && !SysInfo.Check_Protect_Flage)
 		{
-				if (SysInfo.WorkState == upkeep_mode) // ½ôÖÂÌáÀ­Ä£Ê½
+				if (SysInfo.WorkState == upkeep_mode) // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½
 				{
 					if (SysInfo.Check_Protect_Flage)
 					{
@@ -468,12 +468,7 @@ void Set_OverTemp_Parameter(void)
 				else
 					;
 		}
-#if SENSOR_MOVE
-
-		else if(SysInfo.OverTemp_Flag == 0x02 ||SysInfo.Check_Protect_Flage)
-#else
 		else if(SysInfo.OverTemp_Flag == 0x02)
-#endif
 		{
 			if(SysInfo.Power_Value.state == System_ON)
 			{
@@ -482,6 +477,19 @@ void Set_OverTemp_Parameter(void)
 				SysInfo.Restore_Flag = 1 ;
 			}
 		}
+	#if SENSOR_MOVE
+		else if(SysInfo.Check_Protect_Flage)
+		{
+			if(SysInfo.Power_Value.state == System_ON)
+			{
+				RF_DeInit();
+				Ems_DeInit();
+				SysInfo.Restore_Flag = 1 ;
+			}
+		}
+	#endif
+
+
 #else
 //		if(SysInfo.OverTemp_Flag == 0x01 ||SysInfo.Check_Protect_Flage )
 //		{
@@ -492,24 +500,28 @@ void Set_OverTemp_Parameter(void)
 
 
 #endif
-		if (SysInfo.Power_Value.state == System_ON && SysInfo.Batt_Value.State != BAT_00_20_STATUS) // Ä£Ê½µÆ±¨¾¯ÌáÐÑ
+		if (SysInfo.Power_Value.state == System_ON && SysInfo.Batt_Value.State != BAT_00_20_STATUS) // Ä£Ê½ï¿½Æ±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		{
-			if(SysInfo.Skin_Touch_Flag)
-			{
-				Mode_Twink1hz_Display(50);
-			}
-			else
-			{
-				if (SysInfo.WorkState == repair_mode)
-				{
-					Repair_LED_ON();
-				}
-				else
-				{
-					Upkeep_LED_ON();
-				}
-					IRled_start();		
-			}
+			// if(SysInfo.Skin_Touch_Flag)
+			// {
+			// if(SysInfo.OverTemp_Flag == 0x02) // 20230512 ?????????45??c?????u???
+			// {
+			// 	Mode_Twink1hz_Display(50);
+			// }
+
+			// }
+			// else
+			// {
+				// if (SysInfo.WorkState == repair_mode)
+				// {
+				// 	Repair_LED_ON();
+				// }
+				// else
+				// {
+				// 	Upkeep_LED_ON();
+				// }
+					// IRled_start();
+			// }
 
 		}
 	}
@@ -524,14 +536,14 @@ void Set_OverTemp_Parameter(void)
 
 /*************************************************************************************
  * FunctionName	: SLIDE_MODE_Run
- * Description   :»¬¶¯Ä£Ê½
+ * Description   :ï¿½ï¿½ï¿½ï¿½Ä£Ê½
  * EntryParameter:
  * ReturnValue   :
  **************************************************************************************/
 void SLIDE_MODE_Run(void)
 {
 		static uint8_t Lis2dInit_Flag = 0;
-	//	SysInfo.MotionStateFlage = LIS3DH_get_angle(ddata.AXIS_X, ddata.AXIS_Y, ddata.AXIS_Z);//½âÎö
+	//	SysInfo.MotionStateFlage = LIS3DH_get_angle(ddata.AXIS_X, ddata.AXIS_Y, ddata.AXIS_Z);//ï¿½ï¿½ï¿½ï¿½
 #if LIS2DH
   if(SysInfo.Power_Value.state==System_ON)
 	{
@@ -548,11 +560,11 @@ void SLIDE_MODE_Run(void)
 	}
 
 #else
-	LIS3DH_get_angle(ddata.AXIS_X, ddata.AXIS_Y, ddata.AXIS_Z); // ½âÎö
+	LIS3DH_get_angle(ddata.AXIS_X, ddata.AXIS_Y, ddata.AXIS_Z); // ï¿½ï¿½ï¿½ï¿½
 #endif
 	if (SysInfo.Test_Mode.Test_Mode_Flag == ON)
 	{
-		SysInfo.MotionStateFlage = 1; // ²âÊÔ
+		SysInfo.MotionStateFlage = 1; // ï¿½ï¿½ï¿½ï¿½
 	}
 #if AGEING_TEST
 	SysInfo.MotionStateFlage = 1;  //????
@@ -564,7 +576,7 @@ void SLIDE_MODE_Run(void)
 	}
 	else
 	{
-//		if(SysInfo.Period_Flag)  //Õý³£¹¤×÷×´Ì¬ÏÂ´«¸ÐÆ÷Î´ÒÆ¶¯£¬Íê³Éµ±Ç°ÖÜÆÚÄÜÁ¿Êä³öºó£¬RF½µÎª1µµ£¬EMS²»½µµµ£¬Ä£Ê½µÆ¼°ËíµÀµÆÉÁ£¨1SÁÁÃð£©
+//		if(SysInfo.Period_Flag)  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½Â´ï¿½ï¿½ï¿½ï¿½ï¿½Î´ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½Éµï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½RFï¿½ï¿½Îª1ï¿½ï¿½ï¿½ï¿½EMSï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½ï¿½Æ¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½1Sï¿½ï¿½ï¿½ï¿½
 //		{
 //			SysInfo.Period_Flag = 0 ;
 //			SysInfo.Check_Protect_Flage = 1;
@@ -583,25 +595,25 @@ void EMS_Procedure_Run(void)
 
 	if (SysInfo.WorkState == upkeep_mode && SysInfo.Power_Value.state == System_ON)
 	{
-		System_Standby_Run();				  // 60sÎÞ½Ó´¥¹Ø»ú¡¢µÚÒ»´Î½Ó´¥Æ¤·ôÂí´ïÕñ¶¯
-		if (SysInfo.Mode_Switch_Flag == 0x01) // RF³õÊ¼»¯
+		System_Standby_Run();				  // 60sï¿½Þ½Ó´ï¿½ï¿½Ø»ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½Î½Ó´ï¿½Æ¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		if (SysInfo.Mode_Switch_Flag == 0x01) // RFï¿½ï¿½Ê¼ï¿½ï¿½
 		{
 			SysInfo.Mode_Switch_Flag = 0x00;
 			Ems_DeInit();
 			RF_Init();
 		}
-		else if (SysInfo.Mode_Switch_Flag == 0x02) // EMS³õÊ¼»¯
+		else if (SysInfo.Mode_Switch_Flag == 0x02) // EMSï¿½ï¿½Ê¼ï¿½ï¿½
 		{
 			RF_DeInit();
 			Ems_Init();
 		}
-		else if (SysInfo.Mode_Switch_Flag == 0x03) // ½øÈë´ý»úÄ£Ê½
+		else if (SysInfo.Mode_Switch_Flag == 0x03) // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½
 		{
 			RF_Call_Data();
-			IRled_stop(); // ¹Ø±ÕËíµÀµÆ
+			IRled_stop(); // ï¿½Ø±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			RF_DeInit();
 			Ems_DeInit();
-			VBAT_DET_ON(); // Ê¹ÄÜ V33V5020
+			VBAT_DET_ON(); // Ê¹ï¿½ï¿½ V33V5020
 			VBAT_OUT_OFF();
 			RF_EN_DOWN();
 			PID.Flag = 0;
@@ -615,8 +627,8 @@ void EMS_Procedure_Run(void)
 
 	if (SysInfo.WorkState == upkeep_mode && SysInfo.Power_Value.state == System_ON)
 	{
-		System_Standby_Run();														// 60sÎÞ½Ó´¥¹Ø»ú¡¢µÚÒ»´Î½Ó´¥Æ¤·ôÂí´ïÕñ¶¯
-		if ((SysInfo.Mode_Switch_Flag == 0x01 || SysInfo.Mode_Switch_Flag == 0x02)) // RF¡¢EMS³õÊ¼»¯
+		System_Standby_Run();														// 60sï¿½Þ½Ó´ï¿½ï¿½Ø»ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½Î½Ó´ï¿½Æ¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		if ((SysInfo.Mode_Switch_Flag == 0x01 || SysInfo.Mode_Switch_Flag == 0x02)) // RFï¿½ï¿½EMSï¿½ï¿½Ê¼ï¿½ï¿½
 		{
 			SysInfo.Mode_Switch_Flag = 0x00;
 			RF_Init();
@@ -625,13 +637,13 @@ void EMS_Procedure_Run(void)
 				Ems_Init();
 			}
 		}
-		else if (SysInfo.Mode_Switch_Flag == 0x03) // ½øÈë´ý»úÄ£Ê½
+		else if (SysInfo.Mode_Switch_Flag == 0x03) // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½
 		{
 			RF_Call_Data();
-			IRled_stop();  // ¹Ø±ÕËíµÀµÆ
+			IRled_stop();  // ï¿½Ø±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			RF_DeInit();
 			Ems_DeInit();
-			VBAT_DET_ON(); // Ê¹ÄÜV33V5020
+			VBAT_DET_ON(); // Ê¹ï¿½ï¿½V33V5020
 			VBAT_OUT_OFF();
 			RF_EN_DOWN();
 			PID.Flag = 0;
@@ -645,30 +657,30 @@ void EMS_Procedure_Run(void)
 }
 /**************************************************************************************
 * FunctionName   : Cosmetic_Procedure_Run(void)
-* Description    : SysInfo.Montor_Flag:Âí´ïÕñ¶¯±êÖ¾Î»
-				   SysInfo.StayTime£ºÕñ¶¯Ê±³¤
+* Description    : SysInfo.Montor_Flag:ï¿½ï¿½ï¿½ï¿½ï¿½ñ¶¯±ï¿½Ö¾Î»
+				   SysInfo.StayTimeï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
 * EntryParameter : None
 * ReturnValue    : None
 **************************************************************************************/
 void RF_Procedure_Run(void)
 {
 #if ARF001
-	if (SysInfo.WorkState == repair_mode && SysInfo.Power_Value.state == System_ON) // µ­ÎÆÐÞ¸´Ä£Ê½
+	if (SysInfo.WorkState == repair_mode && SysInfo.Power_Value.state == System_ON) // ï¿½ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½Ä£Ê½
 	{
-		System_Standby_Run();				  // 60sÎÞ½Ó´¥¹Ø»ú¡¢µÚÒ»´Î½Ó´¥Æ¤·ôÂí´ïÕñ¶¯
-		if (SysInfo.Mode_Switch_Flag == 0x01) // RF³õÊ¼»¯
+		System_Standby_Run();				  // 60sï¿½Þ½Ó´ï¿½ï¿½Ø»ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½Î½Ó´ï¿½Æ¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		if (SysInfo.Mode_Switch_Flag == 0x01) // RFï¿½ï¿½Ê¼ï¿½ï¿½
 		{
 			SysInfo.Mode_Switch_Flag = 0x00;
 			Ems_DeInit();
 			RF_Init();
 		}
-		else if (SysInfo.Mode_Switch_Flag == 0x03) // ½øÈë´ý»úÄ£Ê½
+		else if (SysInfo.Mode_Switch_Flag == 0x03) // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½
 		{
 			RF_Call_Data();
-			IRled_stop(); // ¹Ø±ÕËíµÀµÆ
+			IRled_stop(); // ï¿½Ø±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			RF_DeInit();
 			Ems_DeInit();
-			VBAT_DET_ON(); // Ê¹ÄÜ V33V5020
+			VBAT_DET_ON(); // Ê¹ï¿½ï¿½ V33V5020
 			VBAT_OUT_OFF();
 			RF_EN_DOWN();
 			PID.Flag = 0;
@@ -679,22 +691,22 @@ void RF_Procedure_Run(void)
 	}
 
 #else
-	if (SysInfo.WorkState == repair_mode && SysInfo.Power_Value.state == System_ON) // µ­ÎÆÐÞ¸´Ä£Ê½
+	if (SysInfo.WorkState == repair_mode && SysInfo.Power_Value.state == System_ON) // ï¿½ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½Ä£Ê½
 	{
-		System_Standby_Run();				  // 60sÎÞ½Ó´¥¹Ø»ú¡¢µÚÒ»´Î½Ó´¥Æ¤·ôÂí´ïÕñ¶¯
-		if (SysInfo.Mode_Switch_Flag == 0x01) // RF³õÊ¼»¯
+		System_Standby_Run();				  // 60sï¿½Þ½Ó´ï¿½ï¿½Ø»ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½Î½Ó´ï¿½Æ¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		if (SysInfo.Mode_Switch_Flag == 0x01) // RFï¿½ï¿½Ê¼ï¿½ï¿½
 		{
 			SysInfo.Mode_Switch_Flag = 0x00;
 			Ems_DeInit();
 			RF_Init();
 		}
-		else if (SysInfo.Mode_Switch_Flag == 0x03) // ½øÈë´ý»úÄ£Ê½
+		else if (SysInfo.Mode_Switch_Flag == 0x03) // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½
 		{
 			RF_Call_Data();
-			IRled_stop(); // ¹Ø±ÕËíµÀµÆ
+			IRled_stop(); // ï¿½Ø±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			RF_DeInit();
 			Ems_DeInit();
-			VBAT_DET_ON(); // Ê¹ÄÜ V33V5020
+			VBAT_DET_ON(); // Ê¹ï¿½ï¿½ V33V5020
 			VBAT_OUT_OFF();
 			RF_EN_DOWN();
 			PID.Flag = 0;
@@ -883,8 +895,8 @@ void System_Sleep(void)
 		SysInfo.Power_Value.Enter_Sleep_Flag = 1;
 	}
 
-	//	if(((SysInfo.Power_Value.state == System_OFF ) && (!SysInfo.Batt_Value.Usb_flag)))  //½øÈëµÍ¹¦ºÄ¼ÆÊ±£¬10S
-	if ((SysInfo.Power_Value.Enter_Sleep_Flag) && (!SysInfo.Batt_Value.Usb_flag)) // ½øÈëµÍ¹¦ºÄ¼ÆÊ±£¬10S
+	//	if(((SysInfo.Power_Value.state == System_OFF ) && (!SysInfo.Batt_Value.Usb_flag)))  //ï¿½ï¿½ï¿½ï¿½Í¹ï¿½ï¿½Ä¼ï¿½Ê±ï¿½ï¿½10S
+	if ((SysInfo.Power_Value.Enter_Sleep_Flag) && (!SysInfo.Batt_Value.Usb_flag)) // ï¿½ï¿½ï¿½ï¿½Í¹ï¿½ï¿½Ä¼ï¿½Ê±ï¿½ï¿½10S
 	{
 		if (++SysInfo.Sleep_Counts > 100)
 		{
@@ -919,9 +931,9 @@ void Rx_Init(void)
 {
 	GPIO_InitTypeDef GPIO_InitStruct;
 	__HAL_RCC_GPIOA_CLK_ENABLE();
-	// ÅäÖÃUART1µÄRxÒý½ÅÎªEXITÄ£Ê½
+	// ï¿½ï¿½ï¿½ï¿½UART1ï¿½ï¿½Rxï¿½ï¿½ï¿½ï¿½ÎªEXITÄ£Ê½
 	GPIO_InitStruct.Pin = GPIO_PIN_10;
-	GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING; // ÌØ±ð×¢ÒâÕâÀïÒªÊ¹ÓÃÖÐ¶ÏÄ£Ê½
+	GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING; // ï¿½Ø±ï¿½×¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÒªÊ¹ï¿½ï¿½ï¿½Ð¶ï¿½Ä£Ê½
 	GPIO_InitStruct.Pull = GPIO_PULLDOWN;
 	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 	HAL_NVIC_SetPriority(EXTI4_15_IRQn, 0, 0);
@@ -930,7 +942,7 @@ void Rx_Init(void)
 
 /**************************************************************************************
  * FunctionName   : Enter_Sleep_Mode(void)
- * Description    : ½øÈëÐÝÃßÄ£Ê½
+ * Description    : ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½
  * EntryParameter : None
  * ReturnValue    : None
  **************************************************************************************/
@@ -970,7 +982,7 @@ IRled_stop();
 	HAL_NVIC_DisableIRQ(EXTI4_15_IRQn);
 
 	HAL_IWDG_Refresh(&hiwdg);
-	HAL_ADC_Stop_IT(&hadc1); /// ADC×ª»»Æô¶¯
+	HAL_ADC_Stop_IT(&hadc1); /// ADC×ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	HAL_ADC_Stop_DMA(&hadc1);
 	HAL_UART_DMAStop(&huart1);
 	HAL_ADC_MspDeInit(&hadc1);
@@ -985,14 +997,14 @@ IRled_stop();
 	MX_GPIO_DISInit();
 
 
-	HAL_NVIC_EnableIRQ(EXTI0_1_IRQn); // Ê¹ÄÜKEY_ON_OFF_PinÖÐ¶Ï
+	HAL_NVIC_EnableIRQ(EXTI0_1_IRQn); // Ê¹ï¿½ï¿½KEY_ON_OFF_Pinï¿½Ð¶ï¿½
 	Rx_Init();
-		///Ë¯Ãß
-//		__HAL_RCC_PWR_CLK_ENABLE();   //Ê¹ÄÜPWRÊ±ÖÓ
-//		SysTick->CTRL = 0x00;//¹Ø±Õ¶¨Ê±Æ÷
-//		SysTick->VAL = 0x00;//Çå¿Õval,Çå¿Õ¶¨Ê±Æ÷
+		///Ë¯ï¿½ï¿½
+//		__HAL_RCC_PWR_CLK_ENABLE();   //Ê¹ï¿½ï¿½PWRÊ±ï¿½ï¿½
+//		SysTick->CTRL = 0x00;//ï¿½Ø±Õ¶ï¿½Ê±ï¿½ï¿½
+//		SysTick->VAL = 0x00;//ï¿½ï¿½ï¿½val,ï¿½ï¿½Õ¶ï¿½Ê±ï¿½ï¿½
 //		HAL_DBGMCU_EnableDBGStopMode();
-//		  /* ½øÈëÍ£Ö¹Ä£Ê½£¬ÉèÖÃµçÑ¹µ÷½ÚÆ÷ÎªµÍ¹¦ºÄÄ£Ê½£¬µÈ´ýÖÐ¶Ï»½ÐÑ KEY2 °´¼üÏÂ½µÑØ»½ÐÑ*/
+//		  /* ï¿½ï¿½ï¿½ï¿½Í£Ö¹Ä£Ê½ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½Í¹ï¿½ï¿½ï¿½Ä£Ê½ï¿½ï¿½ï¿½È´ï¿½ï¿½Ð¶Ï»ï¿½ï¿½ï¿½ KEY2 ï¿½ï¿½ï¿½ï¿½ï¿½Â½ï¿½ï¿½Ø»ï¿½ï¿½ï¿½*/
 //		HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON,PWR_STOPENTRY_WFI);
 
 
@@ -1007,7 +1019,7 @@ IRled_stop();
 }
 /**************************************************************************************
  * FunctionName   : Enter_Sleep_Mode(void)
- * Description    : ÍË³öË¯ÃßÄ£Ê½
+ * Description    : ï¿½Ë³ï¿½Ë¯ï¿½ï¿½Ä£Ê½
  * EntryParameter : None
  * ReturnValue    : None
  **************************************************************************************/
@@ -1027,7 +1039,7 @@ void exit_sleep_mode(void)
   HAL_ADC_MspInit(&hadc1);
 	SysInfo.Power_Value.Enter_Sleep_Flag = 1;
 	SysInfo.Batt_Value.Usb_flag = 0;
-	HAL_NVIC_DisableIRQ(EXTI0_1_IRQn); // ¹Ø±ÕÍâ²¿ÖÐ¶ÏKEY_ON_OFF_PinÊ¹ÄÜ
+	HAL_NVIC_DisableIRQ(EXTI0_1_IRQn); // ï¿½Ø±ï¿½ï¿½â²¿ï¿½Ð¶ï¿½KEY_ON_OFF_PinÊ¹ï¿½ï¿½
 	HAL_NVIC_DisableIRQ(EXTI4_15_IRQn);
 
 	HAL_NVIC_EnableIRQ(USART1_IRQn);
@@ -1036,7 +1048,7 @@ void exit_sleep_mode(void)
 	HAL_NVIC_EnableIRQ(DMA1_Channel2_3_IRQn);
 	HAL_NVIC_EnableIRQ(TIM14_IRQn);
 
-	SysInfo.Power_Value.BattState = 0x01; // ¿ª»úµç³ØµçÑ¹¼ì²â±êÖ¾
+	SysInfo.Power_Value.BattState = 0x01; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½Ö¾
 	Read_Current_Level_For_Eeprom();
 //	VBAT_OUT_ON();
   VCC3V3_OUT_ON();
@@ -1070,7 +1082,7 @@ void System_1mS_Procedure(void)
 	SysInfo.Batt_Value.State = Scan_Batter_State();
 	//		Scan_Batter_State();
 	Skin_RF_Scan();
-	Pole_Change(); // Ðý×ªµç¼«
+	Pole_Change(); // ï¿½ï¿½×ªï¿½ç¼«
 				   //		Touch_Skin_EMS_Freq_Conversion();
 }
 /**************************************************************************************
@@ -1091,7 +1103,7 @@ void System_5mS_Procedure(void)
 			Key_Proc();
 		}
 
-		if (SysInfo.Test_Mode.Test_Mode_Flag == ON || SysInfo.Test_Mode.Auto_Mode_Level == 0x04) // ²âÊÔÄ£Ê½°´¼üº¯Êý
+		if (SysInfo.Test_Mode.Test_Mode_Flag == ON || SysInfo.Test_Mode.Auto_Mode_Level == 0x04) // ï¿½ï¿½ï¿½ï¿½Ä£Ê½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		{
 			Test_Key_Proc();
 		}
@@ -1107,21 +1119,21 @@ void System_10mS_Procedure(void)
 {
 	USB_Plug_Scan();
 	Montor_Drive(&SysInfo);
-	Led_Process_Run(); // LEDÖ¸Ê¾µÆÔËÐÐ
+	Led_Process_Run(); // LEDÖ¸Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	NTC_Temp_Running();
 	Skin_Touch_Scan();
 
 #if ARF001
-	Vibration_Reminder_Counts_Run(); // »»ÇøÌáÐÑ
-	Set_OverTemp_Parameter();		     // ¹ýÎÂ±£»¤£¬²ÎÊýÉèÖÃ
+	Vibration_Reminder_Counts_Run(); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	Set_OverTemp_Parameter();		     // ï¿½ï¿½ï¿½Â±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	Set_Ems_level(&SysInfo);
 #else
-	Vibration_Reminder_Counts_Run(); // »»ÇøÌáÐÑ
-	Set_OverTemp_Parameter();		     // ¹ýÎÂ±£»¤£¬²ÎÊýÉèÖÃ
+	Vibration_Reminder_Counts_Run(); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	Set_OverTemp_Parameter();		     // ï¿½ï¿½ï¿½Â±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 #endif
 
-	EMS_Procedure_Run(); // ½ôÖÂÌáÀ­
-	RF_Procedure_Run();	 // µ­ÎÆÐÞ¸´
+	EMS_Procedure_Run(); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	RF_Procedure_Run();	 // ï¿½ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½
 
 	if (SysInfo.Batt_Value.Usb_flag)
 	{
@@ -1140,7 +1152,7 @@ void System_10mS_Procedure(void)
 void System_100mS_Procedure(void)
 {
 
-	Frequency_conversion_Process(); // ±äÆµ
+	Frequency_conversion_Process(); // ï¿½ï¿½Æµ
 	Set_RF_Level(&SysInfo);
 
 #if ARF001
@@ -1171,7 +1183,7 @@ void System_Data_Init(void)
 	SysInfo.Batt_Value.State = BAT_40_60_STATUS;
 	SysInfo.Power_Value.Enter_Sleep_Flag = 1;
 	SysInfo.Restore_Flag = 0;
-	HAL_NVIC_EnableIRQ(EXTI0_1_IRQn); // ¹Ø±ÕÍâ²¿ÖÐ¶ÏÊ¹ÄÜ
+	HAL_NVIC_EnableIRQ(EXTI0_1_IRQn); // ï¿½Ø±ï¿½ï¿½â²¿ï¿½Ð¶ï¿½Ê¹ï¿½ï¿½
 	HAL_NVIC_DisableIRQ(EXTI4_15_IRQn);
 	Led_Value.Level = 0x5a;
 	Read_Current_Level_For_Eeprom();
@@ -1181,9 +1193,9 @@ void System_Data_Init(void)
 	PID.Kd = 0.1;
 	PID.Constant = 50;
 	PID.temp = 500;
-	printf("\n\r ==========\n\r");
+	//printf("\n\r ==========\n\r");
 	printf("\n\r version:%s\n\r", version);
-	printf("\n\r ----------\n\r");
+	//printf("\n\r ----------\n\r");
 	HAL_UART_Receive_DMA(&huart1, SysInfo.Test_Mode.Data, 20);
 }
 /**************************************************************************************
