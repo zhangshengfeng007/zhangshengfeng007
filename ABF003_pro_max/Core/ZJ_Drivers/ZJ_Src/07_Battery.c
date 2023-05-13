@@ -142,8 +142,8 @@ uint16_t Get_Battery_Read(uint16_t *ADC_Source, uint16_t Counts)
 	}
 	sum -= min;
 	sum -= max;
-
-	return sum >> 7; // 取128次平均值
+  sum /=(Counts-2);
+	return sum ; // 取128次平均值
 }
 /**************************************************************************************
  * FunctionName   : uint8_t Charge_Batter_State(uint16_t ChargeBatValue)
@@ -245,10 +245,14 @@ uint8_t CheckWorking_Batter_State(uint16_t WorkBatValue)
 
 	if (WorkBatValue < BAT_VOL_3V20)
 	{
-//		if (WorkBatValue < (BAT_VOL_3V20 - BAT_VOL_HYS))
-//		{
+		if (WorkBattState ==BAT_00_20_STATUS || WorkBattState == BAT_00_00_STATUS)
+		{
 			WorkBattState = BAT_00_00_STATUS;
-//		}
+		}
+		else
+		{
+			WorkBattState = BAT_00_20_STATUS;
+		}
 	}
 	else if (WorkBatValue < BAT_VOL_3V30)
 	{
@@ -313,7 +317,7 @@ uint8_t Scan_Batter_State(void)
 				SysInfo.Save_Data.BattState = CheckIdle_Batter_State(BatValue);
 			}
 
-			printf("\n\r SaveBatValue=%d\n\r", SysInfo.Save_Data.BattState);
+//			printf("\n\r SaveBatValue=%d\n\r", SysInfo.Save_Data.BattState);
 		}
 		//		printf ("\n\r BatValue=%d\n\r",BatValue);
 	}
@@ -322,6 +326,13 @@ uint8_t Scan_Batter_State(void)
 	if (SysInfo.Power_Value.state == System_ON) // 系统工作状态电池检测
 	{
 		BattState = CheckWorking_Batter_State(BatValue);
+		if(SysInfo.Save_Data.BattState <= BAT_00_20_STATUS)
+		{
+			if(BattState!=BAT_00_00_STATUS)
+			{
+				BattState = SysInfo.Save_Data.BattState;
+			}
+		}
 	}
 	else if (SysInfo.Batt_Value.Usb_flag) // 充电电池检测
 	{

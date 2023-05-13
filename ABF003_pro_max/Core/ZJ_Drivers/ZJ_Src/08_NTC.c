@@ -172,6 +172,7 @@ void NTC_Temp_Running(void) // 1ms运行一次
 	//	int8_t current_temp;
 	uint32_t ntc_value, Rt_Value;
 //  static uint8_t OverTemp=42,StopTemp=45,NormalTemp =40;
+	static uint16_t over_temp_cnt;
 	uint8_t NormalTemp =40;
 
 	ntc_value = filter((uint16_t *)&ADC_Value, NTC_CHANNEL, ADC_CHANNEL_NUM, ADC_ADD_COUNT) * 0.61035; // 2500/4096
@@ -195,21 +196,29 @@ void NTC_Temp_Running(void) // 1ms运行一次
     {
 			SysInfo.OverTemp_Flag = 1; // 过温
 		}
+		over_temp_cnt = 0;
 	}
   else if((SysInfo.NTC_Temp < OVER_TEMP) && (SysInfo.NTC_Temp >= NORMAL_TEMP))
 	{
     if(SysInfo.OverTemp_Flag == 2) //超温45°停止输出，直到温度小于42°，再开始输出能量
     {
-				SysInfo.OverTemp_Flag = 1; // 过温
-		}		
+				SysInfo.OverTemp_Flag = 1; // ????
+		}
+		over_temp_cnt = 0;
 	}
 	else if(SysInfo.NTC_Temp > STOP_TEMP)
 	{
-		SysInfo.OverTemp_Flag = 2; // 超温，停止输出		
+		over_temp_cnt ++;
+		if(over_temp_cnt > 500)
+		{
+			over_temp_cnt = 500;
+			SysInfo.OverTemp_Flag = 2; // ???￡??????
+		}
 	}
 	else if ((SysInfo.NTC_Temp < NORMAL_TEMP) && (SysInfo.OverTemp_Flag == 1))
 	{
-		SysInfo.OverTemp_Flag = 0; // 恢复正常
+		SysInfo.OverTemp_Flag = 0; // ???????
+		over_temp_cnt = 0;
 	}
 	else
 		;
