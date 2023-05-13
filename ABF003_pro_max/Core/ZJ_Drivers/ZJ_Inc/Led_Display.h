@@ -3,16 +3,16 @@
 #include "main.h"
 #include "includes.h"
 #include "Handle.h"
-////LED µµÎ»µÆÄ£Ê½µÆ  ²âÊÔ
-#define GEAR_LED1_PIN       GPIO_PIN_15 ///µµÎ»LED1
+////LED ï¿½ï¿½Î»ï¿½ï¿½Ä£Ê½ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½
+#define GEAR_LED1_PIN       GPIO_PIN_15 ///ï¿½ï¿½Î»LED1
 #define GEAR_LED1_PORT		GPIOB
-#define GEAR_LED2_PIN       GPIO_PIN_2 ///µµÎ»LED2
+#define GEAR_LED2_PIN       GPIO_PIN_2 ///ï¿½ï¿½Î»LED2
 #define GEAR_LED2_PORT		GPIOB
-#define GEAR_LED3_PIN       GPIO_PIN_6 ///µµÎ»LED3
+#define GEAR_LED3_PIN       GPIO_PIN_6 ///ï¿½ï¿½Î»LED3
 #define GEAR_LED3_PORT		GPIOC
-#define GEAR_LED4_PIN       GPIO_PIN_7 ///µµÎ»LED4
+#define GEAR_LED4_PIN       GPIO_PIN_7 ///ï¿½ï¿½Î»LED4
 #define GEAR_LED4_PORT		GPIOC
-#define GEAR_LED5_PIN       GPIO_PIN_11 ///µµÎ»LED5
+#define GEAR_LED5_PIN       GPIO_PIN_11 ///ï¿½ï¿½Î»LED5
 #define GEAR_LED5_PORT		GPIOA
 
 
@@ -46,11 +46,11 @@
 #define Repair_LED_OFF() RF_LED_DOWN()
 
 #define	OLED_ON_BIT		1U<<6
-#define	PLED_ON_BIT		1U<<5		
-#define	WLED1_ON_BIT	1U<<4		
-#define	WLED2_ON_BIT	1U<<3		
-#define	WLED3_ON_BIT	1U<<2		
-#define	WLED4_ON_BIT	1U<<1	
+#define	PLED_ON_BIT		1U<<5
+#define	WLED1_ON_BIT	1U<<4
+#define	WLED2_ON_BIT	1U<<3
+#define	WLED3_ON_BIT	1U<<2
+#define	WLED4_ON_BIT	1U<<1
 #define	WLED5_ON_BIT	1U<<0
 
 extern void led_scan(uint8_t bit_flag);
@@ -60,4 +60,5 @@ extern void led_scan(uint8_t bit_flag);
 uint8_t  Led_Display(_LED_VALUE_TypeDef * LED );
 uint8_t LED_Flicker(uint16_t stayTime) ;
 void Mode_Twink1hz_Display(uint16_t stayTime);
+void MODE_LEVEL_1hz_Display(uint8_t BitFlag, uint16_t stayTime);
 #endif

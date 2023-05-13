@@ -1,7 +1,7 @@
 
 #include "includes.h"
 
-uint8_t ir_on_flag;
+// uint8_t ir_on_flag;
 _IRLED_VALUE_TypeDef IRled_Value;
 
 void LedIR_Init(void)
@@ -11,7 +11,7 @@ void LedIR_Init(void)
 	GPIO_InitStruct.Pin = LED_IR_ON_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
 	HAL_GPIO_Init(LED_IR_ON_GPIO_Port, &GPIO_InitStruct);
 
 	LED_IR_OFF();
@@ -27,24 +27,7 @@ void LedIR_Init(void)
  **************************************************************************************/
 void IRled_stop(void)
 {
-	ir_on_flag = 0;
-#if ARF001
 	LED_IR_OFF();
-#else
-
-	// IR_LED_RED_SET(0);  //0
-	// IR_LED_RED_STOP();
-	// LED_IR_OFF();
-	LED_IR_OFF();
-		// printf ("\n\r led:off\n\r");	 //≤‚ ‘
-#endif
-
-	//	IR_LED_RED_SET(0);
-	//	IR_LED_RED_STOP();
-	//	VBAT_OUT_OFF();
-	//	IR_LED_RED_SET(0);
-	//	VBAT_OUT_SET(0);
-	//	HAL_TIMEx_PWMN_Stop(&IR_LED_TIM,IR_LED_RED);
 }
 
 /**************************************************************************************
@@ -55,21 +38,8 @@ void IRled_stop(void)
  **************************************************************************************/
 void IRled_start(void)
 {
-	ir_on_flag = 1;
-
-#if ARF001
-	LED_IR_ON();
 	VBAT_OUT_ON();
-#else
-	// VBAT_OUT_ON();
-	// IR_LED_RED_START();
-	// IR_LED_RED_SET(90);
-			LED_IR_ON();
-			VBAT_OUT_ON();
-	// printf ("\n\r led:on\n\r");	 //≤‚ ‘
-#endif
-	//	IR_LED_RED_START();
-	//	IR_LED_RED_SET(100);
+	LED_IR_ON();
 }
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

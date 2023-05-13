@@ -132,7 +132,7 @@ void StartDefaultTask(void const * argument)
 //#else
 //  MX_TIM3_Init();
 //#endif
-  /*****************²âÊÔ******************/
+  /*****************ï¿½ï¿½ï¿½ï¿½******************/
   //	VBAT_OUT_ON(); //
   //	BOOST_5V_ON();
   /***************************************/
@@ -174,7 +174,7 @@ void StartTask02(void const * argument)
         Key_Proc();
       }
 
-      if (SysInfo.Test_Mode.Test_Mode_Flag == ON || SysInfo.Test_Mode.Auto_Mode_Level == 0x04) // ²âÊÔÄ£Ê½°´¼ü¼ì²â
+      if (SysInfo.Test_Mode.Test_Mode_Flag == ON || SysInfo.Test_Mode.Auto_Mode_Level == 0x04) // ï¿½ï¿½ï¿½ï¿½Ä£Ê½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
       {
         Test_Key_Proc();
       }
@@ -204,10 +204,10 @@ void StartTask03(void const * argument)
     SLIDE_MODE_Run();
 //		if(Counts_1000ms++>40)
 //		{
-//			printf ("\n\r%.1f\n\r",SysInfo.NTC_Temp);	             //²âÊÔ
+//			printf ("\n\r%.1f\n\r",SysInfo.NTC_Temp);	             //ï¿½ï¿½ï¿½ï¿½
 ////			HAL_UART_Transmit(&huart1, (uint8_t *)(SysInfo.NTC_Temp), 1, 50);
 //			Counts_1000ms = 0;
-//	//		printf ("\n\r NTC: %.1f ??\n\r",SysInfo.NTC_Temp);	 //²âÊÔ
+//	//		printf ("\n\r NTC: %.1f ??\n\r",SysInfo.NTC_Temp);	 //ï¿½ï¿½ï¿½ï¿½
 
 //		}
 
@@ -228,10 +228,10 @@ void StartTask03(void const * argument)
 //	vPortGetHeapStats( &xHeapStats);
 
 	printf ("\n\r heap:%d,%d stack:%d,%d,%d\n\r",
-	FreeHeap,////»ñÈ¡µ±Ç°Î´·ÖÅäµÄÄÚ´æ¶Ñ´óÐ¡
-	MinEverFreeHeap,//»ñÈ¡Î´·ÖÅäµÄÄÚ´æ¶ÑÀúÊ·×îÐ¡Öµ
-	istack1,istack2,istack3);//ÈÎÎñÕ»¿Õ¼äµÄÀúÊ·×îÐ¡Ê£ÓàÖµ,1¸ö×Ö³¤Îª4¸ö×Ö½Ú
-#endif	
+	FreeHeap,////ï¿½ï¿½È¡ï¿½ï¿½Ç°Î´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú´ï¿½Ñ´ï¿½Ð¡
+	MinEverFreeHeap,//ï¿½ï¿½È¡Î´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú´ï¿½ï¿½ï¿½ï¿½Ê·ï¿½ï¿½Ð¡Öµ
+	istack1,istack2,istack3);//ï¿½ï¿½ï¿½ï¿½Õ»ï¿½Õ¼ï¿½ï¿½ï¿½ï¿½Ê·ï¿½ï¿½Ð¡Ê£ï¿½ï¿½Öµ,1ï¿½ï¿½ï¿½Ö³ï¿½Îª4ï¿½ï¿½ï¿½Ö½ï¿½
+#endif
     vTaskDelayUntil(&lasttick, 25);
   }
   /* USER CODE END StartTask03 */

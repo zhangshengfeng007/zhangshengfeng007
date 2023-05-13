@@ -160,14 +160,7 @@ void Mode_Twink1hz_Display(uint16_t stayTime)
 			{
 				Upkeep_LED_ON();
 			}
-
-			//				if(SysInfo.Check_Protect_Flage && !SysInfo.OverTemp_Flag) //??????????
-			//if ((SysInfo.Check_Protect_Flage)||(SysInfo.OverTemp_Flag == 0x02)) // �???????
-			{
-				IRled_start();
-			}
-			// printf ("\n\r led_1khz: on  \n\r");	 //??
-
+			IRled_start();
 		}
 	}
 	else
@@ -191,10 +184,61 @@ void Mode_Twink1hz_Display(uint16_t stayTime)
 			{
 				IRled_stop();
 			}
-			// printf ("\n\r led_1khz :off\n\r");	 //??
 		}
 	}
 }
+/**************************************************************************************
+ * FunctionName   : MODE_LEVEL_1hz_Display(uint8_t BitFlag,uint16_t stayTime)
+ * Description    :
+ * EntryParameter :      --解决 档位灯和 状态灯闪烁不同步问题
+ * ReturnValue    : None
+ **************************************************************************************/
+void MODE_LEVEL_1hz_Display(uint8_t BitFlag, uint16_t stayTime)
+{
+	static uint8_t Twink1hzState;
+	static uint16_t Twink1hzcnt;
+
+	if (Twink1hzState)
+	{
+		if(Twink1hzcnt)
+		{
+			Twink1hzcnt--;
+			return;
+		}
+
+		Twink1hzState = 0;
+		Twink1hzcnt = 0;
+		led_scan(0);
+		if (SysInfo.WorkState == repair_mode)
+		{
+			Repair_LED_OFF();
+		}
+		else
+		{
+			Upkeep_LED_OFF();
+		}
+
+	}
+	else
+	{
+		Twink1hzcnt++;
+		if (Twink1hzcnt >= stayTime)
+		{
+			Twink1hzState = 1;
+			Twink1hzcnt = stayTime;
+			led_scan(BitFlag);
+			if (SysInfo.WorkState == repair_mode)
+			{
+				Repair_LED_ON();
+			}
+			else
+			{
+				Upkeep_LED_ON();
+			}
+		}
+	}
+}
+
 /**************************************************************************************
  * FunctionName   : LedStay_Display(uint8_t BitFlag,uint16_t stayTime)
  * Description    : ��ʱϨ��ָʾ��
@@ -294,29 +338,85 @@ static void bat_lower_percent_20_disp(uint8_t level)
 {
 	switch (level)
 	{
-	case 0x00:
-		led_scan(0x00);
-		break; // BAT_00_00_STATUS
-	case 0x01:
-		Twink1hz_Display(0x01, 50);
-		break; // 1??
-	case 0x02:
-		Twink1hz_Display(0x03, 50);
-		break; // 2??
-	case 0x03:
-		Twink1hz_Display(0x07, 50);
-		break; // 3??
-	case 0x04:
-		Twink1hz_Display(0x0f, 50);
-		break; // 4??
-	case 0x05:
-		Twink1hz_Display(0x1f, 50);
-		break; // 5??
-	default:
-		led_scan(0x00);
-		break; // ?????
+		case 0x00:
+		case 0x01:
+		{
+			if(SysInfo.Check_Protect_Flage)
+			{
+				MODE_LEVEL_1hz_Display(0x01, 50);
+			}
+			else
+			{
+				Twink1hz_Display(0x01, 50);
+			}
+			break; // 1??
+		}
+
+		case 0x02:
+		{
+			//Twink1hz_Display(0x03, 50);
+			if(SysInfo.Check_Protect_Flage)
+			{
+				MODE_LEVEL_1hz_Display(0x03, 50);
+			}
+			else
+			{
+				Twink1hz_Display(0x03, 50);
+			}
+			break; // 2??
+		}
+
+		case 0x03:
+		{
+			//Twink1hz_Display(0x07, 50);
+			if(SysInfo.Check_Protect_Flage)
+			{
+				MODE_LEVEL_1hz_Display(0x07, 50);
+			}
+			else
+			{
+				Twink1hz_Display(0x07, 50);
+			}
+			break; // 3??
+
+		}
+
+		case 0x04:
+		{
+			//Twink1hz_Display(0x0f, 50);
+			if(SysInfo.Check_Protect_Flage)
+			{
+				MODE_LEVEL_1hz_Display(0x07, 50);
+			}
+			else
+			{
+				Twink1hz_Display(0x07, 50);
+			}
+			break; // 4??
+		}
+		case 0x05:
+		{
+			//	Twink1hz_Display(0x1f, 50);
+			if(SysInfo.Check_Protect_Flage)
+			{
+				MODE_LEVEL_1hz_Display(0x1f, 50);
+			}
+			else
+			{
+				Twink1hz_Display(0x1f, 50);
+			}
+			break; // 5??
+
+		}
+
+		default:
+		{
+			led_scan(0x00);
+			break; // ?????
+		}
+
 	}
-	Mode_Twink1hz_Display(50);
+	//Mode_Twink1hz_Display(50);
 
 }
 /**************************************************************************************
@@ -445,9 +545,59 @@ switch(LED->Mode)
 			Led_Lock_Flag = 1;
 			LED->state = 0;
 		}
-		if(SysInfo.OverTemp_Flag == 0x02) // 20230512 ?????????45??c?????u???
+
+
+		if((SysInfo.Check_Protect_Flage)|| (SysInfo.OverTemp_Flag == 0x02)) // 20230512
 		{
-			Mode_Twink1hz_Display(50);
+			if (SysInfo.Power_Value.state == System_ON)
+			{
+				Mode_Twink1hz_Display(50);
+			}
+		}
+		else
+		{
+			switch(SysInfo.WorkState)
+			{
+				case upkeep_mode:
+				{
+					if (SysInfo.Power_Value.state == System_ON)
+					{
+						Upkeep_LED_ON();
+						IRled_start();
+					}
+					else
+					{
+						if (SysInfo.Test_Mode.Test_Mode_Flag != ON)
+						{
+							Upkeep_LED_OFF();
+						}
+					}
+					break;
+				}
+				case repair_mode:
+				{
+					if (SysInfo.Power_Value.state == System_ON)
+					{
+						Repair_LED_ON();
+						IRled_start();
+					}
+					else
+					{
+						if (SysInfo.Test_Mode.Test_Mode_Flag != ON)
+						{
+							Repair_LED_OFF();
+						}
+					}
+					break;
+				}
+				default:
+				{
+					Upkeep_LED_OFF();
+					Repair_LED_OFF();
+					break;
+				}
+			}
+
 		}
 		break;
 	}
