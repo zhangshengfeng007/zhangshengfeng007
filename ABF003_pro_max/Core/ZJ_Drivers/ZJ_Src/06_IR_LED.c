@@ -6,7 +6,7 @@ _IRLED_VALUE_TypeDef IRled_Value;
 
 void LedIR_Init(void)
 {
-#if ARF001
+//#if ARF001
 	GPIO_InitTypeDef GPIO_InitStruct = {0};
 	GPIO_InitStruct.Pin = LED_IR_ON_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -15,9 +15,9 @@ void LedIR_Init(void)
 	HAL_GPIO_Init(LED_IR_ON_GPIO_Port, &GPIO_InitStruct);
 
 	LED_IR_OFF();
-#else
-	MX_TIM3_Init();
-#endif
+//#else
+	//MX_TIM3_Init();
+//#endif
 }
 /**************************************************************************************
  * FunctionName   : IRled_stop
@@ -31,9 +31,12 @@ void IRled_stop(void)
 #if ARF001
 	LED_IR_OFF();
 #else
+
+	// IR_LED_RED_SET(0);  //0
+	// IR_LED_RED_STOP();
+	// LED_IR_OFF();
 	LED_IR_OFF();
-	IR_LED_RED_SET(0);
-	IR_LED_RED_STOP();
+		// printf ("\n\r led:off\n\r");	 //≤‚ ‘
 #endif
 
 	//	IR_LED_RED_SET(0);
@@ -58,11 +61,12 @@ void IRled_start(void)
 	LED_IR_ON();
 	VBAT_OUT_ON();
 #else
-	VBAT_OUT_ON();
-	IR_LED_RED_START();
-	IR_LED_RED_SET(90);
-	//		LED_IR_ON();
-	//		VBAT_OUT_ON() ;
+	// VBAT_OUT_ON();
+	// IR_LED_RED_START();
+	// IR_LED_RED_SET(90);
+			LED_IR_ON();
+			VBAT_OUT_ON();
+	// printf ("\n\r led:on\n\r");	 //≤‚ ‘
 #endif
 	//	IR_LED_RED_START();
 	//	IR_LED_RED_SET(100);
