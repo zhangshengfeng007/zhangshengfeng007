@@ -134,7 +134,7 @@ CLEAR_BIT(SysTick->CTRL,SysTick_CTRL_TICKINT_Msk);
 #if ARF001
   ;
 #else
-  MX_TIM3_Init();
+  //MX_TIM3_Init();
 #endif
 SET_BIT(SysTick->CTRL, SysTick_CTRL_TICKINT_Msk);
   /* USER CODE END 2 */
