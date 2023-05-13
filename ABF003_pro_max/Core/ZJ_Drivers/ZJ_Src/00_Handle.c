@@ -420,8 +420,8 @@ void Set_OverTemp_Parameter(void)
 			// 	}
 			// }
 		}
-		else
-			;
+		// else
+		// 	;
 
 		if (!SysInfo.Check_Protect_Flage) // ��⵽�������ƶ�
 		{
