@@ -11,6 +11,7 @@
 //#define ARF001 1    // pro版本
 #define DEVICE_R1_RPO_MAX  0    //宏定义 r1_pro_max = 0, 未修改逻辑
 #define DEVICE_R1_RPO      1    //宏定义 r1_pro = 1,     未修改逻辑
+#define DEVICE_R1_HAIWAI   2    //宏定义 r1_HAIWAI = 2,   ABF001P
 
 #define ARF001            DEVICE_R1_RPO_MAX  //PRO_MAX
 
