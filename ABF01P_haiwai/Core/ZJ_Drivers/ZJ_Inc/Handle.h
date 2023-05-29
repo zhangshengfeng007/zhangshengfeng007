@@ -13,7 +13,17 @@
 #define DEVICE_R1_RPO      1    //宏定义 r1_pro = 1,     未修改逻辑
 
 #define ARF001            DEVICE_R1_RPO_MAX  //PRO_MAX
-#define LIS2DH 1  //2D������
+
+#define UNUSE_G_SENSOR    0
+#define USE_G_SENSOR      1
+#define G_SENSOR_SELECT   UNUSE_G_SENSOR
+
+#if (G_SENSOR_SELECT == USE_G_SENSOR)
+#define LIS2DH           1  //g_sensor device
+#else
+#define LIS2DH           0  //g_sensor device
+#endif
+
 //#define LIS3DH 0  //3D������
 #define ENABLE_FREERTOS_HEAP_STACK_LOG 0
 #define DEBUG_IDWG 1
