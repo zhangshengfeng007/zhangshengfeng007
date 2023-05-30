@@ -7,7 +7,7 @@ extern TIM_HandleTypeDef htim1;
 _EMS_HANDLE_TypeDef EMS_Handle;
 _PID_HANDLE_TypeDef PID;
 
-#if ARF001				  // �»Դｵ��
+#if (ARF001 == DEVICE_R1_RPO)				  // �»Դｵ��
 #define EMS_Freq 1000	  // ���� ʱ��
 #define duty 30			  // ���� 30
 #define interval 35		  // �����������ʱ��
@@ -16,7 +16,7 @@ _PID_HANDLE_TypeDef PID;
 #define channel_n_start channel_p_stop + interval
 #define channel_n_stop channel_n_start + duty
 
-#else
+#elif (ARF001 == DEVICE_R1_RPO_MAX)
 #define EMS_Freq 250	  // ���� ʱ��
 #define duty 11			  // ����
 #define interval 30		  // �����������ʱ��
@@ -24,6 +24,16 @@ _PID_HANDLE_TypeDef PID;
 #define channel_p_stop channel_p_start + duty
 #define channel_n_start channel_p_stop + interval
 #define channel_n_stop channel_n_start + duty
+
+#elif (ARF001 == DEVICE_R1_HAIWAI)
+#define EMS_Freq 250	  // ���� ʱ��
+#define duty 11			  // ����
+#define interval 30		  // �����������ʱ��
+#define channel_p_start 5 //
+#define channel_p_stop channel_p_start + duty
+#define channel_n_start channel_p_stop + interval
+#define channel_n_stop channel_n_start + duty
+
 #endif
 
 static uint16_t EMS_Freq_Value = EMS_Freq;
@@ -262,7 +272,7 @@ void Set_Ems_level(_Sys_Info_TypeDef *EmsLevel)
 			}
 			EMS_Handle.Period = EMS_BOOST_SW_PERIOD;
 
-#if ARF001
+#if (ARF001 == DEVICE_R1_RPO)
 			if (EMS_Handle.Run_Flag)
 			{
 				EMS_Handle.EMS_Cnt++;

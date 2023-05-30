@@ -3,23 +3,23 @@
 
 /*************************************************************************************
  * FunctionName	: Skin_Touch_Scan(void)
- * Description		: Æ¤·ô½Ó´¥¼ì²â Ö÷ÒªÎªÉäÆµ½Ó´¥¼ì²â
+ * Description		: Æ¤ï¿½ï¿½ï¿½Ó´ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ÒªÎªï¿½ï¿½Æµï¿½Ó´ï¿½ï¿½ï¿½ï¿½
  * EntryParameter:
  * ReturnValue		:
  **************************************************************************************/
-void Skin_Touch_Scan(void) // 10msÔËÐÐÒ»´Î
+void Skin_Touch_Scan(void) // 10msï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
 {
 	static uint16_t no_touch_filter_count = 0;
-#if ARF001
+#if (ARF001 == DEVICE_R1_RPO)
 	;
-#else
+#elif ((ARF001 == DEVICE_R1_RPO_MAX)||(ARF001 == DEVICE_R1_HAIWAI))
 	if (RF_Handle.Flag || SysInfo.Restore_Flag)
 #endif
 	{
 		if (SysInfo.Skin_Touch_RF_Flag)
 		{
 			no_touch_filter_count = 0;
-			SysInfo.Skin_Touch_Flag = 1; // ÏµÍ³½Ó´¥±êÖ¾Î»
+			SysInfo.Skin_Touch_Flag = 1; // ÏµÍ³ï¿½Ó´ï¿½ï¿½ï¿½Ö¾Î»
 		}
 		else
 		{
@@ -35,11 +35,11 @@ void Skin_Touch_Scan(void) // 10msÔËÐÐÒ»´Î
 
 /*************************************************************************************
  * FunctionName	: Cosmetic_Time_Count(void)
- * Description		: 60SÆ¤·ôÎÞ½Ó´¥¡¢Ä£Ê½ºó60SÄÚÎÞÇÐ»» ÏµÍ³¹Ø»ú
+ * Description		: 60SÆ¤ï¿½ï¿½ï¿½Þ½Ó´ï¿½ï¿½ï¿½Ä£Ê½ï¿½ï¿½60Sï¿½ï¿½ï¿½ï¿½ï¿½Ð»ï¿½ ÏµÍ³ï¿½Ø»ï¿½
  * EntryParameter:
  * ReturnValue		:
  **************************************************************************************/
-uint8_t Cosmetic_Time_Count(void) // 10msÔËÐÐ
+uint8_t Cosmetic_Time_Count(void) // 10msï¿½ï¿½ï¿½ï¿½
 {
 	uint8_t TimeOut = 0;
 	//	static uint8_t Montor_Flag=0;
@@ -47,7 +47,7 @@ uint8_t Cosmetic_Time_Count(void) // 10msÔËÐÐ
 
 	if (SysInfo.Power_Value.state == System_ON)
 	{
-		if (SysInfo.Skin_Touch_Flag) // ¼ÆÊ±¿ªÊ¼
+		if (SysInfo.Skin_Touch_Flag) // ï¿½ï¿½Ê±ï¿½ï¿½Ê¼
 		{
 			if (!SysInfo.Montor_Flag && SysInfo.Skin_Touch_Montor_Flag)
 			{
@@ -60,10 +60,10 @@ uint8_t Cosmetic_Time_Count(void) // 10msÔËÐÐ
 
 			if ((SysInfo.Skin_No_Touch_Timer || No_Touch_Cnt > 100) && SysInfo.Skin_Touch_Montor_Flag)
 			{
-				//				if(!SysInfo.Montor_Flag &&SysInfo.Skin_Touch_Montor_Flag ) //¿ª»úµÚÒ»´Î½Ó´¥µ½Æ¤·ô
+				//				if(!SysInfo.Montor_Flag &&SysInfo.Skin_Touch_Montor_Flag ) //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½Î½Ó´ï¿½ï¿½ï¿½Æ¤ï¿½ï¿½
 				//				{
 				SysInfo.Skin_Touch_Montor_Flag = 0;
-				SysInfo.Montor_Flag = 1; // µç»úÕñ¶¯±êÖ¾
+				SysInfo.Montor_Flag = 1; // ï¿½ï¿½ï¿½ï¿½ñ¶¯±ï¿½Ö¾
 				SysInfo.StayTime = 20;
 				No_Touch_Cnt = 0;
 
@@ -81,7 +81,7 @@ uint8_t Cosmetic_Time_Count(void) // 10msÔËÐÐ
 			if (SysInfo.Skin_No_Touch_Timer > 6000) // 6000
 			{
 				SysInfo.Skin_No_Touch_Timer = 0;
-				TimeOut = 1; // ½ø³Ì½áÊø
+				TimeOut = 1; // ï¿½ï¿½ï¿½Ì½ï¿½ï¿½ï¿½
 			}
 		}
 	}
@@ -94,11 +94,11 @@ uint8_t Cosmetic_Time_Count(void) // 10msÔËÐÐ
 }
 /*************************************************************************************
  * FunctionName	: skin_rf_scan(void)
- * Description		: RFÆ¤·ô¼ì²â
+ * Description		: RFÆ¤ï¿½ï¿½ï¿½ï¿½ï¿½
  * EntryParameter:
  * ReturnValue		:
  **************************************************************************************/
-uint8_t Skin_RF_Scan(void) // 1msÔËÐÐ1´Î
+uint8_t Skin_RF_Scan(void) // 1msï¿½ï¿½ï¿½ï¿½1ï¿½ï¿½
 {
 	static uint16_t Skin_RF_Value = 0;
 	static uint8_t RF_Count = 0, ShinCount = 0;
@@ -107,9 +107,9 @@ uint8_t Skin_RF_Scan(void) // 1msÔËÐÐ1´Î
 
 	if (++ShinCount <= BAT_ADC_COUNT)
 	{
-#if ARF001
+#if (ARF001 == DEVICE_R1_RPO)
 		if (!SysInfo.Montor_Flag)
-#else
+#elif ((ARF001 == DEVICE_R1_RPO_MAX)||(ARF001 == DEVICE_R1_HAIWAI))
 		if ((RF_Handle.ADC_Flag && !SysInfo.Montor_Flag) || SysInfo.Restore_Flag)
 #endif
 		{
@@ -129,7 +129,7 @@ uint8_t Skin_RF_Scan(void) // 1msÔËÐÐ1´Î
 		//		Skin_RF_Value = Skin_filter((uint16_t *)&Skin_Touch_Data,BAT_ADC_COUNT);
 	}
 
-	if (SysInfo.Power_Value.state != System_OFF || SysInfo.Test_Mode.Test_Mode_Flag != OFF) // ¿ª»ú2sºó¼ì²âÆ¤·ô
+	if (SysInfo.Power_Value.state != System_OFF || SysInfo.Test_Mode.Test_Mode_Flag != OFF) // ï¿½ï¿½ï¿½ï¿½2sï¿½ï¿½ï¿½ï¿½Æ¤ï¿½ï¿½
 	{
 		SystemON_2s_Cnt++;
 	}
@@ -143,23 +143,23 @@ uint8_t Skin_RF_Scan(void) // 1msÔËÐÐ1´Î
 		//			#if ARF001
 		//				;
 		//			#else
-		if (RF_Handle.Flag || SysInfo.Restore_Flag) // RF¿ªÆôºó£¬ÅÐ¶ÏÊÇ·ñ½Ó´¥Æ¤·ô
+		if (RF_Handle.Flag || SysInfo.Restore_Flag) // RFï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½Ç·ï¿½Ó´ï¿½Æ¤ï¿½ï¿½
 		//			#endif
 		{
 			//			Skin_RF_Value = filter((uint16_t *)&ADC_Value,3,ADC_CHANNEL_NUM,ADC_ADD_COUNT);
 
-			if (Skin_RF_Value >= RF_TOUCH_THRESHOLD) // ½Ó´¥Æ¤·ô
+			if (Skin_RF_Value >= RF_TOUCH_THRESHOLD) // ï¿½Ó´ï¿½Æ¤ï¿½ï¿½
 			{
 				if (++RF_Over_Count >= 2)
 				{
-					SysInfo.Skin_Touch_RF_Flag = 1; // RFÉäÆµ½Ó´¥±êÖ¾Î»
+					SysInfo.Skin_Touch_RF_Flag = 1; // RFï¿½ï¿½Æµï¿½Ó´ï¿½ï¿½ï¿½Ö¾Î»
 					RF_Over_Count = 0;
 				}
 				RF_Count = 0;
 			}
 			else
 			{
-				if (++RF_Count >= Skin_Remove_Cnt) // Àë¿ªÆ¤·ô
+				if (++RF_Count >= Skin_Remove_Cnt) // ï¿½ë¿ªÆ¤ï¿½ï¿½
 				{
 					SysInfo.Skin_Touch_RF_Flag = 0;
 					RF_Count = 0;

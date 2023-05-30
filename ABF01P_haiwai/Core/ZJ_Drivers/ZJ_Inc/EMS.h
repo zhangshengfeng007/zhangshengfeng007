@@ -19,7 +19,7 @@
 #define TEST_MODE  0
 
 
-#if ARF001
+#if (ARF001 == DEVICE_R1_RPO)
 
 #if TEST_MODE
 /*********************����***********************/
@@ -42,14 +42,22 @@
 #endif
 
 /******************************************/
-#else
-	#define PidConstant       10
+#elif (ARF001 == DEVICE_R1_RPO_MAX)
+	#define PidConstant       		 10
 	#define	EMS_VOL_LEVEL1			(1220 + PidConstant)//(1228 + PidConstant)(VPP = 35V)
 	#define	EMS_VOL_LEVEL2			(1320 + PidConstant)//(1326 + PidConstant)//(VPP = 39V)
 	#define	EMS_VOL_LEVEL3			(1420 + PidConstant)//(1444 + PidConstant)//(VPP = 43V)
 	#define	EMS_VOL_LEVEL4			(1520 + PidConstant) //(1560 + PidConstant)//(VPP = 46V)
 	#define	EMS_VOL_LEVEL5			(1620  + PidConstant)//1720  ----1620 --(VPP = 49V)
 
+#elif (ARF001 == DEVICE_R1_HAIWAI)
+	#define EMS_VOL_Constant  		85 // 85 1.5 V  114 2 V    -------具体参数还要调试
+	#define PidConstant       		-171//30
+	#define	EMS_VOL_LEVEL1			(1228 + PidConstant)//21.569 V
+	#define	EMS_VOL_LEVEL2			(1392 + PidConstant)//24.540 V
+	#define	EMS_VOL_LEVEL3			(1556 + PidConstant)//27.331 V
+	#define	EMS_VOL_LEVEL4			(1720 + PidConstant)//30.211 V
+	#define	EMS_VOL_LEVEL5			(1884 + PidConstant)//33.092 V
 
 #endif
 

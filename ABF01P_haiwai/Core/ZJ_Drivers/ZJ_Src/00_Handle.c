@@ -283,7 +283,7 @@ void Vibration_Reminder_Counts_Run(void) // 10ms����һ��
 				}
 			}
 		}
-#if ARF001
+#if (ARF001 == DEVICE_R1_RPO)
 		if (EMS_Handle.Run_Flag) // EMS���м�ʱ
 		{
 			if (++SysInfo.Mode_Cnt >= Timer_EMS) // 2s
@@ -294,7 +294,7 @@ void Vibration_Reminder_Counts_Run(void) // 10ms����һ��
 			}
 			Error_Time_Flag = 1;
 		}
-#else
+#elif ((ARF001 == DEVICE_R1_RPO_MAX)||(ARF001 == DEVICE_R1_HAIWAI))
 		if (LockFlag == 0x01 && EMS_Handle.Run_Flag)
 		{
 			LockFlag |= 0x02;
@@ -601,7 +601,7 @@ void SLIDE_MODE_Run(void)
  **************************************************************************************/
 void EMS_Procedure_Run(void)
 {
-#if ARF001
+#if (ARF001 == DEVICE_R1_RPO)
 
 	if (SysInfo.WorkState == upkeep_mode && SysInfo.Power_Value.state == System_ON)
 	{
@@ -633,7 +633,7 @@ void EMS_Procedure_Run(void)
 			;
 	}
 
-#else
+#elif ((ARF001 == DEVICE_R1_RPO_MAX)||(ARF001 == DEVICE_R1_HAIWAI))
 
 	if (SysInfo.WorkState == upkeep_mode && SysInfo.Power_Value.state == System_ON)
 	{
@@ -662,7 +662,6 @@ void EMS_Procedure_Run(void)
 		else
 			;
 	}
-
 #endif
 }
 /**************************************************************************************
@@ -674,7 +673,7 @@ void EMS_Procedure_Run(void)
 **************************************************************************************/
 void RF_Procedure_Run(void)
 {
-#if ARF001
+#if (ARF001 == DEVICE_R1_RPO)
 	if (SysInfo.WorkState == repair_mode && SysInfo.Power_Value.state == System_ON) // �����޸�ģʽ
 	{
 		System_Standby_Run();				  // 60s�޽Ӵ��ػ�����һ�νӴ�Ƥ��������
@@ -700,7 +699,7 @@ void RF_Procedure_Run(void)
 			;
 	}
 
-#else
+#elif ((ARF001 == DEVICE_R1_RPO_MAX)||(ARF001 == DEVICE_R1_HAIWAI))
 	if (SysInfo.WorkState == repair_mode && SysInfo.Power_Value.state == System_ON) // �����޸�ģʽ
 	{
 		System_Standby_Run();				  // 60s�޽Ӵ��ػ�����һ�νӴ�Ƥ��������
@@ -958,15 +957,11 @@ void Rx_Init(void)
  **************************************************************************************/
 void Enter_Sleep_Mode(void)
 {
-#if ARF001
-
 	Ems_DeInit();
 	RF_DeInit();
-
-#else
-	;
-#endif
+#if (G_SENSOR_SELECT == USE_G_SENSOR)
 	Lis2dh_Sleep_on();
+#endif
 RF_DeInit();
 Ems_DeInit();
 IRled_stop();
@@ -1133,13 +1128,10 @@ void System_10mS_Procedure(void)
 	NTC_Temp_Running();
 	Skin_Touch_Scan();
 
-#if ARF001
 	Vibration_Reminder_Counts_Run(); // ��������
 	Set_OverTemp_Parameter();		     // ���±�������������
+#if (ARF001 == DEVICE_R1_RPO)
 	Set_Ems_level(&SysInfo);
-#else
-	Vibration_Reminder_Counts_Run(); // ��������
-	Set_OverTemp_Parameter();		     // ���±�������������
 #endif
 
 	EMS_Procedure_Run(); // ��������
@@ -1165,9 +1157,7 @@ void System_100mS_Procedure(void)
 	Frequency_conversion_Process(); // ��Ƶ
 	Set_RF_Level(&SysInfo);
 
-#if ARF001
-	;
-#else
+#if ((ARF001 == DEVICE_R1_RPO_MAX)||(ARF001 == DEVICE_R1_HAIWAI))
 	Set_Ems_level(&SysInfo);
 #endif
 

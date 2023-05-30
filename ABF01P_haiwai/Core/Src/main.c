@@ -77,7 +77,7 @@ int main(void)
 //  __disable_irq();
 	HAL_RCC_DeInit ();
 
-//  __enable_irq(); 
+//  __enable_irq();
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -86,7 +86,7 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
- 
+
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -115,10 +115,10 @@ CLEAR_BIT(SysTick->CTRL,SysTick_CTRL_TICKINT_Msk);
   /* USER CODE BEGIN 2 */
 	#if LIS2DH
 		MX_I2C2_Init();
-//		IIC_Init();	
-    #else 
-		IIC_Init();	
-	#endif	
+//		IIC_Init();
+    #else
+		IIC_Init();
+	#endif
 
   System_Data_Init();
   LedIR_Init();
@@ -131,11 +131,7 @@ CLEAR_BIT(SysTick->CTRL,SysTick_CTRL_TICKINT_Msk);
   lis3dhinit();
 #endif
 
-#if ARF001
-  ;
-#else
-  //MX_TIM3_Init();
-#endif
+
 SET_BIT(SysTick->CTRL, SysTick_CTRL_TICKINT_Msk);
   /* USER CODE END 2 */
 
