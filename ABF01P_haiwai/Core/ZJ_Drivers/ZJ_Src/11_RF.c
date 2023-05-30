@@ -5,15 +5,15 @@
 _RF_HANDLE_TypeDef RF_Handle;
 /*************************************************************************************
  * FunctionName	: RF_Osc_ON(void)
- * Description		: RF PWM ¿ªÆô
+ * Description		: RF PWM ï¿½ï¿½ï¿½ï¿½
  * EntryParameter:
  * ReturnValue		:
  **************************************************************************************/
 void RF_Osc_ON(void)
 {
-	/* Æô¶¯Í¨µÀPWMÊä³ö */
+	/* ï¿½ï¿½ï¿½ï¿½Í¨ï¿½ï¿½PWMï¿½ï¿½ï¿½ */
 	HAL_TIM_PWM_Start(&RF_Tim, TIM_CHANNEL_1);	  /// RF
-												  /* Æô¶¯¶¨Ê±Æ÷»¥²¹Í¨µÀPWMÊä³ö */
+												  /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¨ï¿½ï¿½PWMï¿½ï¿½ï¿½ */
 	HAL_TIMEx_PWMN_Start(&RF_Tim, TIM_CHANNEL_1); /// RF
 }
 /*************************************************************************************
@@ -24,14 +24,14 @@ void RF_Osc_ON(void)
  **************************************************************************************/
 void RF_Osc_Off(void)
 {
-	/* Æô¶¯Í¨µÀPWM¹Ø±Õ */
+	/* ï¿½ï¿½ï¿½ï¿½Í¨ï¿½ï¿½PWMï¿½Ø±ï¿½ */
 	HAL_TIM_PWM_Stop(&RF_Tim, TIM_CHANNEL_1);	 /// RF
-												 /* Æô¶¯¶¨Ê±Æ÷»¥²¹Í¨µÀPWM¹Ø±Õ */
+												 /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¨ï¿½ï¿½PWMï¿½Ø±ï¿½ */
 	HAL_TIMEx_PWMN_Stop(&RF_Tim, TIM_CHANNEL_1); /// RF
 }
 /*************************************************************************************
  * FunctionName	: RF_Stop(void)
- * Description		: Í£Ö¹ÉäÆµÊä³ö
+ * Description		: Í£Ö¹ï¿½ï¿½Æµï¿½ï¿½ï¿½
  * EntryParameter:
  * ReturnValue		:
  **************************************************************************************/
@@ -42,7 +42,7 @@ void RF_Stop(void)
 }
 /*************************************************************************************
  * FunctionName	: RF_Start(void)
- * Description	: ¿ªÆôÉäÆµÊä³ö
+ * Description	: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æµï¿½ï¿½ï¿½
  * EntryParameter:
  * ReturnValue	:
  **************************************************************************************/
@@ -50,12 +50,12 @@ void RF_Start(void)
 {
 	RF_Handle.Flag = 1;
 	RF_EN_UP();
-	VBAT_DET_ON(); // Ê¹ÄÜ V33V5020
+	VBAT_DET_ON(); // Ê¹ï¿½ï¿½ V33V5020
 	VBAT_OUT_ON(); //
 }
 /*************************************************************************************
  * FunctionName	: Set_RF_Level(_Sys_Info_TypeDef* Level)
- * Description		: ÉäÆµµµÎ»ÉèÖÃ
+ * Description		: ï¿½ï¿½Æµï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½
  * EntryParameter:
  * ReturnValue		:
  **************************************************************************************/
@@ -65,15 +65,15 @@ void Set_RF_Level(_Sys_Info_TypeDef *Level)
 
 	if (SysInfo.Power_Value.state == System_ON)
 	{
-		if (Level->WorkState == repair_mode) // ÐÞ¸´Ä£Ê½µµÎ»
+		if (Level->WorkState == repair_mode) // ï¿½Þ¸ï¿½Ä£Ê½ï¿½ï¿½Î»
 		{
 			Vol_Level = Level->repair_level;
 		}
-		else // ½ôÖÂÌáÀ­Ä£Ê½µµÎ»
+		else // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½ï¿½ï¿½Î»
 		{
 			switch (Level->upkeep_level)
 			{
-#if ARF001
+#if (ARF001 == DEVICE_R1_RPO)
 			case Level_None:
 				Vol_Level = Level_3;
 				break;
@@ -95,9 +95,9 @@ void Set_RF_Level(_Sys_Info_TypeDef *Level)
 			default:
 				Vol_Level = Level_3;
 				break;
-#else
+#elif ((ARF001 == DEVICE_R1_RPO_MAX)||(ARF001 == DEVICE_R1_HAIWAI))
 			case Level_None:
-				Vol_Level = Level_3;  //µ­ÎÆÐÞ¸´Ä£Ê½¹ýÎÂ¼°²»ÒÆ¶¯½µµµ
+				Vol_Level = Level_3;  //ï¿½ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½Ä£Ê½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½
 				break;
 			case Level_1:
 				Vol_Level = Level_3;
@@ -124,9 +124,9 @@ void Set_RF_Level(_Sys_Info_TypeDef *Level)
 		RF_Handle.Flag = 1;
 		RF_Handle.Mode = 1;
 
-		switch (Vol_Level) // µµÎ»ÉèÖÃ
+		switch (Vol_Level) // ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½
 		{
-		case Level_None: // ¹ýÎÂ²ÎÊý
+		case Level_None: // ï¿½ï¿½ï¿½Â²ï¿½ï¿½ï¿½
 			RF_Level_1();
 			RF_Handle.Duty = Repair_Duty0;
 			break;
@@ -160,7 +160,7 @@ void Set_RF_Level(_Sys_Info_TypeDef *Level)
 }
 /*************************************************************************************
  * FunctionName	: EF_Frequency_conversion(void)
- * Description		: ÉäÆµ±äÆµ
+ * Description		: ï¿½ï¿½Æµï¿½ï¿½Æµ
  * EntryParameter:
  * ReturnValue		:
  **************************************************************************************/
@@ -189,7 +189,7 @@ void RF_Frequency_conversion(uint8_t level)
 }
 /*************************************************************************************
  * FunctionName	: Frequency_conversion_Process(void)
- * Description		: ÉäÆµ±äÆµÔËÐÐº¯Êý
+ * Description		: ï¿½ï¿½Æµï¿½ï¿½Æµï¿½ï¿½ï¿½Ðºï¿½ï¿½ï¿½
  * EntryParameter:
  * ReturnValue		:
  **************************************************************************************/
@@ -201,23 +201,23 @@ void Frequency_conversion_Process(void)
 
 	if (SysInfo.Skin_Touch_Flag)
 	{
-#if 0		
-		if(SysInfo.NTC_Temp<39)			
+#if 0
+		if(SysInfo.NTC_Temp<39)
 		{
 			Counts=0;
 		}
-		else if(SysInfo.NTC_Temp<41&& SysInfo.NTC_Temp>=39)			
+		else if(SysInfo.NTC_Temp<41&& SysInfo.NTC_Temp>=39)
 		{
 			Counts=1;
 		}
-		else if(SysInfo.NTC_Temp>=41)			
+		else if(SysInfo.NTC_Temp>=41)
 		{
-			Counts=2;			
+			Counts=2;
 		}
-		else 
+		else
 		{
 //			Time_Counts = Frequency_1M0_CNT ;
-			Counts=2;	
+			Counts=2;
 		}
 #else
 		SysInfo.Freq_Cnt++;
@@ -229,7 +229,7 @@ void Frequency_conversion_Process(void)
 		{
 			Counts = 1;
 		}
-#if ARF001 // µÂ»Ô´ï½µ±¾
+#if (ARF001 == DEVICE_R1_RPO)// ï¿½Â»Ô´ï½µï¿½ï¿½
 		else if (SysInfo.Freq_Cnt < Frequency_1M0_CNT)
 		{
 			Counts = 2;
@@ -240,7 +240,7 @@ void Frequency_conversion_Process(void)
 			SysInfo.Freq_Cnt = 0;
 		}
 
-		if (SysInfo.WorkState == upkeep_mode) // ½ôÖÂÌáÀ­Ä£Ê½£¬RF 2MHZÔËÐÐ
+		if (SysInfo.WorkState == upkeep_mode) // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½ï¿½ï¿½RF 2MHZï¿½ï¿½ï¿½ï¿½
 		{
 			//			if(SysInfo.Freq_Cnt<4)
 			//			{
@@ -260,7 +260,7 @@ void Frequency_conversion_Process(void)
 			SysInfo.Freq_Cnt = 0;
 			//			}
 		}
-#else
+#elif ((ARF001 == DEVICE_R1_RPO_MAX)||(ARF001 == DEVICE_R1_HAIWAI))
 		else
 		{
 			//			Time_Counts = Frequency_1M0_CNT ;
@@ -278,7 +278,7 @@ void Frequency_conversion_Process(void)
 
 	if (SysInfo.Heating_Flag && SysInfo.Skin_Touch_Flag)
 	{
-		if (++Heating_Counts < Heating_CNT) // ¿ª»úÇ°3Ãë5µµÔËÐÐ£¬Ê¹µç¼«Ñ¸ËÙÉýÎÂ
+		if (++Heating_Counts < Heating_CNT) // ï¿½ï¿½ï¿½ï¿½Ç°3ï¿½ï¿½5ï¿½ï¿½ï¿½ï¿½ï¿½Ð£ï¿½Ê¹ï¿½ç¼«Ñ¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		{
 			SysInfo.repair_level = Level_5;
 			SysInfo.upkeep_level = Level_5;
@@ -295,10 +295,10 @@ void Frequency_conversion_Process(void)
 	{
 		Heating_Counts = 0;
 	}
-#if ARF001 // µÂ»Ô´ï½µ±¾
+#if (ARF001 == DEVICE_R1_RPO)// ï¿½Â»Ô´ï½µï¿½ï¿½
 	;
-#else
-	if (SysInfo.OverTemp_Flag) // ¹ýÎÂ
+#elif ((ARF001 == DEVICE_R1_RPO_MAX)||(ARF001 == DEVICE_R1_HAIWAI))
+	if (SysInfo.OverTemp_Flag) // ï¿½ï¿½ï¿½ï¿½
 	{
 		SysInfo.Freq_Cnt = Frequency_1M0_CNT;
 		Counts = 2;
@@ -311,12 +311,12 @@ void Frequency_conversion_Process(void)
 	}
 	else
 	{
-		RF_Frequency_conversion(SysInfo.Test_Mode.Set_RF_Freq); // ²âÊÔÄ£Ê½
+		RF_Frequency_conversion(SysInfo.Test_Mode.Set_RF_Freq); // ï¿½ï¿½ï¿½ï¿½Ä£Ê½
 	}
 }
 /*************************************************************************************
  * FunctionName	: RF_Process(_RF_HANDLE_TypeDef* RfHandle)
- * Description		: ÉäÆµÔËÐÐ
+ * Description		: ï¿½ï¿½Æµï¿½ï¿½ï¿½ï¿½
  * EntryParameter:
  * ReturnValue		:
  **************************************************************************************/
@@ -330,7 +330,7 @@ void RF_Process(_RF_HANDLE_TypeDef *RfHandle)
 		{
 			if (Pwm_Count == 0)
 			{
-				RF_Osc_ON(); // ¿ªÆôÉäÆµPWMÊä³ö
+				RF_Osc_ON(); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÆµPWMï¿½ï¿½ï¿½
 			}
 			if (Pwm_Count > 4)
 			{
@@ -341,7 +341,7 @@ void RF_Process(_RF_HANDLE_TypeDef *RfHandle)
 		{
 			if (Pwm_Count == (RfHandle->Duty)) //
 			{
-				RF_Osc_Off(); // ¹Ø±ÕÉäÆµPWMÊä³ö
+				RF_Osc_Off(); // ï¿½Ø±ï¿½ï¿½ï¿½ÆµPWMï¿½ï¿½ï¿½
 				RfHandle->ADC_Flag = 0;
 			}
 		}
@@ -360,13 +360,13 @@ void RF_Process(_RF_HANDLE_TypeDef *RfHandle)
 }
 /*************************************************************************************
  * FunctionName	: RF_Pole_Change(_RF_HANDLE_TypeDef* RfHandle)
- * Description		:  Ðý×ªµç¼« 170ms±äÒ»´Î  10msÔËÐÐÒ»´Îº¯Êý
+ * Description		:  ï¿½ï¿½×ªï¿½ç¼« 170msï¿½ï¿½Ò»ï¿½ï¿½  10msï¿½ï¿½ï¿½ï¿½Ò»ï¿½Îºï¿½ï¿½ï¿½
  * EntryParameter:
  * ReturnValue		:
  **************************************************************************************/
 void Pole_Change(void)
 {
-#if ARF001
+#if (ARF001 == DEVICE_R1_RPO)
 	if (SysInfo.Test_Mode.Test_Mode_Flag == OFF || SysInfo.Test_Mode.Ageing_Flag)
 	{
 		if (SysInfo.WorkState == repair_mode)
@@ -389,7 +389,7 @@ void Pole_Change(void)
 			Set_Mbi5020_Out(0);
 		}
 	}
-#else
+#elif ((ARF001 == DEVICE_R1_RPO_MAX)||(ARF001 == DEVICE_R1_HAIWAI))
 	static uint8_t Rotate_Count = 0, Pole_Counts = 0, Last_Pole_Counts = 0;
 
 	//	if(SysInfo.Power_Value.state == System_ON ||SysInfo.Test_Mode.Test_Mode_Flag!=OFF)
@@ -403,7 +403,7 @@ void Pole_Change(void)
 			{
 				Set_Mbi5020_Out(0);
 			}
-			else if (Rotate_Count > Pole_Change_Time + 2) // ÑÓÊ±2msÔÙ¸Ä±äµç¼«Êä³ö
+			else if (Rotate_Count > Pole_Change_Time + 2) // ï¿½ï¿½Ê±2msï¿½Ù¸Ä±ï¿½ç¼«ï¿½ï¿½ï¿½
 			{
 				Rotate_Count = 0;
 				if (++Pole_Counts > 2)
@@ -466,7 +466,7 @@ void Pole_Change(void)
 					Set_Mbi5020_Out(RF_CH1_ON_BIT | RF_CH3_ON_BIT | EMS_CH1_ON_BIT);
 				}
 				break;
-			case 3: // ¿ª»úÇ°3S 3¶Ôµç¼«Í¬Ê±´ò¿ª£¬Ìá¸ß¼ÓÈÈËÙ¶È
+			case 3: // ï¿½ï¿½ï¿½ï¿½Ç°3S 3ï¿½Ôµç¼«Í¬Ê±ï¿½ò¿ª£ï¿½ï¿½ï¿½ß¼ï¿½ï¿½ï¿½ï¿½Ù¶ï¿½
 				Set_Mbi5020_Out(RF_CH1_ON_BIT | RF_CH2_ON_BIT | RF_CH3_ON_BIT);
 
 				break;
@@ -495,8 +495,8 @@ void RF_Init(void)
 {
 	//	IRled_start();
 	RF_Osc_ON();
-	RF_Start();	   // RFÉäÆµ¿ªÆô
-	VBAT_DET_ON(); // Ê¹ÄÜ V33V5020
+	RF_Start();	   // RFï¿½ï¿½Æµï¿½ï¿½ï¿½ï¿½
+	VBAT_DET_ON(); // Ê¹ï¿½ï¿½ V33V5020
 	VBAT_OUT_ON(); //
 	RF_Handle.Run_Flag = 1;
 }
@@ -509,8 +509,8 @@ void RF_Init(void)
 void RF_DeInit(void)
 {
 	RF_Osc_Off();
-	RF_Stop(); // RFÉäÆµ¹Ø±Õ
-	//	VBAT_DET_OFF(); //¹Ø±Õ V33V5020
+	RF_Stop(); // RFï¿½ï¿½Æµï¿½Ø±ï¿½
+	//	VBAT_DET_OFF(); //ï¿½Ø±ï¿½ V33V5020
 	//	VBAT_OUT_OFF();
 	RF_Handle.Run_Flag = 0;
 }

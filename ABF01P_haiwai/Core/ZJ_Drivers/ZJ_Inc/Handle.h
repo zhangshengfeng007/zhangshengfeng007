@@ -13,7 +13,7 @@
 #define DEVICE_R1_RPO      1    //宏定义 r1_pro = 1,     未修改逻辑
 #define DEVICE_R1_HAIWAI   2    //宏定义 r1_HAIWAI = 2,   ABF001P
 
-#define ARF001            DEVICE_R1_RPO_MAX  //PRO_MAX
+#define ARF001            DEVICE_R1_HAIWAI  //PRO_MAX
 
 #define UNUSE_G_SENSOR    0
 #define USE_G_SENSOR      1
@@ -39,20 +39,28 @@
 #define RF_Reminder_480S  480
 #define RF_Reminder_600S  600
 
-#if ARF001
+#if (ARF001 == DEVICE_R1_RPO)
 
 #define EMS_Reminder_120S  40
 #define EMS_Reminder_240S  80
 #define EMS_Reminder_300S  100
 #define Upkeep_Error_Time  5
 
-#else
+#elif (ARF001 == DEVICE_R1_RPO_MAX)
 
 #define EMS_Reminder_120S  120
 #define EMS_Reminder_240S  240
 #define EMS_Reminder_300S  300
 
 #define Upkeep_Error_Time  5
+
+#elif (ARF001 == DEVICE_R1_HAIWAI)
+#define EMS_Reminder_120S  120
+#define EMS_Reminder_240S  240
+#define EMS_Reminder_300S  300
+
+#define Upkeep_Error_Time  5
+
 #endif
 //////////////////////////////////enum//////////////////////////////////////////
 
@@ -116,20 +124,28 @@ typedef enum
 
 typedef enum
 {
-#if ARF001
+#if (ARF001 == DEVICE_R1_RPO)
   Repair_Duty0= 10,
   Repair_Duty1= 12,
   Repair_Duty2= 14,
   Repair_Duty3= 15,
   Repair_Duty4= 16,
   Repair_Duty5= 17,
-#else
+#elif (ARF001 == DEVICE_R1_RPO_MAX)
   Repair_Duty0= 10,
   Repair_Duty1= 13,
   Repair_Duty2= 14,
   Repair_Duty3= 19,
   Repair_Duty4= 19,
   Repair_Duty5= 19,
+#elif (ARF001 == DEVICE_R1_HAIWAI)
+  Repair_Duty0= 10,
+  Repair_Duty1= 12,
+  Repair_Duty2= 14,
+  Repair_Duty3= 15,
+  Repair_Duty4= 16,
+  Repair_Duty5= 17,
+
 #endif
 }_Repair_Duty_TypeDef;
 

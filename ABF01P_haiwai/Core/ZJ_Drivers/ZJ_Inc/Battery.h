@@ -2,18 +2,18 @@
 #define _BATTERY_H
 #include "includes.h"
 
-/*******************USB½ÓÈë¼ì²â*******************************************/
+/*******************USBï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*******************************************/
 #define VIN_DET_PIN        		GPIO_PIN_5
 #define VIN_DET_PORT		   		GPIOA
-#define VIN_DET_IN()		   		HAL_GPIO_ReadPin(VIN_DET_PORT,VIN_DET_PIN) 
+#define VIN_DET_IN()		   		HAL_GPIO_ReadPin(VIN_DET_PORT,VIN_DET_PIN)
 
-/*******************³äµç×´Ì¬¼ì²â*******************************************/
-#define CHARGE_STAT_PIN     	GPIO_PIN_0 
+/*******************ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½*******************************************/
+#define CHARGE_STAT_PIN     	GPIO_PIN_0
 #define CHARGE_STAT_PORT			GPIOA
-#define BAT_CHARGE_STATE_IN()	HAL_GPIO_ReadPin(CHARGE_STAT_PORT,CHARGE_STAT_PIN) 
+#define BAT_CHARGE_STATE_IN()	HAL_GPIO_ReadPin(CHARGE_STAT_PORT,CHARGE_STAT_PIN)
 
-///Íâ²¿»ù×¼¿ª¹Ø
-#define Vref_EN_PIN       GPIO_PIN_4 
+///ï¿½â²¿ï¿½ï¿½×¼ï¿½ï¿½ï¿½ï¿½
+#define Vref_EN_PIN       GPIO_PIN_4
 #define Vref_EN_PORT			GPIOA
 
 #define Vref_EN_ON()    HAL_GPIO_WritePin(Vref_EN_PORT,Vref_EN_PIN,GPIO_PIN_SET)
@@ -21,7 +21,7 @@
 
 #define CountNum  5
 
-/******************µç³ØµçÑ¹¼ì²â¿ª¹Ø*****************************************/
+/******************ï¿½ï¿½Øµï¿½Ñ¹ï¿½ï¿½â¿ªï¿½ï¿½*****************************************/
 #define BAT_ADC_EN_PIN				GPIO_PIN_15
 #define BAT_ADC_EN_PORT				GPIOC
 
@@ -32,11 +32,7 @@
 #define ADC_CHANNEL_NUM 4
 #define	BAT_ADC_COUNT   130
 
-#if ARF001
-	#define error  0
-#else
-	#define error  0
-#endif
+#define error    		0
 
 #define BAT_VOL_4V40	(3604+error)	/// 2.1      3604
 #define BAT_VOL_4V20	(3441+error)	/// 2.1      3441

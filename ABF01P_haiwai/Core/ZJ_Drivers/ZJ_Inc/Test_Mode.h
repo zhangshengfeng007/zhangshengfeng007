@@ -10,7 +10,7 @@
 
 #define AutoTest 1
 /*******************R1 PRO �»Դｵ��***************************/
-#if ARF001
+#if (ARF001 == DEVICE_R1_RPO)
 #define Manufacturer_Number_H 0x00
 #define Manufacturer_Number_L 0x01
 #define Model_Number_H  0x00
@@ -19,9 +19,19 @@
 #define Device_Number_L 0x10
 #define Soft_Version  0x21
 #define Hardware_Version  0x21
-#else
-/*******************R1 PRO MAX**********************************/
 
+/*******************R1 PRO MAX**********************************/
+#elif (ARF001 == DEVICE_R1_RPO_MAX)
+#define Manufacturer_Number_H 0x00
+#define Manufacturer_Number_L 0x01
+#define Model_Number_H  0x00
+#define Model_Number_L  0x02
+#define Device_Number_H 0x00
+#define Device_Number_L 0x10
+#define Soft_Version  0x13
+#define Hardware_Version  0x15
+/*******************R1_haiwai **********************************/
+#elif (ARF001 == DEVICE_R1_HAIWAI)
 #define Manufacturer_Number_H 0x00
 #define Manufacturer_Number_L 0x01
 #define Model_Number_H  0x00

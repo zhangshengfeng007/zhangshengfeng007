@@ -3,7 +3,7 @@
 
 /**************************************************************************************
  * FunctionName   : Test_Mode_Key_Process(void)
- * Description    : ²âÊÔÄ£Ê½°´¼üº¯Êý
+ * Description    : ï¿½ï¿½ï¿½ï¿½Ä£Ê½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
  * EntryParameter : None
  * ReturnValue    : None
  **************************************************************************************/
@@ -13,10 +13,10 @@ void Test_Mode_Key_Process(void)
   static uint8_t Enter_Test_Flag;
   static uint16_t Test_timer_cnt, Key_Cnt;
 
-  if (!SysInfo.Test_Mode.Quit_Flag && (SysInfo.Test_Mode.Test_Mode_Flag == OFF)) // USB²åÈëÇ°30s£¬²Ù×÷½øÈë²âÊÔÄ£Ê½
+  if (!SysInfo.Test_Mode.Quit_Flag && (SysInfo.Test_Mode.Test_Mode_Flag == OFF)) // USBï¿½ï¿½ï¿½ï¿½Ç°30sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½
   {
     SysInfo.Test_Mode.Quit_Test_30s_Cnt++;
-    if (++SysInfo.Test_Mode.Quit_Test_30s_Cnt >= 3000) // ³¬¹ý30sÎÞ²Ù×÷
+    if (++SysInfo.Test_Mode.Quit_Test_30s_Cnt >= 3000) // ï¿½ï¿½ï¿½ï¿½30sï¿½Þ²ï¿½ï¿½ï¿½
     {
       SysInfo.Test_Mode.Quit_Flag = 1;
       SysInfo.Test_Mode.Quit_Test_30s_Cnt = 0;
@@ -50,7 +50,7 @@ void Test_Mode_Key_Process(void)
     }
     else if (2 == Enter_Test_Flag)
     {
-      if ((Key_Plus_Read_In == GPIO_PIN_RESET) && (Key_minus_Read_In == GPIO_PIN_RESET)) // ¼ì²âUP&DWN³¤°´3S
+      if ((Key_Plus_Read_In == GPIO_PIN_RESET) && (Key_minus_Read_In == GPIO_PIN_RESET)) // ï¿½ï¿½ï¿½UP&DWNï¿½ï¿½ï¿½ï¿½3S
       {
         Test_timer_cnt++;
 
@@ -58,7 +58,7 @@ void Test_Mode_Key_Process(void)
         {
           Enter_Test_Flag = 3;
           Test_timer_cnt = 0;
-          SysInfo.Test_Mode.Test_Mode_Flag = Standy; // ½øÈë²âÊÔÄ£Ê½
+          SysInfo.Test_Mode.Test_Mode_Flag = Standy; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½
           SysInfo.Test_Mode.Test_Mode = 0;
           //					SysInfo.Power_Value.state =System_Standy;
           SysInfo.Power_Value.Enter_Sleep_Flag = 0;
@@ -76,7 +76,7 @@ void Test_Mode_Key_Process(void)
 
       if (Test_timer_cnt < 300)
       {
-        if (Key_Plus_Read_In && Key_minus_Read_In) // ¼ì²âUP&DWN¶¼ËÉ¿ª
+        if (Key_Plus_Read_In && Key_minus_Read_In) // ï¿½ï¿½ï¿½UP&DWNï¿½ï¿½ï¿½É¿ï¿½
         {
           Enter_Test_Flag = 4;
           Test_timer_cnt = 0;
@@ -98,17 +98,17 @@ void Test_Mode_Key_Process(void)
         {
           Key_Cnt++;
         }
-        if (Key_Cnt >= 4 && Key_Scap_Read_In) // ³ýÁË¶Ì°´KEY_ON£¬¼ì²âµ½ÆäËû°´¼üÍË³ö
+        if (Key_Cnt >= 4 && Key_Scap_Read_In) // ï¿½ï¿½ï¿½Ë¶Ì°ï¿½KEY_ONï¿½ï¿½ï¿½ï¿½âµ½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë³ï¿½
         {
           Enter_Test_Flag = 0x5a;
-          SysInfo.Test_Mode.Test_Mode_Flag = ON; // ½øÈë²âÊÔÄ£Ê½
+          SysInfo.Test_Mode.Test_Mode_Flag = ON; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½
           SysInfo.Test_Mode.Test_Mode = 0;
         }
       }
       else
       {
         Enter_Test_Flag = 0x55;
-        SysInfo.Test_Mode.Test_Mode_Flag = OFF; // ÍË³ö²âÊÔÄ£Ê½
+        SysInfo.Test_Mode.Test_Mode_Flag = OFF; // ï¿½Ë³ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½
         ALL_LED_DOWN();
       }
     }
@@ -120,14 +120,14 @@ void Test_Mode_Key_Process(void)
     Enter_Test_Flag = 0;
   }
 
-  if (Enter_Test_Flag == 0x55) // ÍË³ö²âÊÔÄ£Ê½
+  if (Enter_Test_Flag == 0x55) // ï¿½Ë³ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½
   {
     ;
   }
 }
 /**************************************************************************************
  * FunctionName   : Test_LED_Display_Process(void)
- * Description    : ²âÊÔÄ£Ê½LEDÉÁË¸º¯Êý
+ * Description    : ï¿½ï¿½ï¿½ï¿½Ä£Ê½LEDï¿½ï¿½Ë¸ï¿½ï¿½ï¿½ï¿½
  * EntryParameter : None
  * ReturnValue    : None
  **************************************************************************************/
@@ -153,7 +153,7 @@ void Test_LED_Display_Process(void)
     }
   }
 
-  if (SysInfo.Test_Mode.Test_Mode_Flag == Standy || SysInfo.Test_Mode.Twink_Flag == 0x04) // Ä£Ê½µÆÉÁË¸
+  if (SysInfo.Test_Mode.Test_Mode_Flag == Standy || SysInfo.Test_Mode.Twink_Flag == 0x04) // Ä£Ê½ï¿½ï¿½ï¿½ï¿½Ë¸
   {
     Lock_Flag = 1;
     if (Led_Flag)
@@ -236,7 +236,7 @@ void Test_LED_Display_Process(void)
 }
 /**************************************************************************************
  * FunctionName   : Test_RF_Vol_Process(void)
- * Description    : ²âÊÔÄ£Ê½RFµçÑ¹Çý¶¯º¯Êý
+ * Description    : ï¿½ï¿½ï¿½ï¿½Ä£Ê½RFï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
  * EntryParameter : None
  * ReturnValue    : None
  **************************************************************************************/
@@ -275,7 +275,7 @@ void Test_RF_Vol_Process(void)
 }
 /**************************************************************************************
  * FunctionName   : Test_RF_Waveform_Process(void)
- * Description    : ²âÊÔÄ£Ê½RFµçÑ¹Çý¶¯º¯Êý
+ * Description    : ï¿½ï¿½ï¿½ï¿½Ä£Ê½RFï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
  * EntryParameter : None
  * ReturnValue    : None
  **************************************************************************************/
@@ -333,7 +333,7 @@ void Test_RF_Waveform_Process(void)
 }
 /**************************************************************************************
  * FunctionName   : Test_EMS_Waveform_Process(void)
- * Description    :  ²âÊÔÄ£Ê½EMSµçÑ¹Çý¶¯º¯Êý
+ * Description    :  ï¿½ï¿½ï¿½ï¿½Ä£Ê½EMSï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
  * EntryParameter : None
  * ReturnValue    : None
  **************************************************************************************/
@@ -383,7 +383,7 @@ void Test_EMS_Waveform_Process(void)
 
 /**************************************************************************************
  * FunctionName   : Test_Pole_(void)
- * Description    : ÉäÆµÍ¨µÀ´ò¿ª
+ * Description    : ï¿½ï¿½ÆµÍ¨ï¿½ï¿½ï¿½ï¿½
  * EntryParameter : None
  * ReturnValue    : None
  **************************************************************************************/
@@ -409,7 +409,7 @@ void Test_Pole_run(uint8_t Pole_Counts)
 }
 /**************************************************************************************
  * FunctionName   : Test_UART_Send_Data(void)
- * Description    : ²âÊÔÄ£Ê½Êý¾Ý·¢ËÍ
+ * Description    : ï¿½ï¿½ï¿½ï¿½Ä£Ê½ï¿½ï¿½ï¿½Ý·ï¿½ï¿½ï¿½
  * EntryParameter : None
  * ReturnValue    : None
  **************************************************************************************/
@@ -430,7 +430,7 @@ void Test_UART_Send_Data(void)
 }
 /**************************************************************************************
  * FunctionName   : uint8_t display_binary(int8_t bin_data)
- * Description    : ///¶þ½øÖÆÏÔÊ¾ÓÐ·ûºÅÕûÊý£¨Ô­Âë£©bit6~bit0=OLED~WLED5£¬bit6·ûºÅÎ»
+ * Description    : ///ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½Ð·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô­ï¿½ë£©bit6~bit0=OLED~WLED5ï¿½ï¿½bit6ï¿½ï¿½ï¿½ï¿½Î»
  * EntryParameter : None
  * ReturnValue    : None
  **************************************************************************************/
@@ -443,12 +443,12 @@ uint8_t display_binary(int8_t bin_data)
   display_bin = 0;
   temp = 0;
 
-  if (bin_data & 0x80) // ¸ºÊý
+  if (bin_data & 0x80) // ï¿½ï¿½ï¿½ï¿½
   {
-    display_bin |= 0x40;      // ±ê¼Ç·ûºÅÎ»
-    temp = (uint8_t)bin_data; // Ç¿ÖÆ¶þ½øÖÆ×ª»»
-    temp &= 0x7f;             // Çå³þ·ûºÅÎ»
-    temp = (~temp) + 1;       // ÇóÔ­Âë
+    display_bin |= 0x40;      // ï¿½ï¿½Ç·ï¿½ï¿½ï¿½Î»
+    temp = (uint8_t)bin_data; // Ç¿ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½
+    temp &= 0x7f;             // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»
+    temp = (~temp) + 1;       // ï¿½ï¿½Ô­ï¿½ï¿½
     display_bin |= temp;
   }
   else
@@ -460,7 +460,7 @@ uint8_t display_binary(int8_t bin_data)
 }
 /**************************************************************************************
  * FunctionName   : Test_Temp_LED_Display(uint8_t display_Value)
- * Description    : ÎÂ¶ÈÖ¸Ê¾µÆÏÔÊ¾
+ * Description    : ï¿½Â¶ï¿½Ö¸Ê¾ï¿½ï¿½ï¿½ï¿½Ê¾
  * EntryParameter : None
  * ReturnValue    : None
  **************************************************************************************/
@@ -526,7 +526,7 @@ void Test_Temp_LED_Display(uint8_t display_Value)
 }
 /**************************************************************************************
  * FunctionName   : Test_Mode_Run_Process(void)
- * Description    : ²âÊÔÄ£Ê½°´¼üº¯Êý
+ * Description    : ï¿½ï¿½ï¿½ï¿½Ä£Ê½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
  * EntryParameter : None
  * ReturnValue    : None
  **************************************************************************************/
@@ -559,12 +559,12 @@ void Test_Mode_Run_Process(void)
 #if AutoTest
     switch (SysInfo.Test_Mode.Test_Mode)
     {
-    case 0: /***********************²âÊÔÄ£Ê½£¬ËùÓÐÖ¸Ê¾µÆÉÁË¸***********************/
+    case 0: /***********************ï¿½ï¿½ï¿½ï¿½Ä£Ê½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸Ê¾ï¿½ï¿½ï¿½ï¿½Ë¸***********************/
       Test_LED_Display_Process();
       Lock_Flag = 1;
       break;
 
-    case 1: /***********************²âÊÔÄ£Ê½,RFÇý¶¯µçÑ¹¼ì²âÄ£Ê½********************/
+    case 1: /***********************ï¿½ï¿½ï¿½ï¿½Ä£Ê½,RFï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½Ä£Ê½********************/
       if (Lock_Flag == 1)
       {
         RF_Handle.ADC_Flag = 1;
@@ -579,13 +579,13 @@ void Test_Mode_Run_Process(void)
         Lock_Flag = 2;
         BOOST_5V_ON();
       }
-      VBAT_DET_ON(); // Ê¹ÄÜ V33V5020
+      VBAT_DET_ON(); // Ê¹ï¿½ï¿½ V33V5020
       VBAT_OUT_ON();
       Test_RF_Waveform_Process();
 
       break;
 
-    case 2: /***********************²âÊÔÄ£Ê½,RF²¨ÐÎ¼ì²âÄ£Ê½************************/
+    case 2: /***********************ï¿½ï¿½ï¿½ï¿½Ä£Ê½,RFï¿½ï¿½ï¿½Î¼ï¿½ï¿½Ä£Ê½************************/
       if (Lock_Flag == 2)
       {
         Lock_Flag = 3;
@@ -600,7 +600,7 @@ void Test_Mode_Run_Process(void)
       Test_RF_Waveform_Process();
       break;
 
-    case 3: /***********************²âÊÔÄ£Ê½,EMS²¨ÐÎ¼ì²âÄ£Ê½***********************/
+    case 3: /***********************ï¿½ï¿½ï¿½ï¿½Ä£Ê½,EMSï¿½ï¿½ï¿½Î¼ï¿½ï¿½Ä£Ê½***********************/
       if (Lock_Flag == 3)
       {
         Lock_Flag = 1;
@@ -609,13 +609,13 @@ void Test_Mode_Run_Process(void)
         Ems_Boost_On();
         RF_LED_DOWN();
         EMS_LED_UP();
-        VBAT_DET_ON(); // Ê¹ÄÜ V33V5020
+        VBAT_DET_ON(); // Ê¹ï¿½ï¿½ V33V5020
         VBAT_OUT_ON(); //
 
         EMS_Handle.Run_Flag = 1;
         PID.Flag = 1;
         Set_Mbi5020_Out(EMS_CH3_ON_BIT);
-#if ARF001
+#if  (ARF001 == DEVICE_R1_RPO)
         RF_DeInit();
         Ems_Init();
         RF_Handle.Run_Flag = 0;
@@ -637,12 +637,12 @@ void Test_Mode_Run_Process(void)
     {
       switch (SysInfo.Test_Mode.Test_Mode)
       {
-      case 0: /***********************²âÊÔÄ£Ê½£¬ËùÓÐÖ¸Ê¾µÆÉÁË¸***********************/
+      case 0: /***********************ï¿½ï¿½ï¿½ï¿½Ä£Ê½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸Ê¾ï¿½ï¿½ï¿½ï¿½Ë¸***********************/
         Test_LED_Display_Process();
         Lock_Flag = 1;
         break;
 
-      case 1: /***********************²âÊÔÄ£Ê½,RFÇý¶¯µçÑ¹¼ì²âÄ£Ê½********************/
+      case 1: /***********************ï¿½ï¿½ï¿½ï¿½Ä£Ê½,RFï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½Ä£Ê½********************/
         if (Lock_Flag == 1)
         {
           RF_LED_UP();
@@ -654,7 +654,7 @@ void Test_Mode_Run_Process(void)
         Test_RF_Waveform_Process();
         Test_LED_Display_Process();
         break;
-      case 2: /***********************ËíµÀµÆ¡¢µç»ú¡¢ÎÂ¶È¡¢¼ì²âÄ£Ê½************************/
+      case 2: /***********************ï¿½ï¿½ï¿½ï¿½ï¿½Æ¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¶È¡ï¿½ï¿½ï¿½ï¿½Ä£Ê½************************/
         if (Lock_Flag == 2)
         {
           RF_LED_DOWN();
@@ -693,7 +693,7 @@ void Test_Mode_Run_Process(void)
         }
         break;
 
-      case 3: /***********************²âÊÔÄ£Ê½,RF²¨ÐÎ¼ì²âÄ£Ê½************************/
+      case 3: /***********************ï¿½ï¿½ï¿½ï¿½Ä£Ê½,RFï¿½ï¿½ï¿½Î¼ï¿½ï¿½Ä£Ê½************************/
         if (Lock_Flag == 3)
         {
           Lock_Flag = 4;
@@ -712,7 +712,7 @@ void Test_Mode_Run_Process(void)
 
         break;
 
-      case 4: /***********************²âÊÔÄ£Ê½,EMS²¨ÐÎ¼ì²âÄ£Ê½***********************/
+      case 4: /***********************ï¿½ï¿½ï¿½ï¿½Ä£Ê½,EMSï¿½ï¿½ï¿½Î¼ï¿½ï¿½Ä£Ê½***********************/
         if (Lock_Flag == 4)
         {
           Lock_Flag = 5;
@@ -720,7 +720,7 @@ void Test_Mode_Run_Process(void)
           RF_Stop();
           EMS_Pwm_Start();
           Ems_Boost_On();
-          VBAT_DET_ON(); // Ê¹ÄÜ V33V5020
+          VBAT_DET_ON(); // Ê¹ï¿½ï¿½ V33V5020
           VBAT_OUT_ON(); //
           SysInfo.Test_Mode.Level = 0x07;
           EMS_Handle.Run_Flag = 1;
@@ -732,7 +732,7 @@ void Test_Mode_Run_Process(void)
         Test_EMS_Waveform_Process();
         Set_Mbi5020_Out(EMS_CH3_ON_BIT);
         break;
-      case 5: /***********************²âÊÔÄ£Ê½,µç¼«µ¼Í¨×Ô¶¯¼ì²âÄ£Ê½***********************/
+      case 5: /***********************ï¿½ï¿½ï¿½ï¿½Ä£Ê½,ï¿½ç¼«ï¿½ï¿½Í¨ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½Ä£Ê½***********************/
         if (Lock_Flag == 5)
         {
           Lock_Flag = 1;
@@ -767,7 +767,7 @@ void Test_Mode_Run_Process(void)
           Pole_Connect_Flag = 0;
         }
 
-        if (Rotate_Count > 5 && Pole_Connect_Flag) // ±ä¼«ºó50msÅÐ¶Ïµç¼«µ¼Í¨
+        if (Rotate_Count > 5 && Pole_Connect_Flag) // ï¿½ä¼«ï¿½ï¿½50msï¿½Ð¶Ïµç¼«ï¿½ï¿½Í¨
         {
           switch (Pole_Counts)
           {
@@ -813,7 +813,7 @@ void Test_Mode_Run_Process(void)
 }
 /**************************************************************************************
  * FunctionName   : Auto_Continuity_Test_Process(void)
- * Description    : µç¼«×Ô¶¯µ¼Í¨²âÊÔ
+ * Description    : ï¿½ç¼«ï¿½Ô¶ï¿½ï¿½ï¿½Í¨ï¿½ï¿½ï¿½ï¿½
  * EntryParameter : None
  * ReturnValue    : None
  **************************************************************************************/
@@ -844,7 +844,7 @@ uint8_t Auto_Continuity_Test_Process(void)
     AutoPole_Connect_Flag = 0;
   }
 
-  if (AutoRotate_Count > 5 && AutoPole_Connect_Flag) // ±ä¼«ºó50msÅÐ¶Ïµç¼«µ¼Í¨
+  if (AutoRotate_Count > 5 && AutoPole_Connect_Flag) // ï¿½ä¼«ï¿½ï¿½50msï¿½Ð¶Ïµç¼«ï¿½ï¿½Í¨
   {
     switch (AutoPole_Counts)
     {
@@ -880,9 +880,9 @@ uint8_t Auto_Continuity_Test_Process(void)
         SysInfo.Test_Mode.Twink_Flag = 0x05;
         ReturnFlag = 2;
       }
-      AutoPole_Counts = 0;  // µç¼«¶Ô
-      Pole_Connect = 0;     // µç¼«µ¼Í¨Êý
-      AutoRotate_Count = 0; // µç¼«Í¨µÀµ¼Í¨¼ÆÊ±
+      AutoPole_Counts = 0;  // ï¿½ç¼«ï¿½ï¿½
+      Pole_Connect = 0;     // ï¿½ç¼«ï¿½ï¿½Í¨ï¿½ï¿½
+      AutoRotate_Count = 0; // ï¿½ç¼«Í¨ï¿½ï¿½ï¿½ï¿½Í¨ï¿½ï¿½Ê±
       //			return ReturnFlag;
     }
   }
@@ -890,7 +890,7 @@ uint8_t Auto_Continuity_Test_Process(void)
 }
 /**************************************************************************************
  * FunctionName   : Test_AutoMode_Run_Process(void)
- * Description    : ²âÊÔÄ£Ê½ ×Ô¶¯Ä£Ê½²âÊÔ
+ * Description    : ï¿½ï¿½ï¿½ï¿½Ä£Ê½ ï¿½Ô¶ï¿½Ä£Ê½ï¿½ï¿½ï¿½ï¿½
  * EntryParameter : None
  * ReturnValue    : None
  **************************************************************************************/
@@ -905,7 +905,7 @@ void Test_AutoMode_Run_Process(void)
     //		printf ("\n\r=====TEST=========\n\r");
     switch (SysInfo.Test_Mode.Auto_Mode_Level)
     {
-    case 0:                                               /***********************ÅÐ¶ÏNTCÊÇ·ñÕý³£***********************/
+    case 0:                                               /***********************ï¿½Ð¶ï¿½NTCï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½***********************/
       if (SysInfo.NTC_Temp > 22 && SysInfo.NTC_Temp < 28) //
       {
         SysInfo.Test_Mode.Auto_Mode_Level = 0x5a;
@@ -930,12 +930,12 @@ void Test_AutoMode_Run_Process(void)
 
       SysInfo.Sleep_Flag = 0;
       break;
-    case 1: /***********************µç¼«µ¼Í¨ÐÔ²âÊÔ************************/
+    case 1: /***********************ï¿½ç¼«ï¿½ï¿½Í¨ï¿½Ô²ï¿½ï¿½ï¿½************************/
 
       Get_Result = Auto_Continuity_Test_Process();
       if (Get_Result)
       {
-        if (Get_Result == 0x01) // µ¼Í¨
+        if (Get_Result == 0x01) // ï¿½ï¿½Í¨
         {
           SysInfo.Test_Mode.Data[4] = 0x00;
           SysInfo.Test_Mode.Data[5] = 0x00;
@@ -959,13 +959,13 @@ void Test_AutoMode_Run_Process(void)
       }
       break;
 
-    case 2: /***********************RF²¨ÐÎ¼ì²âÄ£Ê½***********************/
+    case 2: /***********************RFï¿½ï¿½ï¿½Î¼ï¿½ï¿½Ä£Ê½***********************/
       if (!SysInfo.Test_Mode.Auto_Mode_Cnt)
       {
         RF_Osc_ON();
         RF_Start();
         RF_Handle.Run_Flag = 1;
-        VBAT_DET_ON(); // Ê¹ÄÜ V33V5020
+        VBAT_DET_ON(); // Ê¹ï¿½ï¿½ V33V5020
         VBAT_OUT_ON(); //
         Set_Mbi5020_Out(RF_CH1_ON_BIT | RF_CH2_ON_BIT | RF_CH3_ON_BIT);
         Test_RF_Waveform_Process();
@@ -974,7 +974,7 @@ void Test_AutoMode_Run_Process(void)
       }
       else
       {
-        if (++SysInfo.Test_Mode.Auto_Mode_Cnt > 500) // 5sÊ±¼äµ½
+        if (++SysInfo.Test_Mode.Auto_Mode_Cnt > 500) // 5sÊ±ï¿½äµ½
         {
           //							Auto_Mode_Level =3;
           SysInfo.Test_Mode.Auto_Mode_Cnt = 0;
@@ -984,12 +984,12 @@ void Test_AutoMode_Run_Process(void)
         }
       }
       break;
-    case 3: /***********************EMS²¨ÐÎ¼ì²âÄ£Ê½***********************/
+    case 3: /***********************EMSï¿½ï¿½ï¿½Î¼ï¿½ï¿½Ä£Ê½***********************/
       if (!SysInfo.Test_Mode.Auto_Mode_Cnt)
       {
         EMS_Pwm_Start();
         Ems_Boost_On();
-        VBAT_DET_ON(); // Ê¹ÄÜ V33V5020
+        VBAT_DET_ON(); // Ê¹ï¿½ï¿½ V33V5020
         VBAT_OUT_ON(); //
         IRled_start();
         EMS_Handle.Run_Flag = 1;
@@ -1001,7 +1001,7 @@ void Test_AutoMode_Run_Process(void)
       }
       else
       {
-        if (++SysInfo.Test_Mode.Auto_Mode_Cnt > 500) // 5sÊ±¼äµ½
+        if (++SysInfo.Test_Mode.Auto_Mode_Cnt > 500) // 5sÊ±ï¿½äµ½
         {
           if (++Cycle_Count > 2)
           {
@@ -1022,7 +1022,7 @@ void Test_AutoMode_Run_Process(void)
       }
       break;
     default:
-      if (++SysInfo.Test_Mode.Auto_Mode_Cnt > 15000) // 150sÊ±¼äµ½
+      if (++SysInfo.Test_Mode.Auto_Mode_Cnt > 15000) // 150sÊ±ï¿½äµ½
       {
         SysInfo.Test_Mode.Auto_Mode_Cnt = 0;
         SysInfo.Test_Mode.Test_Mode_Flag = OFF;
@@ -1033,7 +1033,7 @@ void Test_AutoMode_Run_Process(void)
         ALL_LED_DOWN();
         BOOST_5V_OFF();
         VBAT_OUT_OFF();
-        RF_Call_Data(); // ¹Ø±ÕRF¡¢EMS
+        RF_Call_Data(); // ï¿½Ø±ï¿½RFï¿½ï¿½EMS
         Test_Sleep_Flag = 1;
         SysInfo.repair_level = 0;
         SysInfo.upkeep_level = 0;
@@ -1051,10 +1051,10 @@ void Test_AutoMode_Run_Process(void)
     Cycle_Count = 0;
   }
 
-  if (Montor_Flag) // ²âÊÔ²»Í¨¹ý£¬µç»úÕñ¶¯5s
+  if (Montor_Flag) // ï¿½ï¿½ï¿½Ô²ï¿½Í¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½5s
   {
     Montor_Flag = 0;
-    SysInfo.Montor_Flag = 1; // µç»úÕñ¶¯±êÖ¾
+    SysInfo.Montor_Flag = 1; // ï¿½ï¿½ï¿½ï¿½ñ¶¯±ï¿½Ö¾
     SysInfo.StayTime = 500;
     //		SysInfo.Test_Mode.Test_Mode_Flag=0;
   }
@@ -1070,11 +1070,11 @@ void Test_AutoMode_Run_Process(void)
   {
     Test_Sleep_Flag = 0;
   }
-  
+
 }
 /**************************************************************************************
  * FunctionName   : crc16_compute(uint8_t const * p_data, uint32_t size, uint16_t const * p_crc)
- * Description    : CRCÐ£Ñé
+ * Description    : CRCÐ£ï¿½ï¿½
  * EntryParameter : None
  * ReturnValue    : None
  **************************************************************************************/
@@ -1096,7 +1096,7 @@ uint16_t crc16_compute(uint8_t const *p_data, uint32_t size)
 
 /**************************************************************************************
  * FunctionName   : UART_Send_Data(uint8_t *Source ,uint8_t Size)
- * Description    : Êý¾Ý·¢ËÍ
+ * Description    : ï¿½ï¿½ï¿½Ý·ï¿½ï¿½ï¿½
  * EntryParameter : None
  * ReturnValue    : None
  **************************************************************************************/
@@ -1123,12 +1123,12 @@ void UART_Send_Data(uint8_t *Source, uint8_t Size)
 void BKP_SRAM_Init(void)
 {
   //  TAMP->BKP0R = 0x55;
-  HAL_RTCEx_BKUPWrite(&hrtc, 0, 0x55); // ±¸·Ý¼Ä´æÆ÷Ð´Èë0x55
+  HAL_RTCEx_BKUPWrite(&hrtc, 0, 0x55); // ï¿½ï¿½ï¿½Ý¼Ä´ï¿½ï¿½ï¿½Ð´ï¿½ï¿½0x55
   // HAL_RTCEx_BKUPRead(&hrtc,0);
 }
 /**************************************************************************************
  * FunctionName   : LED_Test(uint8_t Size)
- * Description    : LEDµÆ¹â²âÊÔ
+ * Description    : LEDï¿½Æ¹ï¿½ï¿½ï¿½ï¿½
  * EntryParameter : None
  * ReturnValue    : None
  **************************************************************************************/
@@ -1170,7 +1170,7 @@ int my_strlen(char ch[])
 }
 /**************************************************************************************
  * FunctionName   : Comm_GSensor_Control_Process(void)
- * Description    : ´«¸ÐÆ÷²âÊÔ
+ * Description    : ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
  * EntryParameter : None
  * ReturnValue    : None
  **************************************************************************************/
@@ -1196,7 +1196,7 @@ void Comm_GSensor_Control_Process(void)
 }
 /**************************************************************************************
  * FunctionName   : Test_UART_Deal_Process(void)
- * Description    : ²âÊÔÄ£Ê½ ×Ô¶¯Ä£Ê½²âÊÔ
+ * Description    : ï¿½ï¿½ï¿½ï¿½Ä£Ê½ ï¿½Ô¶ï¿½Ä£Ê½ï¿½ï¿½ï¿½ï¿½
  * EntryParameter : None
  * ReturnValue    : None
  **************************************************************************************/
@@ -1266,12 +1266,12 @@ void Test_UART_Deal_Process(void)
     switch (SysInfo.Test_Mode.Data[3])
     {
     case Comm_Inset_Testmode:
-      if (SysInfo.Test_Mode.Data[4] == 0x00 && SysInfo.Test_Mode.Data[5] == 0x00) // ½øÈëÉú²ú²âÊÔÄ£Ê½Ö¸Áî
+      if (SysInfo.Test_Mode.Data[4] == 0x00 && SysInfo.Test_Mode.Data[5] == 0x00) // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½Ö¸ï¿½ï¿½
       {
         SysInfo.Test_Mode.Test_Mode_Flag = Auto_ON;
         BOOST_5V_ON();
       }
-      else // ÍË³öÉú²ú²âÊÔÄ£Ê½Ö¸Áî
+      else // ï¿½Ë³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½Ö¸ï¿½ï¿½
       {
         UART_Send_Data(SysInfo.Test_Mode.Data, Length);
         HAL_NVIC_SystemReset();
@@ -1279,7 +1279,7 @@ void Test_UART_Deal_Process(void)
       }
 
       break;
-    case Comm_manufacture_Info: // »ñÈ¡ÖÆÔìÐÅÏ¢£¨°æ±¾£©
+    case Comm_manufacture_Info: // ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½æ±¾ï¿½ï¿½
       Length = 0x0C;
       SysInfo.Test_Mode.Data[1] = Length;
       SysInfo.Test_Mode.Data[2] = Manufacturer_Number_H;
@@ -1291,58 +1291,58 @@ void Test_UART_Deal_Process(void)
       SysInfo.Test_Mode.Data[8] = Soft_Version;
       SysInfo.Test_Mode.Data[9] = Hardware_Version;
       break;
-    case Comm_Ntc_Temp: // »ñÈ¡NTCÎÂ¶ÈÖµ
+    case Comm_Ntc_Temp: // ï¿½ï¿½È¡NTCï¿½Â¶ï¿½Öµ
       SysInfo.Test_Mode.Auto_Mode_Level = 0;
       SysInfo.Test_Mode.Send_Flag = 0;
       break;
-    case Comm_Batter_Value: // »ñÈ¡µç³ØµçÑ¹Öµ
+    case Comm_Batter_Value: // ï¿½ï¿½È¡ï¿½ï¿½Øµï¿½Ñ¹Öµ
       Vbat = SysInfo.Test_Mode.BatValue * 1.22;
       SysInfo.Test_Mode.Data[4] = Vbat / 1000;
       SysInfo.Test_Mode.Data[5] = (Vbat % 1000) / 10;
       break;
-    case Comm_Moto_Control: // Âí´ïÁ¬ÐøÕð¶¯
+    case Comm_Moto_Control: // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
       if (SysInfo.Test_Mode.Data[4] == 0x00 && SysInfo.Test_Mode.Data[5] == 0x00)
       {
-        SysInfo.Montor_Flag = 1; // µç»úÕñ¶¯±êÖ¾ÖÃ1
+        SysInfo.Montor_Flag = 1; // ï¿½ï¿½ï¿½ï¿½ñ¶¯±ï¿½Ö¾ï¿½ï¿½1
         SysInfo.StayTime = 5000;
       }
       else
       {
-        SysInfo.Montor_Flag = 0; // µç»úÕñ¶¯±êÖ¾Çå0
+        SysInfo.Montor_Flag = 0; // ï¿½ï¿½ï¿½ï¿½ñ¶¯±ï¿½Ö¾ï¿½ï¿½0
         SysInfo.StayTime = 0;
       }
       break;
     case Comm_HeadLED_Control:
-      if (SysInfo.Test_Mode.Data[4] == 0x00 && SysInfo.Test_Mode.Data[5] == 0x00) // ´ò¿ªµÆ°å£¨LED-IR-ON£©Êä³ö
+      if (SysInfo.Test_Mode.Data[4] == 0x00 && SysInfo.Test_Mode.Data[5] == 0x00) // ï¿½ò¿ªµÆ°å£¨LED-IR-ONï¿½ï¿½ï¿½ï¿½ï¿½
       {
         IRled_start();
       }
-      else // ¹Ø±ÕµÆ°å£¨LED-IR-ON£©Êä³ö
+      else // ï¿½Ø±ÕµÆ°å£¨LED-IR-ONï¿½ï¿½ï¿½ï¿½ï¿½
       {
         VBAT_OUT_OFF();
         IRled_stop();
       }
       break;
-    case Comm_Electrode_Test: // µç¼«Í·µ¼Í¨ÐÔ²âÊÔ
+    case Comm_Electrode_Test: // ï¿½ç¼«Í·ï¿½ï¿½Í¨ï¿½Ô²ï¿½ï¿½ï¿½
       SysInfo.Test_Mode.Auto_Mode_Level = 1;
       SysInfo.Test_Mode.Send_Flag = 0;
 
       RF_Osc_ON();
       RF_Start();
       RF_Handle.Run_Flag = 1;
-      VBAT_DET_ON(); // Ê¹ÄÜ V33V5020
+      VBAT_DET_ON(); // Ê¹ï¿½ï¿½ V33V5020
       VBAT_OUT_ON(); //
       SysInfo.Test_Mode.Level = 0x05;
-      SysInfo.Test_Mode.Twink_Flag = 0x04; // Ä£Ê½µÆÉÁË¸
+      SysInfo.Test_Mode.Twink_Flag = 0x04; // Ä£Ê½ï¿½ï¿½ï¿½ï¿½Ë¸
       Set_Mbi5020_Out(RF_CH1_ON_BIT);
       Test_RF_Waveform_Process();
       break;
-    case Comm_RF_Control:                                                                           // RFÉäÆµ²âÊÔ
-      if (SysInfo.Test_Mode.Data[Length - 4] == 0xFF && SysInfo.Test_Mode.Data[Length - 3] == 0xFF) // ¹Ø±ÕRF
+    case Comm_RF_Control:                                                                           // RFï¿½ï¿½Æµï¿½ï¿½ï¿½ï¿½
+      if (SysInfo.Test_Mode.Data[Length - 4] == 0xFF && SysInfo.Test_Mode.Data[Length - 3] == 0xFF) // ï¿½Ø±ï¿½RF
       {
         SysInfo.Test_Mode.Auto_Mode_Level = 0x5a;
         SysInfo.Test_Mode.Level = 0;
-        RF_Call_Data(); // ¹Ø±ÕRF¡¢EMS
+        RF_Call_Data(); // ï¿½Ø±ï¿½RFï¿½ï¿½EMS
         led_scan(0x00);
         IRled_stop();
         VBAT_OUT_OFF();
@@ -1358,12 +1358,12 @@ void Test_UART_Deal_Process(void)
         }
       }
       break;
-    case Comm_EMS_Control:                                                                          // ¿ªÆôEMS²âÊÔ
-      if (SysInfo.Test_Mode.Data[Length - 4] == 0xFF && SysInfo.Test_Mode.Data[Length - 3] == 0xFF) // ¹Ø±ÕEMS
+    case Comm_EMS_Control:                                                                          // ï¿½ï¿½ï¿½ï¿½EMSï¿½ï¿½ï¿½ï¿½
+      if (SysInfo.Test_Mode.Data[Length - 4] == 0xFF && SysInfo.Test_Mode.Data[Length - 3] == 0xFF) // ï¿½Ø±ï¿½EMS
       {
         SysInfo.Test_Mode.Auto_Mode_Level = 0x5a;
         SysInfo.Test_Mode.Level = 0;
-        RF_Call_Data(); // ¹Ø±ÕRF¡¢EMS
+        RF_Call_Data(); // ï¿½Ø±ï¿½RFï¿½ï¿½EMS
         led_scan(0x00);
         IRled_stop();
         VBAT_OUT_OFF();
@@ -1382,15 +1382,15 @@ void Test_UART_Deal_Process(void)
 
       break;
 
-    case Comm_KEY_Control:                                                                          // ½øÈë°´¼ü²âÊÔ
-      if (SysInfo.Test_Mode.Data[Length - 4] == 0xFF && SysInfo.Test_Mode.Data[Length - 3] == 0xFF) // ¹Ø±Õ°´¼ü²âÊÔ
+    case Comm_KEY_Control:                                                                          // ï¿½ï¿½ï¿½ë°´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+      if (SysInfo.Test_Mode.Data[Length - 4] == 0xFF && SysInfo.Test_Mode.Data[Length - 3] == 0xFF) // ï¿½Ø±Õ°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
       {
         SysInfo.Test_Mode.Auto_Mode_Level = 0x5a;
         SysInfo.Test_Mode.Test_Mode_Flag = OFF;
       }
       else
       {
-        RF_Call_Data(); // ¹Ø±ÕRF¡¢EMS
+        RF_Call_Data(); // ï¿½Ø±ï¿½RFï¿½ï¿½EMS
         led_scan(0x00);
         IRled_stop();
         VBAT_OUT_OFF();
@@ -1399,8 +1399,8 @@ void Test_UART_Deal_Process(void)
       }
 
       break;
-    case Comm_Light_Control:                                                                        // ½øÈëµÆ¹â²âÊÔ
-      if (SysInfo.Test_Mode.Data[Length - 4] == 0xFF && SysInfo.Test_Mode.Data[Length - 3] == 0xFF) // ¹Ø±ÕµÆ¹â²âÊÔ
+    case Comm_Light_Control:                                                                        // ï¿½ï¿½ï¿½ï¿½Æ¹ï¿½ï¿½ï¿½ï¿½
+      if (SysInfo.Test_Mode.Data[Length - 4] == 0xFF && SysInfo.Test_Mode.Data[Length - 3] == 0xFF) // ï¿½Ø±ÕµÆ¹ï¿½ï¿½ï¿½ï¿½
       {
         SysInfo.Test_Mode.Auto_Mode_Level = 0x5a;
         VBAT_OUT_OFF();
@@ -1412,8 +1412,8 @@ void Test_UART_Deal_Process(void)
         LED_Test((SysInfo.Test_Mode.Data[5] - 1));
       }
       break;
-    case Comm_Aging_Model:                                                                          // ÀÏ»¯²âÊÔ
-      if (SysInfo.Test_Mode.Data[Length - 4] == 0xFF && SysInfo.Test_Mode.Data[Length - 3] == 0xFF) // ¹Ø±ÕÀÏ»¯²âÊÔ
+    case Comm_Aging_Model:                                                                          // ï¿½Ï»ï¿½ï¿½ï¿½ï¿½ï¿½
+      if (SysInfo.Test_Mode.Data[Length - 4] == 0xFF && SysInfo.Test_Mode.Data[Length - 3] == 0xFF) // ï¿½Ø±ï¿½ï¿½Ï»ï¿½ï¿½ï¿½ï¿½ï¿½
       {
         Ageing_TestData_DeInit();
         ALL_LED_DOWN();
@@ -1429,8 +1429,8 @@ void Test_UART_Deal_Process(void)
         SysInfo.Skin_Touch_Flag = 1;
       }
       break;
-    case Comm_Inset_Life_Testl:                                                                     // ÊÙÃü²âÊÔ
-      if (SysInfo.Test_Mode.Data[Length - 4] == 0xFF && SysInfo.Test_Mode.Data[Length - 3] == 0xFF) // ¹Ø±ÕÊÙÃü²âÊÔ
+    case Comm_Inset_Life_Testl:                                                                     // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+      if (SysInfo.Test_Mode.Data[Length - 4] == 0xFF && SysInfo.Test_Mode.Data[Length - 3] == 0xFF) // ï¿½Ø±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
       {
         Ageing_TestData_DeInit();
         SysInfo.Test_Mode.Ageing_Flag = 0;
@@ -1438,7 +1438,7 @@ void Test_UART_Deal_Process(void)
         SysInfo.Mode_Switch_Flag = 0;
         RF_Handle.Run_Flag = 0;
         SysInfo.Skin_Touch_Flag = 0;
-        SysInfo.Save_Data.save_Data_flag = 1; // ±£´æµµÎ»
+        SysInfo.Save_Data.save_Data_flag = 1; // ï¿½ï¿½ï¿½æµµÎ»
         ALL_LED_DOWN();
         //						HAL_NVIC_SystemReset();
       }
@@ -1450,28 +1450,28 @@ void Test_UART_Deal_Process(void)
         SysInfo.Mode_Switch_Flag = 1;
         RF_Handle.Run_Flag = 1;
         SysInfo.Skin_Touch_Flag = 1;
-        SysInfo.Save_Data.save_Data_flag = 1; // ±£´æµµÎ»
+        SysInfo.Save_Data.save_Data_flag = 1; // ï¿½ï¿½ï¿½æµµÎ»
         RF_LED_DOWN();
         EMS_LED_UP();
         Ageing_TestData_Init();
       }
       break;
 
-    case Comm_Inset_Bootloader: // ½øÈëBootloaderÉý¼¶
+    case Comm_Inset_Bootloader: // ï¿½ï¿½ï¿½ï¿½Bootloaderï¿½ï¿½ï¿½ï¿½
       UART_Send_Data(SysInfo.Test_Mode.Data, Length);
       BKP_SRAM_Init();
       HAL_NVIC_SystemReset();
       break;
-    case Comm_Check_Version: // °æ±¾Ð£Ñé
+    case Comm_Check_Version: // ï¿½æ±¾Ð£ï¿½ï¿½
 
       break;
-    case Comm_Standby:                                                                              // ½øÈë´ý»úµçÁ÷²âÊÔÄ£Ê½
-      if (SysInfo.Test_Mode.Data[Length - 4] == 0xFF && SysInfo.Test_Mode.Data[Length - 3] == 0xFF) // ÍË³ö´ý»úµçÁ÷²âÊÔÄ£Ê½
+    case Comm_Standby:                                                                              // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½
+      if (SysInfo.Test_Mode.Data[Length - 4] == 0xFF && SysInfo.Test_Mode.Data[Length - 3] == 0xFF) // ï¿½Ë³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½
       {
         SysInfo.Test_Mode.Sleep_Flag = 0x00;
         SysInfo.Test_Mode.Test_Mode_Flag = Auto_ON;
         SysInfo.Test_Mode.Send_Flag = 1;
-        RF_Call_Data(); // ¹Ø±ÕRF¡¢EMS
+        RF_Call_Data(); // ï¿½Ø±ï¿½RFï¿½ï¿½EMS
       }
       else
       {
@@ -1481,8 +1481,8 @@ void Test_UART_Deal_Process(void)
         Key_Call_Data();
       }
       break;
-    case Comm_GSensor_Control:                                                                      // G-SENSOR²âÊÔ
-      if (SysInfo.Test_Mode.Data[Length - 4] == 0xFF && SysInfo.Test_Mode.Data[Length - 3] == 0xFF) // ÍË³ö´ý»úµçÁ÷²âÊÔÄ£Ê½
+    case Comm_GSensor_Control:                                                                      // G-SENSORï¿½ï¿½ï¿½ï¿½
+      if (SysInfo.Test_Mode.Data[Length - 4] == 0xFF && SysInfo.Test_Mode.Data[Length - 3] == 0xFF) // ï¿½Ë³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½
       {
         Lis2dh_Sleep_on();
       }
@@ -1495,7 +1495,7 @@ void Test_UART_Deal_Process(void)
       }
       break;
 
-    case Comm_Quit_Testmode: // ÍË³ö²âÊÔÄ£Ê½
+    case Comm_Quit_Testmode: // ï¿½Ë³ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½
       UART_Send_Data(SysInfo.Test_Mode.Data, Length);
       HAL_NVIC_SystemReset();
       break;
@@ -1506,7 +1506,7 @@ void Test_UART_Deal_Process(void)
 }
 /**************************************************************************************
  * FunctionName   : Test_UART_Deal_Process(void)
- * Description    : ²âÊÔÄ£Ê½ ÀÏ»¯Ä£Ê½Êý¾Ý³õÊ¼»¯
+ * Description    : ï¿½ï¿½ï¿½ï¿½Ä£Ê½ ï¿½Ï»ï¿½Ä£Ê½ï¿½ï¿½ï¿½Ý³ï¿½Ê¼ï¿½ï¿½
  * EntryParameter : None
  * ReturnValue    : None
  **************************************************************************************/
@@ -1515,7 +1515,7 @@ void Ageing_TestData_Init(void)
   SysInfo.Power_Value.Enter_Sleep_Flag = 0;
   SysInfo.Power_Value.state = System_ON;
   BOOST_5V_ON();
-  SysInfo.Heating_Flag = 0x00; // ¿ª»úÇ°Á½Ãë5µµÔËÐÐ£¬Ê¹µç¼«Ñ¸ËÙÉýÎÂ±êÖ¾Î»
+  SysInfo.Heating_Flag = 0x00; // ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½5ï¿½ï¿½ï¿½ï¿½ï¿½Ð£ï¿½Ê¹ï¿½ç¼«Ñ¸ï¿½ï¿½ï¿½ï¿½ï¿½Â±ï¿½Ö¾Î»
   SysInfo.Skin_No_Touch_Timer = 0;
   SysInfo.Freq_Cnt = 0;
 
@@ -1526,7 +1526,7 @@ void Ageing_TestData_Init(void)
 }
 /**************************************************************************************
  * FunctionName   : Test_UART_Deal_Process(void)
- * Description    : ²âÊÔÄ£Ê½
+ * Description    : ï¿½ï¿½ï¿½ï¿½Ä£Ê½
  * EntryParameter : None
  * ReturnValue    : None
  **************************************************************************************/
@@ -1535,21 +1535,21 @@ void Ageing_TestData_DeInit(void)
   SysInfo.Power_Value.Enter_Sleep_Flag = 0;
   SysInfo.Power_Value.state = System_Standy;
   BOOST_5V_OFF();
-  SysInfo.Heating_Flag = 0x00; // ¿ª»úÇ°Á½Ãë5µµÔËÐÐ£¬Ê¹µç¼«Ñ¸ËÙÉýÎÂ±êÖ¾Î»
+  SysInfo.Heating_Flag = 0x00; // ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½5ï¿½ï¿½ï¿½ï¿½ï¿½Ð£ï¿½Ê¹ï¿½ç¼«Ñ¸ï¿½ï¿½ï¿½ï¿½ï¿½Â±ï¿½Ö¾Î»
   SysInfo.Skin_No_Touch_Timer = 0;
-  SysInfo.Freq_Cnt = Frequency_1M0_CNT; // ÀÏ»¯Ä£Ê½ÏÂ£¬RFÒÔ1mhzÔËÐÐ
+  SysInfo.Freq_Cnt = Frequency_1M0_CNT; // ï¿½Ï»ï¿½Ä£Ê½ï¿½Â£ï¿½RFï¿½ï¿½1mhzï¿½ï¿½ï¿½ï¿½
 
   SysInfo.repair_level = Level_None;
   SysInfo.upkeep_level = Level_None;
   SysInfo.WorkState = Standy_mode;
-  RF_Call_Data(); // ¹Ø±ÕRF¡¢EMS
+  RF_Call_Data(); // ï¿½Ø±ï¿½RFï¿½ï¿½EMS
   IRled_stop();
 }
 
 // static uint8_t Batt_Value_State = Target_Value_State ;
 /**************************************************************************************
  * FunctionName   : Ageing_Test_Process(void)
- * Description    :  ÀÏ»¯²âÊÔ
+ * Description    :  ï¿½Ï»ï¿½ï¿½ï¿½ï¿½ï¿½
  * EntryParameter : None
  * ReturnValue    : None
  **************************************************************************************/
@@ -1560,7 +1560,7 @@ void Ageing_Test_Process(void)
 
   if (SysInfo.Test_Mode.Test_Mode_Flag != OFF && SysInfo.Test_Mode.Ageing_Flag)
   {
-    if (!SysInfo.Test_Mode.Ageing_Mode) // ÀÏ»¯²âÊÔ
+    if (!SysInfo.Test_Mode.Ageing_Mode) // ï¿½Ï»ï¿½ï¿½ï¿½ï¿½ï¿½
     {
       SysInfo.Test_Mode.Test_Mode = 0x0a;
       RF_LED_UP();
@@ -1575,9 +1575,9 @@ void Ageing_Test_Process(void)
         Test_Key_S1_Long_Str();
       }
     }
-    else // ÊÙÃü²âÊÔ
+    else // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     {
-      //			if( SysInfo.Batt_Value.State <= BAT_00_20_STATUS && !SysInfo.Test_Mode.Lock_Flag) // ???§Ô??
+      //			if( SysInfo.Batt_Value.State <= BAT_00_20_STATUS && !SysInfo.Test_Mode.Lock_Flag) // ???ï¿½ï¿½??
       if (SysInfo.Sleep_Flag == 0x01)
       {
         SysInfo.Sleep_Flag = 0x00;
@@ -1585,7 +1585,7 @@ void Ageing_Test_Process(void)
         SysInfo.Test_Mode.Ageing_Mode = 0x02;
         Ageing_TestData_DeInit();
       }
-      else if (SysInfo.Batt_Value.State > Target_Value_State) // ³äµç½áÊø£¬½øÈëÀÏ»¯
+      else if (SysInfo.Batt_Value.State > Target_Value_State) // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï»ï¿½
       {
         if (++SysInfo.Test_Mode.AgeTimer_Cnt > 9000) // 90s
         {
@@ -1614,7 +1614,7 @@ void Ageing_Test_Process(void)
         }
       }
 
-      /************************²âÊÔ***************************/
+      /************************ï¿½ï¿½ï¿½ï¿½***************************/
       /*				if(SysInfo.Test_Mode.Ageing_Mode==0x01)
           {
               if(++AgeTimer_Cnt>3000)
@@ -1633,7 +1633,7 @@ void Ageing_Test_Process(void)
               }
           }
       */
-      /************************²âÊÔ***************************/
+      /************************ï¿½ï¿½ï¿½ï¿½***************************/
 
       if (SysInfo.Test_Mode.Ageing_Mode == 0x01)
       {
