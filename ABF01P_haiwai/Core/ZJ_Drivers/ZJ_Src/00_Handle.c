@@ -564,6 +564,9 @@ void SLIDE_MODE_Run(void)
 #else
 	LIS3DH_get_angle(ddata.AXIS_X, ddata.AXIS_Y, ddata.AXIS_Z); // ����
 #endif
+#else
+
+SysInfo.MotionStateFlage = 1; // no g_sensor时，将该标志位置1
 #endif
 	if (SysInfo.Test_Mode.Test_Mode_Flag == ON)
 	{
