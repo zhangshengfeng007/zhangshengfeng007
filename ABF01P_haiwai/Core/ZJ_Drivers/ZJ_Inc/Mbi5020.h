@@ -2,8 +2,8 @@
 #define _MBI5020_H
 #include "includes.h"
 
-//×¢Òâ±ÈÌØÁ÷×ª»»
-//Í¬Ò»¸ö×Ö£¬µÍ×Ö½ÚÏÈ·¢ËÍ£¬Í¬Ò»¸ö×Ö½Ú¸ßÎ»ÏÈ·¢ËÍ
+//×¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½
+//Í¬Ò»ï¿½ï¿½ï¿½Ö£ï¿½ï¿½ï¿½ï¿½Ö½ï¿½ï¿½È·ï¿½ï¿½Í£ï¿½Í¬Ò»ï¿½ï¿½ï¿½Ö½Ú¸ï¿½Î»ï¿½È·ï¿½ï¿½ï¿½
 #define RF_CH1_ON_BIT	0x0003
 #define RF_CH2_ON_BIT	0x0003 << 2
 #define RF_CH3_ON_BIT	0x0003 << 4
@@ -24,8 +24,14 @@
 
 #define VCC3V3_EN_PIN          GPIO_PIN_1
 #define VCC3V3_EN_PORT			   GPIOF
+
+#if ((ARF001 == DEVICE_R1_RPO)||(ARF001 == DEVICE_R1_RPO_MAX))
 #define VCC3V3_OUT_ON()         HAL_GPIO_WritePin(VCC3V3_EN_PORT,VCC3V3_EN_PIN,GPIO_PIN_SET)
 #define VCC3V3_OUT_OFF()        HAL_GPIO_WritePin(VCC3V3_EN_PORT,VCC3V3_EN_PIN,GPIO_PIN_RESET)
+#elif (ARF001 == DEVICE_R1_HAIWAI)
+#define VCC3V3_OUT_ON()
+#define VCC3V3_OUT_OFF()
+#endif
 
 #define EMS_CHANNEL_ON()          HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4|GPIO_PIN_5, GPIO_PIN_SET)
 #define EMS_CHANNEL_OFF()         HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4|GPIO_PIN_5, GPIO_PIN_RESET)
