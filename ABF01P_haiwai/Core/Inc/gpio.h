@@ -102,14 +102,26 @@ void Error_Handler(void);
 
 #endif
 
+#if (G_SENSOR_SELECT == USE_G_SENSOR)
+  #define G_SENSOR_SCL_Pin GPIO_PIN_10
+  #define G_SENSOR_SCL_GPIO_Port GPIOB
+  #define G_SENSOR_SDA_Pin GPIO_PIN_11
+  #define G_SENSOR_SDA_GPIO_Port GPIOB
+#endif
+
+#if ((ARF001 == DEVICE_R1_RPO) || (ARF001 == DEVICE_R1_RPO_MAX))
+  #define RF_Current_Pin        GPIO_PIN_12
+  #define RF_Current_GPIO_Port  GPIOB
+#elif (ARF001 == DEVICE_R1_HAIWAI)
+  #define RF_Current_Pin        GPIO_PIN_11
+  #define RF_Current_GPIO_Port  GPIOB
+
+  #define EMS_DET_Pin           GPIO_PIN_12
+  #define EMS_DET_GPIO_Port     GPIOB
+
+#endif
 
 
-#define G_SENSOR_SCL_Pin GPIO_PIN_10
-#define G_SENSOR_SCL_GPIO_Port GPIOB
-#define G_SENSOR_SDA_Pin GPIO_PIN_11
-#define G_SENSOR_SDA_GPIO_Port GPIOB
-#define RF_Current_Pin GPIO_PIN_12
-#define RF_Current_GPIO_Port GPIOB
 #define PLED_PWM_Pin GPIO_PIN_14
 #define PLED_PWM_GPIO_Port GPIOB
 #define WLED1_Pin GPIO_PIN_15

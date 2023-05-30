@@ -69,6 +69,7 @@
 #include "lis2dw12_tap.h"
 #include "includes.h"
 
+#if (G_SENSOR_SELECT == USE_G_SENSOR)
 #define SENSOR_BUS hi2c2
 /* Private macro -------------------------------------------------------------*/
 #define BOOT_TIME 20 // ms
@@ -176,7 +177,7 @@ void LIS2DH_Data_Deal(void)
 
 	if (++Lis2d_Counts >= 10)
 	{
-		//		printf ("\n\r%d\n\r",Lis2d_Result);	 //²âÊÔ
+		//		printf ("\n\r%d\n\r",Lis2d_Result);	 //ï¿½ï¿½ï¿½ï¿½
 		if (Lis2d_Result > 40) //
 		{
 			SysInfo.MotionStateFlage = MEMS_SUCCESS;
@@ -195,11 +196,11 @@ void LIS2DH_Data_Deal(void)
 		{
 			if (++ERROR_ID_CNT > 20)
 			{
-        if(ERROR_ID_CNT < 25) //¹Ø±Õ´«¸ÐÆ÷µçÔ´ÑÓÊ±50ms
+        if(ERROR_ID_CNT < 25) //ï¿½Ø±Õ´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´ï¿½ï¿½Ê±50ms
 				{
 					VCC3V3_OUT_OFF();
 				}
-				else if(ERROR_ID_CNT < 35) //¿ªÆô´«¸ÐÆ÷µçÔ´ÑÓÊ±100msºó£¬µÈµçÔ´ÎÈ¶¨ºóÔÙ³õÊ¼»¯´«¸ÐÆ÷
+				else if(ERROR_ID_CNT < 35) //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´ï¿½ï¿½Ê±100msï¿½ó£¬µÈµï¿½Ô´ï¿½È¶ï¿½ï¿½ï¿½ï¿½Ù³ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				{
 					VCC3V3_OUT_ON();
 				}
@@ -282,6 +283,8 @@ static void platform_delay(uint32_t ms)
 	HAL_Delay(ms);
 }
 
+
+#endif
 /*
  * @brief  platform specific initialization (platform dependent)
  */
