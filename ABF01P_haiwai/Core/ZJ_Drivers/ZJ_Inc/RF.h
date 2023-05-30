@@ -52,9 +52,17 @@
 #define GEAR2_PORT		GPIOA
 #define GEAR3_PIN       GPIO_PIN_0 ///��λ3
 #define GEAR3_PORT		GPIOB
+
+#if ((ARF001 == DEVICE_R1_RPO)||(ARF001 == DEVICE_R1_RPO_MAX))
 #define GEAR4_PIN       GPIO_PIN_1 ///��λ4
 #define GEAR4_PORT		GPIOB
+#elif(ARF001 == DEVICE_R1_HAIWAI)
+#define GEAR4_PIN       GPIO_PIN_2 ///��λ4
+#define GEAR4_PORT		GPIOB
 
+#define GEAR5_PIN       GPIO_PIN_1 ///��λ4
+#define GEAR5_PORT		GPIOB
+#endif
 
 
 #define GEAR2_UP()    HAL_GPIO_WritePin(GEAR2_PORT,GEAR2_PIN,GPIO_PIN_SET)
@@ -64,6 +72,10 @@
 #define GEAR4_UP()    HAL_GPIO_WritePin(GEAR4_PORT,GEAR4_PIN,GPIO_PIN_SET)
 #define GEAR4_DOWN()  HAL_GPIO_WritePin(GEAR4_PORT,GEAR4_PIN,GPIO_PIN_RESET)
 
+#if(ARF001 == DEVICE_R1_HAIWAI)
+#define GEAR5_UP()    HAL_GPIO_WritePin(GEAR5_PORT,GEAR5_PIN,GPIO_PIN_SET)
+#define GEAR5_DOWN()  HAL_GPIO_WritePin(GEAR5_PORT,GEAR5_PIN,GPIO_PIN_RESET)
+#endif
 
 
 #if (ARF001 == DEVICE_R1_RPO)
@@ -86,12 +98,12 @@
 
 #elif (ARF001 == DEVICE_R1_HAIWAI)                            // 需要根据原理图，重新修改
 
-	#define	RF_Level_1()	{GEAR2_DOWN();GEAR3_DOWN();GEAR4_DOWN();}
-	#define	RF_Level_2()	{GEAR2_UP();GEAR3_DOWN();GEAR4_DOWN();}
-	#define	RF_Level_3()	{GEAR2_DOWN();GEAR3_UP();GEAR4_DOWN();}
-	#define	RF_Level_4()	{GEAR2_UP();GEAR3_UP();GEAR4_DOWN();}
-	#define	RF_Level_5()	{GEAR2_DOWN();GEAR3_UP();GEAR4_UP();}
-	#define	RF_Level_6()	{GEAR2_DOWN();GEAR3_UP();GEAR4_UP();}
+	#define	RF_Level_1()	{GEAR2_DOWN();GEAR3_DOWN();GEAR4_DOWN();GEAR5_DOWN();}
+	#define	RF_Level_2()	{GEAR2_UP();GEAR3_DOWN();GEAR4_DOWN();GEAR5_DOWN();}
+	#define	RF_Level_3()	{GEAR2_DOWN();GEAR3_UP();GEAR4_DOWN();GEAR5_DOWN();}
+	#define	RF_Level_4()	{GEAR2_DOWN();GEAR3_DOWN();GEAR4_UP();GEAR5_DOWN();}
+	#define	RF_Level_5()	{GEAR2_DOWN();GEAR3_DOWN();GEAR4_DOWN();GEAR5_UP();}
+	#define	RF_Level_6()	{RF_Level_5();}
 #endif
 
 void Set_RF_Level(_Sys_Info_TypeDef* Level) ;
