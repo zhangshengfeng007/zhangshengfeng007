@@ -545,6 +545,7 @@ void SLIDE_MODE_Run(void)
 		static uint8_t Lis2dInit_Flag = 0;
 		static uint8_t Delay_Timer=0;
 	//	SysInfo.MotionStateFlage = LIS3DH_get_angle(ddata.AXIS_X, ddata.AXIS_Y, ddata.AXIS_Z);//����
+#if (G_SENSOR_SELECT == USE_G_SENSOR)
 #if LIS2DH
   if(SysInfo.Power_Value.state==System_ON)
 	{
@@ -562,6 +563,7 @@ void SLIDE_MODE_Run(void)
 
 #else
 	LIS3DH_get_angle(ddata.AXIS_X, ddata.AXIS_Y, ddata.AXIS_Z); // ����
+#endif
 #endif
 	if (SysInfo.Test_Mode.Test_Mode_Flag == ON)
 	{
@@ -992,7 +994,9 @@ IRled_stop();
 	HAL_UART_DMAStop(&huart1);
 	HAL_ADC_MspDeInit(&hadc1);
 	HAL_SPI_MspDeInit(&hspi1);
-	HAL_I2C_MspDeInit(&hi2c2);
+	#if (G_SENSOR_SELECT == USE_G_SENSOR)
+		HAL_I2C_MspDeInit(&hi2c2);
+	#endif
 	HAL_TIM_PWM_Stop(&htim16, TIM_CHANNEL_1);
 
 
@@ -1040,7 +1044,9 @@ void exit_sleep_mode(void)
 	SystemClock_Config();
 	MX_GPIO_ONT_Init();
 	HAL_SPI_MspInit(&hspi1);
+#if (G_SENSOR_SELECT == USE_G_SENSOR)
 	HAL_I2C_MspInit(&hi2c2);
+#endif
   HAL_ADC_MspInit(&hadc1);
 	SysInfo.Power_Value.Enter_Sleep_Flag = 1;
 	SysInfo.Batt_Value.Usb_flag = 0;
@@ -1066,7 +1072,9 @@ void exit_sleep_mode(void)
 	MX_TIM1_Init();
 	HAL_UART_MspInit(&huart1);
 //	MX_USART1_UART_Init();
+#if (G_SENSOR_SELECT == USE_G_SENSOR)
 	MX_I2C2_Init();
+#endif
 	// Lis2dh_Init();
 	HAL_UART_Receive_DMA(&huart1, SysInfo.Test_Mode.Data, 6);
 	SysInfo.Test_Mode.Test_Mode_Flag = 0;

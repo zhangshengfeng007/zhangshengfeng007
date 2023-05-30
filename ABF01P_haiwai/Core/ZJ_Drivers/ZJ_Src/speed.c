@@ -34,6 +34,8 @@
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
 AxesRaw_t ddata, gdata, jdata;
+
+#if (G_SENSOR_SELECT == USE_G_SENSOR)
 /*******************************************************************************
  * Function Name		: LIS3DH_ReadReg
  * Description		: Generic Reading function. It must be fullfilled with either
@@ -1750,7 +1752,7 @@ uint16_t Get_LIS3DH_Read(uint16_t *ADC_Source, uint16_t Counts)
   min = 0x0FFF;
   sum = 0x00;
 
-  /* µ¥Í¨µÀ¹²½øÐÐ10´Î×ª»»£¬´¦Àíµ¥Í¨µÀÊý¾Ý */
+  /* ï¿½ï¿½Í¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½10ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
   for (i = 0; i < Counts; i++)
   {
     ad_temp = ADC_Source[i];
@@ -1767,7 +1769,7 @@ uint16_t Get_LIS3DH_Read(uint16_t *ADC_Source, uint16_t Counts)
   sum -= min;
   sum -= max;
 
-  return sum >> 3; // È¡8´ÎÆ½¾ùÖµ
+  return sum >> 3; // È¡8ï¿½ï¿½Æ½ï¿½ï¿½Öµ
 }
 
 uint16_t LIS3DH_Data_Filter(uint16_t *pData, uint8_t channel, uint8_t len)
@@ -1803,7 +1805,7 @@ void LIS3DH_Data_Smooth(void)
   static uint16_t AXIS_Counts;
   static uint16_t AXIS_X[10], AXIS_Y[10], AXIS_Z[10];
 
-  LIS3DH_GetAccAxesRaw(&ddata); // ¶ÁÈ¡¼ÓËÙ¶È³õÊ¼Öµ
+  LIS3DH_GetAccAxesRaw(&ddata); // ï¿½ï¿½È¡ï¿½ï¿½ï¿½Ù¶È³ï¿½Ê¼Öµ
 
   if (AXIS_Counts < 10)
   {
@@ -1831,7 +1833,7 @@ status_t LIS3DH_get_angle(float acc_x, float acc_y, float acc_z)
   static uint8_t Lis3d_Counts;
   static uint32_t Lis3d_Result;
   /*
-    //»»ËãÎª¼ÓËÙ¶È
+    //ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½Ù¶ï¿½
     angle_x=acc_x*0.061035;//4/65536*1000=0.061035
     angle_y=acc_y*0.061035;
     angle_z=acc_z*0.061035;
@@ -1842,12 +1844,12 @@ status_t LIS3DH_get_angle(float acc_x, float acc_y, float acc_z)
 
     gdata.AXIS_D =sqrt(gdata.AXIS_X*gdata.AXIS_X + gdata.AXIS_Y*gdata.AXIS_Y + gdata.AXIS_Z*gdata.AXIS_Z);
   */
-  LIS3DH_GetAccAxesRaw(&ddata); // ¶ÁÈ¡¼ÓËÙ¶È³õÊ¼Öµ
+  LIS3DH_GetAccAxesRaw(&ddata); // ï¿½ï¿½È¡ï¿½ï¿½ï¿½Ù¶È³ï¿½Ê¼Öµ
   gdata.AXIS_D = sqrt(acc_x * acc_x + acc_y * acc_y + acc_z * acc_z);
-  //		printf ("\n\%d\n\r",gdata.AXIS_D); //²âÊÔ
+  //		printf ("\n\%d\n\r",gdata.AXIS_D); //ï¿½ï¿½ï¿½ï¿½
   Lis3d_Result += abs(gdata.AXIS_D - gdata.LAST_AXIS_D);
   //	Lis3d_Result = gdata.AXIS_D-gdata.LAST_AXIS_D;
-  //	printf ("\n\r%d\n\r",Lis3d_Result); //²âÊÔ
+  //	printf ("\n\r%d\n\r",Lis3d_Result); //ï¿½ï¿½ï¿½ï¿½
   gdata.LAST_AXIS_D = gdata.AXIS_D;
 
   if (++Lis3d_Counts >= 10)
@@ -1865,7 +1867,7 @@ status_t LIS3DH_get_angle(float acc_x, float acc_y, float acc_z)
   }
 
   /*
-    //»»Ëã½Ç¶È
+    //ï¿½ï¿½ï¿½ï¿½Ç¶ï¿½
     angle_x = (atan(angle_x / sqrt(angle_y*angle_y + angle_z*angle_z)))*180/3.14;
     angle_y = (atan(angle_y / sqrt(angle_x*angle_x + angle_z*angle_z)))*180/3.14;
     angle_z = (atan(angle_z / sqrt(angle_x*angle_x + angle_y*angle_y)))*180/3.14;
@@ -1874,3 +1876,5 @@ status_t LIS3DH_get_angle(float acc_x, float acc_y, float acc_z)
     jdata.AXIS_Z = angle_z;
   */
 }
+
+#endif

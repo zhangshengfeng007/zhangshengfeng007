@@ -124,12 +124,18 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-#if (ARF001 == DEVICE_R1_HAIWAI)
+#if (ARF001 == DEVICE_R1_HAIWAI) // 海外版，特殊IO口处理
   GPIO_InitStruct.Pin = RF_LEVEL5_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(RF_LEVEL5_GPIO_Port, &GPIO_InitStruct);
+
+  GPIO_InitStruct.Pin = EMS_DET_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(EMS_DET_GPIO_Port, &GPIO_InitStruct);
 
 #endif
   /*Configure GPIO pin : PtPin */

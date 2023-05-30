@@ -113,24 +113,19 @@ CLEAR_BIT(SysTick->CTRL,SysTick_CTRL_TICKINT_Msk);
 //  MX_I2C2_Init();
 //  MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
+#if (G_SENSOR_SELECT == USE_G_SENSOR)
+
 	#if LIS2DH
 		MX_I2C2_Init();
+    Lis2dh_Init();
 //		IIC_Init();
     #else
 		IIC_Init();
+    lis3dhinit();
 	#endif
-
+#endif
   System_Data_Init();
   LedIR_Init();
-
-#if LIS2DH
-  //		MX_I2C2_Init();
-  Lis2dh_Init();
-#else
-  //		IIC_Init();
-  lis3dhinit();
-#endif
-
 
 SET_BIT(SysTick->CTRL, SysTick_CTRL_TICKINT_Msk);
   /* USER CODE END 2 */

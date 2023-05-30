@@ -1,38 +1,39 @@
 #ifndef __IIC_H
 #define __IIC_H
-#include "includes.h" 
+#include "includes.h"
 
-   	   		   
-//#define PIN_SCL    GPIO_Pin_6  
-//#define PIN_SDA    GPIO_Pin_7  
-//#define I2C_PORT   GPIOB  
+ #if (G_SENSOR_SELECT == USE_G_SENSOR)
+//#define PIN_SCL    GPIO_Pin_6
+//#define PIN_SDA    GPIO_Pin_7
+//#define I2C_PORT   GPIOB
 #define  L3DH_SCL_Pin         G_SENSOR_SCL_Pin
 #define  L3DH_SCL_GPIO_Port   G_SENSOR_SCL_GPIO_Port
 
 #define  L3DH_SDA_Pin         G_SENSOR_SDA_Pin
 #define  L3DH_SDA_GPIO_Port   G_SENSOR_SDA_GPIO_Port
-//IIC×ÜÏßÒý½ÅÅäÖÃ
+//IICï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 #define L3DH_SCL_Clr() HAL_GPIO_WritePin(L3DH_SCL_GPIO_Port, L3DH_SCL_Pin, GPIO_PIN_RESET);
 #define L3DH_SCL_Set() HAL_GPIO_WritePin(L3DH_SCL_GPIO_Port, L3DH_SCL_Pin, GPIO_PIN_SET);
 #define L3DH_SDA_Clr() HAL_GPIO_WritePin(L3DH_SDA_GPIO_Port, L3DH_SDA_Pin, GPIO_PIN_RESET);
 #define L3DH_SDA_Set() HAL_GPIO_WritePin(L3DH_SDA_GPIO_Port, L3DH_SDA_Pin, GPIO_PIN_SET);
 #define L3DH_SDA_Read_In       HAL_GPIO_ReadPin(L3DH_SDA_GPIO_Port,L3DH_SDA_Pin)
 
-//SDAµÄ·½ÏòÉèÖÃ  
-void L3DH_SDA_IN(void);   
-void L3DH_SDA_OUT(void);  
-  
-//I2CËùÓÐ²Ù×÷º¯Êý  
-void IIC_Init(void);                   //³õÊ¼»¯I2CµÄIO¿Ú       
-void LIS3DH_Start(void);                  //·¢ËÍI2C¿ªÊ¼ÐÅºÅ  
-void LIS3DH_Stop(void);                   //·¢ËÍI2CÍ£Ö¹ÐÅºÅ  
-void LIS3DH_SendByte(uint8_t txd);            //I2C·¢ËÍÒ»¸ö×Ö½Ú  
-uint8_t LIS3DH_RecvByte(unsigned char ack);   //I2C¶ÁÈ¡Ò»¸ö×Ö½Ú  
-uint8_t I2C_Wait_Ack(void);                 //I2CµÈ´ýACKÐÅºÅ  
-void I2C_Ack(void);                    //I2C·¢ËÍACKÐÅºÅ  
-void I2C_NAck(void);                   //I2C²»·¢ËÍACKÐÅºÅ  
+//SDAï¿½Ä·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+void L3DH_SDA_IN(void);
+void L3DH_SDA_OUT(void);
+
+//I2Cï¿½ï¿½ï¿½Ð²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+void IIC_Init(void);                   //ï¿½ï¿½Ê¼ï¿½ï¿½I2Cï¿½ï¿½IOï¿½ï¿½
+void LIS3DH_Start(void);                  //ï¿½ï¿½ï¿½ï¿½I2Cï¿½ï¿½Ê¼ï¿½Åºï¿½
+void LIS3DH_Stop(void);                   //ï¿½ï¿½ï¿½ï¿½I2CÍ£Ö¹ï¿½Åºï¿½
+void LIS3DH_SendByte(uint8_t txd);            //I2Cï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Ö½ï¿½
+uint8_t LIS3DH_RecvByte(unsigned char ack);   //I2Cï¿½ï¿½È¡Ò»ï¿½ï¿½ï¿½Ö½ï¿½
+uint8_t I2C_Wait_Ack(void);                 //I2Cï¿½È´ï¿½ACKï¿½Åºï¿½
+void I2C_Ack(void);                    //I2Cï¿½ï¿½ï¿½ï¿½ACKï¿½Åºï¿½
+void I2C_NAck(void);                   //I2Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ACKï¿½Åºï¿½
 
 void Single_Write_LIS3DH(uint8_t REG_Address,uint8_t REG_data);
-uint8_t Single_Read_LIS3DH(uint8_t REG_Address);	  
+uint8_t Single_Read_LIS3DH(uint8_t REG_Address);
+#endif
 #endif
 

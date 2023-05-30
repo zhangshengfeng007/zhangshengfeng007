@@ -1180,8 +1180,10 @@ void Comm_GSensor_Control_Process(void)
   {
     SysInfo.Test_Mode.GSensor_Flag = 0;
     VCC3V3_OUT_ON();
-    Lis2dh_Init();
-    LIS2DH_Data_Deal();
+    #if (G_SENSOR_SELECT == USE_G_SENSOR)
+      Lis2dh_Init();
+      LIS2DH_Data_Deal();
+    #endif
 
     SysInfo.Test_Mode.Data[1] = 0x0D;
     SysInfo.Test_Mode.Data[4] = 0x44;
@@ -1481,18 +1483,21 @@ void Test_UART_Deal_Process(void)
         Key_Call_Data();
       }
       break;
-    case Comm_GSensor_Control:                                                                      // G-SENSOR����
-      if (SysInfo.Test_Mode.Data[Length - 4] == 0xFF && SysInfo.Test_Mode.Data[Length - 3] == 0xFF) // �˳�������������ģʽ
-      {
-        Lis2dh_Sleep_on();
-      }
-      else
-      {
-        SysInfo.Test_Mode.GSensor_Flag = 0x01;
-        SysInfo.Test_Mode.Send_Flag = 0;
-				Length = 0x0D;
-        Comm_GSensor_Control_Process();
-      }
+
+    case Comm_GSensor_Control:
+      #if (G_SENSOR_SELECT == USE_G_SENSOR)                                                            // G-SENSOR����
+        if (SysInfo.Test_Mode.Data[Length - 4] == 0xFF && SysInfo.Test_Mode.Data[Length - 3] == 0xFF) // �˳�������������ģʽ
+        {
+          Lis2dh_Sleep_on();
+        }
+        else
+        {
+          SysInfo.Test_Mode.GSensor_Flag = 0x01;
+          SysInfo.Test_Mode.Send_Flag = 0;
+  				Length = 0x0D;
+          Comm_GSensor_Control_Process();
+        }
+      #endif
       break;
 
     case Comm_Quit_Testmode: // �˳�����ģʽ

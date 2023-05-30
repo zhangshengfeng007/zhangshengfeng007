@@ -1,5 +1,6 @@
 #include "iic.h"
 
+#if (G_SENSOR_SELECT == USE_G_SENSOR)
 #define SlaveAddress 0x32 // 定义器件在IIC总线中的从地址,根据ALT  ADDRESS地址引脚不同修改
                           // ALT  ADDRESS引脚接地时地址为0x30，接电源时地址为0x32
 
@@ -195,3 +196,5 @@ uint8_t Single_Read_LIS3DH(uint8_t REG_Address)
    LIS3DH_Stop();                 // 停止信号
    return REG_data;
 }
+
+#endif
