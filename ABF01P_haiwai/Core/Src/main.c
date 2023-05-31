@@ -150,7 +150,7 @@ SET_BIT(SysTick->CTRL, SysTick_CTRL_TICKINT_Msk);
 
 /**
   * @brief System Clock Configuration
-  * @retval None
+  * @retval None  sysclk =48MHZ
   */
 void SystemClock_Config(void)
 {
