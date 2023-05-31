@@ -29,7 +29,12 @@ TIM_HandleTypeDef htim3;
 TIM_HandleTypeDef htim16;
 TIM_HandleTypeDef htim17;
 
-/* TIM1 init function */
+/********* TIM1 init function *********
+* sys_clk = 48MHZ
+* TIM1_CLK = sys_clk/(Prescaler + 1) = 1MHZ
+* 重载值Period ，也就是ARR的值， 实际计数值为（period + 1）
+*
+*************************************/
 void MX_TIM1_Init(void)
 {
 
