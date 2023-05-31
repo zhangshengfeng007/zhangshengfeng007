@@ -191,7 +191,7 @@ void RF_Frequency_conversion(uint8_t level)
  * FunctionName	: Frequency_conversion_Process(void)
  * Description		: ��Ƶ��Ƶ���к���
  * EntryParameter:
- * ReturnValue		:
+ * ReturnValue		:   100MS
  **************************************************************************************/
 void Frequency_conversion_Process(void)
 {
@@ -276,7 +276,7 @@ void Frequency_conversion_Process(void)
 		Counts = 0;
 	}
 
-	if (SysInfo.Heating_Flag && SysInfo.Skin_Touch_Flag)
+	if (SysInfo.Heating_Flag && SysInfo.Skin_Touch_Flag) // 前2秒快速加热
 	{
 		if (++Heating_Counts < Heating_CNT) // ����ǰ3��5�����У�ʹ�缫Ѹ������
 		{
@@ -389,7 +389,7 @@ void Pole_Change(void)
 			Set_Mbi5020_Out(0);
 		}
 	}
-#elif ((ARF001 == DEVICE_R1_RPO_MAX)||(ARF001 == DEVICE_R1_HAIWAI))
+#elif (ARF001 == DEVICE_R1_RPO_MAX)
 	static uint8_t Rotate_Count = 0, Pole_Counts = 0, Last_Pole_Counts = 0;
 
 	//	if(SysInfo.Power_Value.state == System_ON ||SysInfo.Test_Mode.Test_Mode_Flag!=OFF)
@@ -483,6 +483,32 @@ void Pole_Change(void)
 		Pole_Counts = 0;
 		Last_Pole_Counts = 0;
 	}
+
+#elif ((ARF001 == DEVICE_R1_HAIWAI))
+if (SysInfo.Power_Value.state == System_ON || SysInfo.Test_Mode.Ageing_Flag)
+{
+		if (SysInfo.WorkState == repair_mode)
+		{
+			Set_Mbi5020_Out(RF_CH1_ON_BIT | RF_CH2_ON_BIT | RF_CH3_ON_BIT);
+		}
+		else if (SysInfo.WorkState == upkeep_mode)
+		{
+			if (RF_Handle.Run_Flag)
+			{
+				Set_Mbi5020_Out(RF_CH1_ON_BIT | RF_CH2_ON_BIT | RF_CH3_ON_BIT);
+			}
+			else
+			{
+				Set_Mbi5020_Out(EMS_CH1_ON_BIT|EMS_CH2_ON_BIT|EMS_CH3_ON_BIT);
+			}
+		}
+		else
+		{
+			Set_Mbi5020_Out(0);
+		}
+
+}
+
 #endif
 }
 /**************************************************************************************

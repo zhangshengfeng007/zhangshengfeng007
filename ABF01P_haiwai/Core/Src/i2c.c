@@ -24,6 +24,8 @@
 
 /* USER CODE END 0 */
 
+#if (G_SENSOR_SELECT == USE_G_SENSOR)
+
 I2C_HandleTypeDef hi2c2;
 
 /* I2C2 init function */
@@ -125,6 +127,8 @@ void HAL_I2C_MspDeInit(I2C_HandleTypeDef* i2cHandle)
   }
 }
 
+
+#endif
 /* USER CODE BEGIN 1 */
 
 /* USER CODE END 1 */

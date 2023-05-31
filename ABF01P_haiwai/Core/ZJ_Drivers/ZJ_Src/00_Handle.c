@@ -283,7 +283,7 @@ void Vibration_Reminder_Counts_Run(void) // 10ms����һ��
 				}
 			}
 		}
-#if (ARF001 == DEVICE_R1_RPO)
+#if ((ARF001 == DEVICE_R1_RPO)||(ARF001 == DEVICE_R1_HAIWAI))
 		if (EMS_Handle.Run_Flag) // EMS���м�ʱ
 		{
 			if (++SysInfo.Mode_Cnt >= Timer_EMS) // 2s
@@ -294,7 +294,7 @@ void Vibration_Reminder_Counts_Run(void) // 10ms����һ��
 			}
 			Error_Time_Flag = 1;
 		}
-#elif ((ARF001 == DEVICE_R1_RPO_MAX)||(ARF001 == DEVICE_R1_HAIWAI))
+#elif (ARF001 == DEVICE_R1_RPO_MAX)
 		if (LockFlag == 0x01 && EMS_Handle.Run_Flag)
 		{
 			LockFlag |= 0x02;
@@ -545,6 +545,7 @@ void SLIDE_MODE_Run(void)
 		static uint8_t Lis2dInit_Flag = 0;
 		static uint8_t Delay_Timer=0;
 	//	SysInfo.MotionStateFlage = LIS3DH_get_angle(ddata.AXIS_X, ddata.AXIS_Y, ddata.AXIS_Z);//����
+#if (G_SENSOR_SELECT == USE_G_SENSOR)
 #if LIS2DH
   if(SysInfo.Power_Value.state==System_ON)
 	{
@@ -562,6 +563,10 @@ void SLIDE_MODE_Run(void)
 
 #else
 	LIS3DH_get_angle(ddata.AXIS_X, ddata.AXIS_Y, ddata.AXIS_Z); // ����
+#endif
+#else
+
+SysInfo.MotionStateFlage = 1; // no g_sensor时，将该标志位置1
 #endif
 	if (SysInfo.Test_Mode.Test_Mode_Flag == ON)
 	{
@@ -601,7 +606,7 @@ void SLIDE_MODE_Run(void)
  **************************************************************************************/
 void EMS_Procedure_Run(void)
 {
-#if (ARF001 == DEVICE_R1_RPO)
+#if ((ARF001 == DEVICE_R1_RPO) || (ARF001 == DEVICE_R1_HAIWAI))  // 因为海外版，不需要旋转导通,所以输出逻辑同R1_PRO
 
 	if (SysInfo.WorkState == upkeep_mode && SysInfo.Power_Value.state == System_ON)
 	{
@@ -633,7 +638,7 @@ void EMS_Procedure_Run(void)
 			;
 	}
 
-#elif ((ARF001 == DEVICE_R1_RPO_MAX)||(ARF001 == DEVICE_R1_HAIWAI))
+#elif ((ARF001 == DEVICE_R1_RPO_MAX))
 
 	if (SysInfo.WorkState == upkeep_mode && SysInfo.Power_Value.state == System_ON)
 	{
@@ -992,7 +997,9 @@ IRled_stop();
 	HAL_UART_DMAStop(&huart1);
 	HAL_ADC_MspDeInit(&hadc1);
 	HAL_SPI_MspDeInit(&hspi1);
-	HAL_I2C_MspDeInit(&hi2c2);
+	#if (G_SENSOR_SELECT == USE_G_SENSOR)
+		HAL_I2C_MspDeInit(&hi2c2);
+	#endif
 	HAL_TIM_PWM_Stop(&htim16, TIM_CHANNEL_1);
 
 
@@ -1040,7 +1047,9 @@ void exit_sleep_mode(void)
 	SystemClock_Config();
 	MX_GPIO_ONT_Init();
 	HAL_SPI_MspInit(&hspi1);
+#if (G_SENSOR_SELECT == USE_G_SENSOR)
 	HAL_I2C_MspInit(&hi2c2);
+#endif
   HAL_ADC_MspInit(&hadc1);
 	SysInfo.Power_Value.Enter_Sleep_Flag = 1;
 	SysInfo.Batt_Value.Usb_flag = 0;
@@ -1066,7 +1075,9 @@ void exit_sleep_mode(void)
 	MX_TIM1_Init();
 	HAL_UART_MspInit(&huart1);
 //	MX_USART1_UART_Init();
+#if (G_SENSOR_SELECT == USE_G_SENSOR)
 	MX_I2C2_Init();
+#endif
 	// Lis2dh_Init();
 	HAL_UART_Receive_DMA(&huart1, SysInfo.Test_Mode.Data, 6);
 	SysInfo.Test_Mode.Test_Mode_Flag = 0;

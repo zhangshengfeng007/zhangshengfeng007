@@ -6,8 +6,15 @@
 ////LED ��λ��ģʽ��  ����
 #define GEAR_LED1_PIN       GPIO_PIN_15 ///��λLED1
 #define GEAR_LED1_PORT		GPIOB
+
+#if ((ARF001 == DEVICE_R1_RPO)||(ARF001 == DEVICE_R1_RPO_MAX))
 #define GEAR_LED2_PIN       GPIO_PIN_2 ///��λLED2
 #define GEAR_LED2_PORT		GPIOB
+#elif (ARF001 == DEVICE_R1_HAIWAI)
+#define GEAR_LED2_PIN       GPIO_PIN_10 ///��λLED2
+#define GEAR_LED2_PORT		GPIOB
+#endif
+
 #define GEAR_LED3_PIN       GPIO_PIN_6 ///��λLED3
 #define GEAR_LED3_PORT		GPIOC
 #define GEAR_LED4_PIN       GPIO_PIN_7 ///��λLED4

@@ -27,9 +27,9 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-
+#include "gpio.h"
 /* USER CODE BEGIN Includes */
-
+#if (G_SENSOR_SELECT == USE_G_SENSOR)
 /* USER CODE END Includes */
 
 extern I2C_HandleTypeDef hi2c2;
@@ -43,6 +43,7 @@ void MX_I2C2_Init(void);
 /* USER CODE BEGIN Prototypes */
 
 /* USER CODE END Prototypes */
+#endif
 
 #ifdef __cplusplus
 }
