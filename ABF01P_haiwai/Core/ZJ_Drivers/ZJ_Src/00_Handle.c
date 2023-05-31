@@ -283,7 +283,7 @@ void Vibration_Reminder_Counts_Run(void) // 10ms����һ��
 				}
 			}
 		}
-#if (ARF001 == DEVICE_R1_RPO)
+#if ((ARF001 == DEVICE_R1_RPO)||(ARF001 == DEVICE_R1_HAIWAI))
 		if (EMS_Handle.Run_Flag) // EMS���м�ʱ
 		{
 			if (++SysInfo.Mode_Cnt >= Timer_EMS) // 2s
@@ -294,7 +294,7 @@ void Vibration_Reminder_Counts_Run(void) // 10ms����һ��
 			}
 			Error_Time_Flag = 1;
 		}
-#elif ((ARF001 == DEVICE_R1_RPO_MAX)||(ARF001 == DEVICE_R1_HAIWAI))
+#elif (ARF001 == DEVICE_R1_RPO_MAX)
 		if (LockFlag == 0x01 && EMS_Handle.Run_Flag)
 		{
 			LockFlag |= 0x02;
@@ -606,7 +606,7 @@ SysInfo.MotionStateFlage = 1; // no g_sensor时，将该标志位置1
  **************************************************************************************/
 void EMS_Procedure_Run(void)
 {
-#if (ARF001 == DEVICE_R1_RPO)
+#if ((ARF001 == DEVICE_R1_RPO) || (ARF001 == DEVICE_R1_HAIWAI))  // 因为海外版，不需要旋转导通,所以输出逻辑同R1_PRO
 
 	if (SysInfo.WorkState == upkeep_mode && SysInfo.Power_Value.state == System_ON)
 	{
@@ -638,7 +638,7 @@ void EMS_Procedure_Run(void)
 			;
 	}
 
-#elif ((ARF001 == DEVICE_R1_RPO_MAX)||(ARF001 == DEVICE_R1_HAIWAI))
+#elif ((ARF001 == DEVICE_R1_RPO_MAX))
 
 	if (SysInfo.WorkState == upkeep_mode && SysInfo.Power_Value.state == System_ON)
 	{
