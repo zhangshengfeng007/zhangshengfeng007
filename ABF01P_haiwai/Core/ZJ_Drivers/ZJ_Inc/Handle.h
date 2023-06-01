@@ -60,7 +60,7 @@
 #define EMS_Reminder_300S  300
 
 #define Upkeep_Error_Time  5
-
+#define SLEEP_DELAY_60S    6000
 #endif
 //////////////////////////////////enum//////////////////////////////////////////
 
