@@ -346,11 +346,26 @@ static void mode_led_normal_display(void)
 	{
 		case upkeep_mode:
 		{
-			if (SysInfo.Power_Value.state == System_ON)
-			{
-				Upkeep_LED_ON();
-				IRled_start();
-			}
+			#if ((ARF001 == DEVICE_R1_RPO) || (ARF001 == DEVICE_R1_RPO_MAX))
+				if (SysInfo.Power_Value.state == System_ON)
+				{
+					Upkeep_LED_ON();
+					IRled_start();
+				}
+			#elif (ARF001 == DEVICE_R1_HAIWAI)
+				if ((SysInfo.Power_Value.state == System_ON) || (SysInfo.Power_Value.state == System_Standy))
+				{
+					Upkeep_LED_ON();
+					if (SysInfo.Power_Value.state == System_ON)
+					{
+						IRled_start();
+					}
+					else
+					{
+						IRled_stop();
+					}
+				}
+			#endif
 			else
 			{
 				if (SysInfo.Test_Mode.Test_Mode_Flag != ON)
@@ -362,11 +377,26 @@ static void mode_led_normal_display(void)
 		}
 		case repair_mode:
 		{
-			if (SysInfo.Power_Value.state == System_ON)
-			{
-				Repair_LED_ON();
-				IRled_start();
-			}
+			#if ((ARF001 == DEVICE_R1_RPO)||(ARF001 == DEVICE_R1_RPO_MAX))
+				if (SysInfo.Power_Value.state == System_ON)
+				{
+					Repair_LED_ON();
+					IRled_start();
+				}
+			#elif (ARF001 == DEVICE_R1_HAIWAI)
+				if ((SysInfo.Power_Value.state == System_ON)||(SysInfo.Power_Value.state == System_Standy))
+				{
+					Repair_LED_ON();
+					if(SysInfo.Power_Value.state == System_ON)
+					{
+						IRled_start();
+					}
+					else
+					{
+						IRled_stop();
+					}
+				}
+			#endif
 			else
 			{
 				if (SysInfo.Test_Mode.Test_Mode_Flag != ON)
@@ -619,47 +649,62 @@ switch(LED->Mode)
 		}
 		else
 		{
-			switch(SysInfo.WorkState)
-			{
-				case upkeep_mode:
-				{
-					if (SysInfo.Power_Value.state == System_ON)
-					{
-						Upkeep_LED_ON();
-						IRled_start();
-					}
-					else
-					{
-						if (SysInfo.Test_Mode.Test_Mode_Flag != ON)
-						{
-							Upkeep_LED_OFF();
-						}
-					}
-					break;
-				}
-				case repair_mode:
-				{
-					if (SysInfo.Power_Value.state == System_ON)
-					{
-						Repair_LED_ON();
-						IRled_start();
-					}
-					else
-					{
-						if (SysInfo.Test_Mode.Test_Mode_Flag != ON)
-						{
-							Repair_LED_OFF();
-						}
-					}
-					break;
-				}
-				default:
-				{
-					Upkeep_LED_OFF();
-					Repair_LED_OFF();
-					break;
-				}
-			}
+			mode_led_normal_display();
+			// switch(SysInfo.WorkState)
+			// {
+			// 	case upkeep_mode:
+			// 	{
+			// 		if (SysInfo.Power_Value.state == System_ON)
+			// 		{
+			// 			Upkeep_LED_ON();
+			// 			#if ((ARF001 == DEVICE_R1_RPO)||(ARF001 == DEVICE_R1_RPO_MAX))
+			// 				IRled_start();
+			// 			#elif (ARF001 == DEVICE_R1_HAIWAI)
+			// 				if(SysInfo.Reminder_Cnt < EMS_Reminder_300S)
+			// 				{
+			// 					IRled_start();
+			// 				}
+			// 			#endif
+			// 		}
+			// 		else
+			// 		{
+			// 			if (SysInfo.Test_Mode.Test_Mode_Flag != ON)
+			// 			{
+			// 				Upkeep_LED_OFF();
+			// 			}
+			// 		}
+			// 		break;
+			// 	}
+			// 	case repair_mode:
+			// 	{
+			// 		if (SysInfo.Power_Value.state == System_ON)
+			// 		{
+			// 			Repair_LED_ON();
+			// 			#if ((ARF001 == DEVICE_R1_RPO)||(ARF001 == DEVICE_R1_RPO_MAX))
+			// 				IRled_start();
+			// 			#elif (ARF001 == DEVICE_R1_HAIWAI)
+			// 				if(SysInfo.Reminder_Cnt < RF_Reminder_600S)
+			// 				{
+			// 					IRled_start();
+			// 				}
+			// 			#endif
+			// 		}
+			// 		else
+			// 		{
+			// 			if (SysInfo.Test_Mode.Test_Mode_Flag != ON)
+			// 			{
+			// 				Repair_LED_OFF();
+			// 			}
+			// 		}
+			// 		break;
+			// 	}
+			// 	default:
+			// 	{
+			// 		Upkeep_LED_OFF();
+			// 		Repair_LED_OFF();
+			// 		break;
+			// 	}
+			// }
 
 		}
 		break;
