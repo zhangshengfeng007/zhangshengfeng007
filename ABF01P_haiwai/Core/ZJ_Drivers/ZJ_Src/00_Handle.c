@@ -373,7 +373,8 @@ void Vibration_Reminder_Counts_Run(void) // 10ms����һ��
 		}
 		#endif
 
-		if (SysInfo.Test_Mode.Ageing_Mode == 0x01)
+		//if (SysInfo.Test_Mode.Ageing_Mode == 0x01)
+		if (SysInfo.Test_Mode.Test_Mode_Flag != OFF && SysInfo.Test_Mode.Ageing_Flag)
 		{
 			StandyCnt = 0;
 			SysInfo.Mode_Switch_Flag = 0x01;
