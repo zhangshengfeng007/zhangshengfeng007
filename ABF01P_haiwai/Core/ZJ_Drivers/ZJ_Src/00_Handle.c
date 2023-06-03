@@ -82,6 +82,12 @@ void Led_Process_Run(void)
 				ChargeCnt = 0;
 			}
 		}
+
+		if(SysInfo.Test_Mode.Test_Mode_Flag)
+		{
+			BOOST_5V_OFF();
+		}
+
 		Batt_Cnt = 0;
 		Cnt = 0;
 	}
