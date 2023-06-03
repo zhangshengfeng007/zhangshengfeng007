@@ -614,8 +614,8 @@ void Test_Mode_Run_Process(void)
 
         EMS_Handle.Run_Flag = 1;
         PID.Flag = 1;
-        Set_Mbi5020_Out(EMS_CH3_ON_BIT);
-#if  (ARF001 == DEVICE_R1_RPO)
+        Set_Mbi5020_Out(EMS_CH3_ON_BIT|EMS_CH1_ON_BIT|EMS_CH2_ON_BIT);
+#if  ((ARF001 == DEVICE_R1_RPO)||(ARF001 == DEVICE_R1_HAIWAI))
         RF_DeInit();
         Ems_Init();
         RF_Handle.Run_Flag = 0;
@@ -994,7 +994,7 @@ void Test_AutoMode_Run_Process(void)
         IRled_start();
         EMS_Handle.Run_Flag = 1;
         PID.Flag = 1;
-        Set_Mbi5020_Out(EMS_CH3_ON_BIT);
+        Set_Mbi5020_Out(EMS_CH3_ON_BIT|EMS_CH1_ON_BIT|EMS_CH2_ON_BIT);
         Test_LED_Display_Process();
         Test_EMS_Waveform_Process();
         //						Auto_Mode_Cnt=1;
@@ -1562,17 +1562,42 @@ void Ageing_Test_Process(void)
 {
   //	static uint16_t Low_Power_Cnt ;
   //	static uint16_t	AgeTimer_Cnt;
+  static uint8_t Ageing_10ms_cnt = 0;
 
   if (SysInfo.Test_Mode.Test_Mode_Flag != OFF && SysInfo.Test_Mode.Ageing_Flag)
   {
+    Ageing_10ms_cnt ++;
+    if(0 == Ageing_10ms_cnt % 100)
+    {
+      Ageing_10ms_cnt = 0;
+      SysInfo.Test_Mode.AgeTimer_Cnt ++;
+    }
+
     if (!SysInfo.Test_Mode.Ageing_Mode) // �ϻ�����
     {
       SysInfo.Test_Mode.Test_Mode = 0x0a;
       RF_LED_UP();
       EMS_LED_DOWN();
-      Ageing_TestData_Init();
-
       Test_LED_Display_Process();
+
+      if (SysInfo.Test_Mode.AgeTimer_Cnt == 0)
+      {
+          Ageing_TestData_Init();
+          IRled_start();
+      }
+      else if (SysInfo.Test_Mode.AgeTimer_Cnt > EMS_Reminder_300S * 2)
+      {
+          SysInfo.Test_Mode.AgeTimer_Cnt = 0;
+      }
+      else if (SysInfo.Test_Mode.AgeTimer_Cnt > EMS_Reminder_300S)
+      {
+          IRled_stop();
+          RF_DeInit();
+          Ems_DeInit();
+          SysInfo.Power_Value.Enter_Sleep_Flag = 0;
+          SysInfo.Power_Value.state = System_Standy;
+      }
+
       if (SysInfo.Sleep_Flag)
       {
         SysInfo.Test_Mode.Ageing_Flag = 0;
