@@ -1624,15 +1624,16 @@ void Ageing_Test_Process(void)
       {
         EMS_LED_UP();
         Ageine_mode_1s_cnt = 7201;
+        RF_DeInit();
+        Ems_DeInit();
       }
       else
       {
         EMS_LED_DOWN();
+        ageing_ems_rf_ctrl();
       }
 
       Test_LED_Display_Process();
-
-      ageing_ems_rf_ctrl();
       if (SysInfo.Sleep_Flag)
       {
         SysInfo.Test_Mode.Ageing_Flag = 0;
