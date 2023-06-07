@@ -82,6 +82,12 @@ void Led_Process_Run(void)
 				ChargeCnt = 0;
 			}
 		}
+
+		if(SysInfo.Test_Mode.Test_Mode_Flag)
+		{
+			BOOST_5V_OFF();
+		}
+
 		Batt_Cnt = 0;
 		Cnt = 0;
 	}
@@ -281,6 +287,7 @@ void Vibration_Reminder_Counts_Run(void) // 10ms����һ��
 				{
 					SysInfo.Mode_Switch_Flag = 0x01; // RFģʽ����
 				}
+				SysInfo.Reminder_Cnt ++;
 			}
 		}
 #if ((ARF001 == DEVICE_R1_RPO)||(ARF001 == DEVICE_R1_HAIWAI))
@@ -291,8 +298,10 @@ void Vibration_Reminder_Counts_Run(void) // 10ms����һ��
 				SysInfo.Mode_Cnt = 0;
 				LockFlag |= 0x02;
 				SysInfo.Mode_Switch_Flag = 0x01; // RFģʽ����
+				SysInfo.Reminder_Cnt += 2;
 			}
 			Error_Time_Flag = 1;
+
 		}
 #elif (ARF001 == DEVICE_R1_RPO_MAX)
 		if (LockFlag == 0x01 && EMS_Handle.Run_Flag)
@@ -321,11 +330,13 @@ void Vibration_Reminder_Counts_Run(void) // 10ms����һ��
 2�������޸�ģʽ���������ѣ�240s��480s;ģʽ�������:600s���������ģʽ��60s�޲�������������ģʽ��
 	*************************************************************************************************/
 
-	if ((LockFlag == 0x03 && SysInfo.WorkState == upkeep_mode) ||
-		(LockFlag == 0x01 && SysInfo.WorkState == repair_mode))
+	// if ((LockFlag == 0x03 && SysInfo.WorkState == upkeep_mode) ||
+	// 	(LockFlag == 0x01 && SysInfo.WorkState == repair_mode))
+
+	if ((SysInfo.WorkState == upkeep_mode) || (SysInfo.WorkState == repair_mode))
 	{
-		LockFlag = 0;
-		SysInfo.Reminder_Cnt++;
+//		LockFlag = 0;
+	//	SysInfo.Reminder_Cnt ++;
 	//	SysInfo.Check_Protect_Flage = 1;
 //		SysInfo.Period_Flag = 1;
 		if (((SysInfo.Reminder_Cnt == EMS_Reminder_120S || SysInfo.Reminder_Cnt == EMS_Reminder_240S) && SysInfo.WorkState == upkeep_mode) ||
@@ -339,7 +350,7 @@ void Vibration_Reminder_Counts_Run(void) // 10ms����һ��
 			if ((SysInfo.Reminder_Cnt == EMS_Reminder_300S && SysInfo.WorkState == upkeep_mode) ||
 				(SysInfo.Reminder_Cnt == RF_Reminder_600S && SysInfo.WorkState == repair_mode))
 			{
-				SysInfo.Reminder_Cnt = 0;
+				SysInfo.Reminder_Cnt = 0;  //PRO 和 PRO_MAX版本运行时间到后，立刻关机
 				SysInfo.Montor_Flag = 1; // ������������
 				SysInfo.StayTime = 100;	 // ��ʱ��1.0s
 				SysInfo.Mode_Switch_Flag = 0x03;
@@ -351,13 +362,25 @@ void Vibration_Reminder_Counts_Run(void) // 10ms����һ��
 
 	if (SysInfo.Mode_Switch_Flag == 0x03)
 	{
+		#if ((ARF001 == DEVICE_R1_RPO)||(ARF001 == DEVICE_R1_RPO_MAX))
 		if (++StandyCnt > 5)
 		{
 			SysInfo.Mode_Switch_Flag = 0x00;
 			SysInfo.Sleep_Flag = 1; // �ػ���־λ
 		}
+		#elif (ARF001 == DEVICE_R1_HAIWAI)
+		{
+			if (++StandyCnt > SLEEP_DELAY_60S) //海外版 延时60s后再关机
+			{
+				SysInfo.Mode_Switch_Flag = 0x00;
+				SysInfo.StayTime = 50;	// 进入关机，马达震动0.5s
+				SysInfo.Sleep_Flag = 1; // �ػ���־λ
+			}
+		}
+		#endif
 
-		if (SysInfo.Test_Mode.Ageing_Mode == 0x01)
+		//if (SysInfo.Test_Mode.Ageing_Mode == 0x01)
+		if (SysInfo.Test_Mode.Test_Mode_Flag != OFF && SysInfo.Test_Mode.Ageing_Flag)
 		{
 			StandyCnt = 0;
 			SysInfo.Mode_Switch_Flag = 0x01;

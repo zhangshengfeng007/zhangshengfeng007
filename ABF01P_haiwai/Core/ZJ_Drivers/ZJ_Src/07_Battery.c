@@ -8,7 +8,7 @@ uint16_t Bat_ADC_Value[BAT_ADC_COUNT] = {0};
  * EntryParameter :
  * ReturnValue    : None
  **************************************************************************************/
-void USB_Plug_Scan(void) // 10msÔËĞĞÒ»´Î
+void USB_Plug_Scan(void) // 10msï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
 {
 	static uint8_t usb_plug_time;
 	static uint8_t usb_no_plug_time;
@@ -126,7 +126,7 @@ uint16_t Get_Battery_Read(uint16_t *ADC_Source, uint16_t Counts)
 	min = 0x0FFF;
 	sum = 0x00;
 
-	/* µ¥Í¨µÀ¹²½øĞĞ10´Î×ª»»£¬´¦Àíµ¥Í¨µÀÊı¾İ */
+	/* ï¿½ï¿½Í¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½10ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
 	for (i = 0; i < Counts; i++)
 	{
 		ad_temp = ADC_Source[i];
@@ -143,11 +143,11 @@ uint16_t Get_Battery_Read(uint16_t *ADC_Source, uint16_t Counts)
 	sum -= min;
 	sum -= max;
   sum /=(Counts-2);
-	return sum ; // È¡128´ÎÆ½¾ùÖµ
+	return sum ; // È¡128ï¿½ï¿½Æ½ï¿½ï¿½Öµ
 }
 /**************************************************************************************
  * FunctionName   : uint8_t Charge_Batter_State(uint16_t ChargeBatValue)
- * Description    : 130msÔËĞĞÒ»´Î
+ * Description    : 130msï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
  * EntryParameter :
  * ReturnValue    : None
  **************************************************************************************/
@@ -196,7 +196,7 @@ uint8_t CheckCharge_Batter_State(uint16_t ChargeBatValue)
 }
 /**************************************************************************************
  * FunctionName   : uint8_t CheckIdle_Batter_State(uint16_t CheckBatValue)
- * Description    : 130msÔËĞĞÒ»´Î
+ * Description    : 130msï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
  * EntryParameter :
  * ReturnValue    : None
  **************************************************************************************/
@@ -234,7 +234,7 @@ uint8_t CheckIdle_Batter_State(uint16_t CheckBatValue)
 }
 /**************************************************************************************
  * FunctionName   : uint8_t CheckWorking_Batter_State(uint16_t WorkBatValue)
- * Description    : 130msÔËĞĞÒ»´Î
+ * Description    : 130msï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
  * EntryParameter :
  * ReturnValue    : None
  **************************************************************************************/
@@ -285,12 +285,161 @@ uint8_t CheckWorking_Batter_State(uint16_t WorkBatValue)
  * EntryParameter :
  * ReturnValue    : None
  **************************************************************************************/
+static uint8_t old_4pin_bat_working_mode_state(uint16_t BatValue)
+{
+	static uint8_t WorkBattState_Cnt = 0;
+	static uint8_t bat_40_60_precent_delay = 0;
+	static uint8_t BattState = BAT_40_60_STATUS;
+
+	// if(RF_Handle.Run_Flag) //RFï¿½ï¿½ï¿½ï¿½ï¿½Â£ï¿½ï¿½ï¿½ï¿½
+	// {
+		if(BatValue < BAT_VOL_3V05)
+		{
+			if(BatValue < (BAT_VOL_3V05-BAT_VOL_HYS))
+			{
+				BattState = BAT_00_00_STATUS;
+				WorkBattState_Cnt = 0 ;
+			}
+			bat_40_60_precent_delay = 0;
+		}
+		else if(BatValue < BAT_VOL_3V20)
+		{
+			if((BatValue >= BAT_VOL_3V05 + BAT_VOL_HYS)\
+			 &&(BatValue <= BAT_VOL_3V20 - BAT_VOL_HYS))
+			{
+				if(++WorkBattState_Cnt>50)
+				{
+					WorkBattState_Cnt = 50 ;
+					if(BattState > BAT_00_20_STATUS)
+					{
+						BattState = BAT_00_20_STATUS;
+					}
+				}
+				bat_40_60_precent_delay = 0;
+			}
+		}
+		else
+		{
+			WorkBattState_Cnt = 0 ;
+			bat_40_60_precent_delay ++;
+			if(bat_40_60_precent_delay > 200)
+			{
+				BattState = BAT_40_60_STATUS;
+			}
+		}
+	// }
+	return BattState;
+}
+
+/**************************************************************************************
+ * FunctionName   : uint8_t new_5pin_bat_idle_mode_state(void)
+ * Description    : 1ms???????
+ * EntryParameter :
+ * ReturnValue    : None
+ **************************************************************************************/
+static uint8_t new_5pin_bat_idle_mode_state(uint16_t BatValue)
+{
+	static uint8_t WorkBattState_Cnt = 0;
+	static uint8_t BattState = BAT_40_60_STATUS;
+
+	if (BatValue <= BAT_VOL_3V55 && (BatValue > BAT_VOL_3V05)) // 0
+	{
+		BattState = BAT_00_00_STATUS;
+	}
+	else if (BatValue <= BAT_VOL_3V75 && (BatValue > BAT_VOL_3V55)) // 0~20   2908 ~ 3113
+	{
+		BattState = BAT_00_20_STATUS;
+	}
+	else if (BatValue <= BAT_VOL_3V85 && (BatValue > BAT_VOL_3V75)) // 20~40  3113 ~ 3236
+	{
+		BattState = BAT_20_40_STATUS;
+	}
+	else if (BatValue <= BAT_VOL_3V95 && (BatValue > BAT_VOL_3V85)) // 40~60  3236 ~ 3317
+	{
+		BattState = BAT_40_60_STATUS;
+	}
+	else if (BatValue <= BAT_VOL_4V10 && (BatValue > BAT_VOL_3V95)) // 60~80  3317 ~ 3400
+	{
+		BattState = BAT_60_80_STATUS;
+	}
+	else if (BatValue <= BAT_VOL_4V40 && (BatValue > BAT_VOL_4V10)) // 80~100 3400 ~ 3604
+	{
+		BattState = BAT_80_100_STATUS;
+	}
+
+	return BattState;
+
+}
+
+/**************************************************************************************
+ * FunctionName   : uint8_t new_5pin_bat_idle_mode_state(void)
+ * Description    : 1ms???????
+ * EntryParameter :
+ * ReturnValue    : None
+ **************************************************************************************/
+static uint8_t old_4pin_bat_idle_mode_state(uint16_t BatValue)
+{
+	static uint8_t WorkBattState_Cnt = 0;
+	static uint8_t BattState = BAT_40_60_STATUS;
+
+	if(BatValue <= BAT_VOL_3V55 &&  (BatValue > BAT_VOL_3V05))			//0
+	{
+		BattState = BAT_00_00_STATUS;
+	}
+	else if(BatValue <= BAT_VOL_3V80  && (BatValue > BAT_VOL_3V55))	//0~20   2908 ~ 2990
+	{
+		BattState = BAT_00_20_STATUS;
+	}
+	else if(BatValue <= BAT_VOL_3V95  && (BatValue > BAT_VOL_3V80))	//20~40  2990 ~ 3072
+	{
+		BattState = BAT_20_40_STATUS;
+	}
+	else if(BatValue <= BAT_VOL_4V05  && (BatValue > BAT_VOL_3V95))	//40~60  3072 ~ 3154
+	{
+		BattState = BAT_40_60_STATUS;
+	}
+	else if(BatValue <=(BAT_VOL_4V15-20)   && (BatValue > BAT_VOL_4V05))  //60~80  3154 ~ 3277
+	{
+		BattState = BAT_60_80_STATUS;
+	}
+	else if(BatValue <=BAT_VOL_4V40    && (BatValue > (BAT_VOL_4V15-20))) //80~100 3277 ~ 3400
+	{
+		BattState = BAT_80_100_STATUS;
+	}
+	return BattState;
+}
+/**************************************************************************************
+ * FunctionName   : uint8_t Check_Batter_State(void)
+ * Description    : 1ms???????
+ * EntryParameter :
+ * ReturnValue    : None
+ **************************************************************************************/
 uint8_t Scan_Batter_State(void)
 {
 	static uint16_t BatValue;
 	static uint8_t BattState, BatteryFlag = 1;
 	static uint16_t TimeCount;
 	static uint16_t BattCount = 0;
+	static uint8_t first_working_mode_flag = 1;
+
+	if (SysInfo.Power_Value.state == System_ON)
+	{
+		if(first_working_mode_flag)
+		{
+			BattState = old_4pin_bat_working_mode_state(BatValue);
+			first_working_mode_flag = 0;
+			return BattState;
+		}
+		if(0 == RF_Handle.ADC_Flag) // å·¥ä½œçŠ¶æ€ä¸‹ï¼Œä»…æ£€æµ‹RFè¾“å‡ºæ—¶çš„ç”µæ± ç”µå‹ï¼Œ
+		{                           // åº”ä¸ºRFè¾“å‡ºæ—¶ï¼Œä¼šå°†ç”µæ± ç”µå‹æ‹‰ä½0.x V
+			return BattState;
+		}
+	}
+	else
+	{
+		first_working_mode_flag = 1;
+	}
+
 
 	if (++BattCount <= BAT_ADC_COUNT)
 	{
@@ -322,19 +471,23 @@ uint8_t Scan_Batter_State(void)
 		//		printf ("\n\r BatValue=%d\n\r",BatValue);
 	}
 
-	//	if(SysInfo.Power_Value.state == System_ON || SysInfo.Test_Mode.Test_Mode_Flag!=OFF)  //ÏµÍ³¹¤×÷×´Ì¬µç³Ø¼ì²â
-	if (SysInfo.Power_Value.state == System_ON) // ÏµÍ³¹¤×÷×´Ì¬µç³Ø¼ì²â
+	//	if(SysInfo.Power_Value.state == System_ON || SysInfo.Test_Mode.Test_Mode_Flag!=OFF)  //ÏµÍ³ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½Ø¼ï¿½ï¿½
+	if (SysInfo.Power_Value.state == System_ON) // ÏµÍ³ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½Ø¼ï¿½ï¿½
 	{
-		BattState = CheckWorking_Batter_State(BatValue);
-		if(SysInfo.Save_Data.BattState <= BAT_00_20_STATUS)
-		{
-			if(BattState!=BAT_00_00_STATUS)
+		#if (USE_BAT_SELECT == USE_5PIN_NEW_BAT)
+			BattState = CheckWorking_Batter_State(BatValue);
+			if(SysInfo.Save_Data.BattState <= BAT_00_20_STATUS)
 			{
-				BattState = SysInfo.Save_Data.BattState;
+				if(BattState!=BAT_00_00_STATUS)
+				{
+					BattState = SysInfo.Save_Data.BattState;
+				}
 			}
-		}
+		#elif(USE_BAT_SELECT == USE_4PIN_OLD_BAT)
+			BattState = old_4pin_bat_working_mode_state(BatValue);
+		#endif
 	}
-	else if (SysInfo.Batt_Value.Usb_flag) // ³äµçµç³Ø¼ì²â
+	else if (SysInfo.Batt_Value.Usb_flag) // ï¿½ï¿½ï¿½ï¿½Ø¼ï¿½ï¿½
 	{
 		//		printf ("\n\r charge\n\r");
 		//		BattState = CheckCharge_Batter_State(BatValue);
@@ -376,36 +529,15 @@ uint8_t Scan_Batter_State(void)
 			}
 		}
 	}
-	else // µçÁ¿²éÑ¯
+	else // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¯
 	{
-		if (BatValue <= BAT_VOL_3V55 && (BatValue > BAT_VOL_3V05)) // 0
-		{
-			BattState = BAT_00_00_STATUS;
-		}
-		else if (BatValue <= BAT_VOL_3V75 && (BatValue > BAT_VOL_3V55)) // 0~20   2908 ~ 3113
-		{
-			BattState = BAT_00_20_STATUS;
-		}
-		else if (BatValue <= BAT_VOL_3V85 && (BatValue > BAT_VOL_3V75)) // 20~40  3113 ~ 3236
-		{
-			BattState = BAT_20_40_STATUS;
-		}
-		else if (BatValue <= BAT_VOL_3V95 && (BatValue > BAT_VOL_3V85)) // 40~60  3236 ~ 3317
-		{
-			BattState = BAT_40_60_STATUS;
-		}
-		else if (BatValue <= BAT_VOL_4V10 && (BatValue > BAT_VOL_3V95)) // 60~80  3317 ~ 3400
-		{
-			BattState = BAT_60_80_STATUS;
-		}
-		else if (BatValue <= BAT_VOL_4V40 && (BatValue > BAT_VOL_4V10)) // 80~100 3400 ~ 3604
-		{
-			BattState = BAT_80_100_STATUS;
-		}
-		else
-			;
+		#if (USE_BAT_SELECT == USE_5PIN_NEW_BAT)
+			BattState = new_5pin_bat_idle_mode_state(BatValue);
+		#elif(USE_BAT_SELECT == USE_4PIN_OLD_BAT)
+			BattState = old_4pin_bat_idle_mode_state(BatValue);
+		#endif
 	}
-
+	SysInfo.Test_Mode.Bat_state = BattState;
 	return BattState;
 }
 /**************************************************************************************
@@ -414,35 +546,35 @@ uint8_t Scan_Batter_State(void)
  * EntryParameter :
  * ReturnValue    : None
  **************************************************************************************/
-uint8_t Check_Batter_State(void) // 1ms???????
-{
-	//	static uint8_t BattCnt=0;
-	static uint16_t State;
-	static uint32_t TimeCnt1;
+// uint8_t Check_Batter_State(void) // 1ms???????
+// {
+// 	//	static uint8_t BattCnt=0;
+// 	static uint16_t State;
+// 	static uint32_t TimeCnt1;
 
-	if (++TimeCnt1 >= 1000) // 10s
-	{
-		State = 1;
-		TimeCnt1 = 0;
-	}
-	else
-	{
-		State = 0;
-	}
+// 	if (++TimeCnt1 >= 1000) // 10s
+// 	{
+// 		State = 1;
+// 		TimeCnt1 = 0;
+// 	}
+// 	else
+// 	{
+// 		State = 0;
+// 	}
 
-	//	if((SysInfo.Power_Value.state == System_ON) || (SysInfo.Batt_Value.Power_Display_Flag)) //µçÁ¿²éÑ¯»ò¹¤×÷×´Ì¬µçÁ¿¼ì²â
-	if (SysInfo.Power_Value.state == System_ON || SysInfo.Test_Mode.Test_Mode_Flag != OFF) // ¹¤×÷×´Ì¬µçÁ¿¼ì²â
-	{
-		SysInfo.Batt_Value.State = Scan_Batter_State();
-	}
-	else if (SysInfo.Batt_Value.Usb_flag && State) // ³äµç×´Ì¬ µçÁ¿¼ì²â  10s¸üĞÂÒ»´Î×´Ì¬
-	{
-		State = 0;
-		TimeCnt1 = 0;
-		SysInfo.Batt_Value.State = Scan_Batter_State();
-	}
-	else
-		;
-	return SysInfo.Batt_Value.State;
-}
+// 	//	if((SysInfo.Power_Value.state == System_ON) || (SysInfo.Batt_Value.Power_Display_Flag)) //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¯ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+// 	if (SysInfo.Power_Value.state == System_ON || SysInfo.Test_Mode.Test_Mode_Flag != OFF) // ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+// 	{
+// 		SysInfo.Batt_Value.State = Scan_Batter_State();
+// 	}
+// 	else if (SysInfo.Batt_Value.Usb_flag && State) // ï¿½ï¿½ï¿½×´Ì¬ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  10sï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½×´Ì¬
+// 	{
+// 		State = 0;
+// 		TimeCnt1 = 0;
+// 		SysInfo.Batt_Value.State = Scan_Batter_State();
+// 	}
+// 	else
+// 		;
+// 	return SysInfo.Batt_Value.State;
+// }
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

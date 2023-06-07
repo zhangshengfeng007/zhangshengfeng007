@@ -2,6 +2,10 @@
 #define _BATTERY_H
 #include "includes.h"
 
+#define USE_4PIN_OLD_BAT   1
+#define USE_5PIN_NEW_BAT   2
+#define USE_BAT_SELECT     USE_4PIN_OLD_BAT
+
 /*******************USB������*******************************************/
 #define VIN_DET_PIN        		GPIO_PIN_5
 #define VIN_DET_PORT		   		GPIOA

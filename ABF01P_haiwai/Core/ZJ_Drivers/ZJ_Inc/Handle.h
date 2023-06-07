@@ -60,7 +60,7 @@
 #define EMS_Reminder_300S  300
 
 #define Upkeep_Error_Time  5
-
+#define SLEEP_DELAY_60S    6000
 #endif
 //////////////////////////////////enum//////////////////////////////////////////
 
@@ -264,6 +264,7 @@ typedef struct
   uint16_t Quit_Test_60s_Cnt;
 
   uint16_t BatValue;
+  uint8_t  Bat_state;
   uint16_t Auto_Mode_Cnt;
 
   uint8_t  Data[20];

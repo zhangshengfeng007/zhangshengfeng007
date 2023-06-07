@@ -614,8 +614,8 @@ void Test_Mode_Run_Process(void)
 
         EMS_Handle.Run_Flag = 1;
         PID.Flag = 1;
-        Set_Mbi5020_Out(EMS_CH3_ON_BIT);
-#if  (ARF001 == DEVICE_R1_RPO)
+        Set_Mbi5020_Out(EMS_CH3_ON_BIT|EMS_CH1_ON_BIT|EMS_CH2_ON_BIT);
+#if  ((ARF001 == DEVICE_R1_RPO)||(ARF001 == DEVICE_R1_HAIWAI))
         RF_DeInit();
         Ems_Init();
         RF_Handle.Run_Flag = 0;
@@ -994,7 +994,7 @@ void Test_AutoMode_Run_Process(void)
         IRled_start();
         EMS_Handle.Run_Flag = 1;
         PID.Flag = 1;
-        Set_Mbi5020_Out(EMS_CH3_ON_BIT);
+        Set_Mbi5020_Out(EMS_CH3_ON_BIT|EMS_CH1_ON_BIT|EMS_CH2_ON_BIT);
         Test_LED_Display_Process();
         Test_EMS_Waveform_Process();
         //						Auto_Mode_Cnt=1;
@@ -1519,7 +1519,15 @@ void Ageing_TestData_Init(void)
 {
   SysInfo.Power_Value.Enter_Sleep_Flag = 0;
   SysInfo.Power_Value.state = System_ON;
-  BOOST_5V_ON();
+	if (SysInfo.Batt_Value.Usb_flag)
+  {
+      BOOST_5V_OFF();
+  }
+  else
+  {
+    BOOST_5V_ON();
+  }
+
   SysInfo.Heating_Flag = 0x00; // ����ǰ����5�����У�ʹ�缫Ѹ�����±�־λ
   SysInfo.Skin_No_Touch_Timer = 0;
   SysInfo.Freq_Cnt = 0;
@@ -1528,6 +1536,7 @@ void Ageing_TestData_Init(void)
   SysInfo.upkeep_level = Level_5;
   SysInfo.WorkState = upkeep_mode;
   SysInfo.Save_Data.upkeep_level = SysInfo.upkeep_level;
+  SysInfo.Mode_Switch_Flag = 0x01;
 }
 /**************************************************************************************
  * FunctionName   : Test_UART_Deal_Process(void)
@@ -1551,6 +1560,37 @@ void Ageing_TestData_DeInit(void)
   IRled_stop();
 }
 
+/**************************************************************************************
+ * FunctionName   : static void ageing_ems_rf_ctrl(uint16_t)
+ * Description    :  �ϻ�����
+ * EntryParameter : None
+ * ReturnValue    : None
+ **************************************************************************************/
+static void ageing_ems_rf_ctrl(void)
+{
+    if (SysInfo.Test_Mode.AgeTimer_Cnt == 0)
+    {
+      Ageing_TestData_Init();
+      IRled_start();
+      VBAT_OUT_ON();
+    }
+    else if (SysInfo.Test_Mode.AgeTimer_Cnt > EMS_Reminder_300S * 2)
+    {
+        SysInfo.Test_Mode.AgeTimer_Cnt = 0;
+    }
+    else if (SysInfo.Test_Mode.AgeTimer_Cnt > EMS_Reminder_300S)
+    {
+        IRled_stop();
+        RF_DeInit();
+        Ems_DeInit();
+        if (SysInfo.Batt_Value.Usb_flag)
+        {
+          VBAT_OUT_OFF(); // 切断电源，彻底关闭隧道灯
+        }
+        SysInfo.Power_Value.Enter_Sleep_Flag = 0;
+        SysInfo.Power_Value.state = System_Standy;
+    }
+}
 // static uint8_t Batt_Value_State = Target_Value_State ;
 /**************************************************************************************
  * FunctionName   : Ageing_Test_Process(void)
@@ -1562,15 +1602,36 @@ void Ageing_Test_Process(void)
 {
   //	static uint16_t Low_Power_Cnt ;
   //	static uint16_t	AgeTimer_Cnt;
+  static uint8_t Ageing_10ms_cnt = 0;
+  static uint32_t Ageine_mode_1s_cnt = 0;
 
   if (SysInfo.Test_Mode.Test_Mode_Flag != OFF && SysInfo.Test_Mode.Ageing_Flag)
   {
-    if (!SysInfo.Test_Mode.Ageing_Mode) // �ϻ�����
+    Ageing_10ms_cnt ++;
+    if(0 == Ageing_10ms_cnt % 100)
+    {
+      Ageing_10ms_cnt = 0;
+      SysInfo.Test_Mode.AgeTimer_Cnt ++;
+      Ageine_mode_1s_cnt ++;
+    }
+
+    if (!SysInfo.Test_Mode.Ageing_Mode) //老化测试
     {
       SysInfo.Test_Mode.Test_Mode = 0x0a;
       RF_LED_UP();
-      EMS_LED_DOWN();
-      Ageing_TestData_Init();
+
+      if(Ageine_mode_1s_cnt > 7200)
+      {
+        EMS_LED_UP();
+        Ageine_mode_1s_cnt = 7201;
+        RF_DeInit();
+        Ems_DeInit();
+      }
+      else
+      {
+        EMS_LED_DOWN();
+        ageing_ems_rf_ctrl();
+      }
 
       Test_LED_Display_Process();
       if (SysInfo.Sleep_Flag)
@@ -1580,94 +1641,20 @@ void Ageing_Test_Process(void)
         Test_Key_S1_Long_Str();
       }
     }
-    else // ��������
+    else // 寿命测试
     {
-      //			if( SysInfo.Batt_Value.State <= BAT_00_20_STATUS && !SysInfo.Test_Mode.Lock_Flag) // ???��??
-      if (SysInfo.Sleep_Flag == 0x01)
-      {
-        SysInfo.Sleep_Flag = 0x00;
-        SysInfo.Test_Mode.AgeTimer_Cnt = 0;
-        SysInfo.Test_Mode.Ageing_Mode = 0x02;
-        Ageing_TestData_DeInit();
-      }
-      else if (SysInfo.Batt_Value.State > Target_Value_State) // �������������ϻ�
-      {
-        if (++SysInfo.Test_Mode.AgeTimer_Cnt > 9000) // 90s
-        {
-          SysInfo.Test_Mode.AgeTimer_Cnt = 0;
-          SysInfo.Test_Mode.Ageing_Mode = 0x01;
-          SysInfo.Test_Mode.Lock_Flag = 0x01;
-          SysInfo.Save_Data.BattState = SysInfo.Batt_Value.State;
-          //					Ageing_TestData_Init();
-        }
-      }
-      else
-      {
-        if (SysInfo.Test_Mode.Lock_Flag)
-        {
-          if (++SysInfo.Test_Mode.AgeTimer_Cnt > 3000)
-          {
-            SysInfo.Test_Mode.AgeTimer_Cnt = 0;
-            SysInfo.Test_Mode.Lock_Flag = 0;
-          }
-          SysInfo.Test_Mode.Ageing_Mode = 0x01;
-          //					Ageing_TestData_Init();
-        }
-        else
-        {
-          SysInfo.Test_Mode.AgeTimer_Cnt = 0;
-        }
-      }
-
-      /************************����***************************/
-      /*				if(SysInfo.Test_Mode.Ageing_Mode==0x01)
-          {
-              if(++AgeTimer_Cnt>3000)
-              {
-                  AgeTimer_Cnt = 0;
-                  SysInfo.Test_Mode.Ageing_Mode=0x02;
-              }
-          }
-
-          if(SysInfo.Test_Mode.Ageing_Mode==0x02)
-          {
-              if(++AgeTimer_Cnt>6000)
-              {
-                  AgeTimer_Cnt = 0;
-                  SysInfo.Test_Mode.Ageing_Mode=0x01;
-              }
-          }
-      */
-      /************************����***************************/
-
-      if (SysInfo.Test_Mode.Ageing_Mode == 0x01)
-      {
-
-        Ageing_TestData_Init();
-        ALL_LED_UP();
-        RF_LED_DOWN();
-        EMS_LED_UP();
-        BOOST_5V_OFF();
-        //				SysInfo.Test_Mode.Lock_Flag = 0x00;
-        //				SysInfo.Test_Mode.Ageing_Mode=0x03;
-      }
-      //			else if(SysInfo.Test_Mode.Ageing_Mode==0x02)
-      else
-      {
-        //				Ageing_TestData_DeInit();
-        RF_LED_UP();
-        EMS_LED_UP();
-        Led_Display(&Led_Value);
-        BOOST_5V_OFF();
-        VBAT_OUT_OFF();
-        //				SysInfo.Test_Mode.Ageing_Mode=0x03;
-      }
-      //			else ;
+       ageing_ems_rf_ctrl();
+       ALL_LED_UP();
+       RF_LED_DOWN();
+       EMS_LED_UP();
+       BOOST_5V_OFF();
+       Ageine_mode_1s_cnt = 0;
     }
   }
   else
   {
     SysInfo.Test_Mode.AgeTimer_Cnt = 0;
+    Ageine_mode_1s_cnt = 0;
   }
 }
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

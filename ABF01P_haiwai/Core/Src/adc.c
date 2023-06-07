@@ -92,7 +92,11 @@ void MX_ADC1_Init(void)
 
   /** Configure Regular Channel
   */
+ #if ((ARF001 == DEVICE_R1_RPO) || (ARF001 == DEVICE_R1_RPO_MAX))
   sConfig.Channel = ADC_CHANNEL_16;
+ #elif (ARF001 == DEVICE_R1_HAIWAI)
+  sConfig.Channel = ADC_CHANNEL_15;
+ #endif
   if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
   {
     Error_Handler();

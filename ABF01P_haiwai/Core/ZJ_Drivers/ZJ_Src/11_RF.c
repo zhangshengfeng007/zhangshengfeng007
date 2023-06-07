@@ -318,7 +318,7 @@ void Frequency_conversion_Process(void)
  * FunctionName	: RF_Process(_RF_HANDLE_TypeDef* RfHandle)
  * Description		: ��Ƶ����
  * EntryParameter:
- * ReturnValue		:
+ * ReturnValue		: 1ms
  **************************************************************************************/
 void RF_Process(_RF_HANDLE_TypeDef *RfHandle)
 {
