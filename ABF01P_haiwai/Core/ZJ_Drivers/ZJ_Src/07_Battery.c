@@ -285,6 +285,127 @@ uint8_t CheckWorking_Batter_State(uint16_t WorkBatValue)
  * EntryParameter :
  * ReturnValue    : None
  **************************************************************************************/
+static uint8_t old_4pin_bat_working_mode_state(uint16_t BatValue)
+{
+	static uint8_t WorkBattState_Cnt = 0;
+	static uint8_t BattState = BAT_40_60_STATUS;
+
+	if(RF_Handle.Run_Flag) //RF�����£����
+	{
+		if(BatValue < BAT_VOL_3V05)
+		{
+			if(BatValue < (BAT_VOL_3V05-BAT_VOL_HYS))
+			{
+				BattState = BAT_00_00_STATUS;
+				WorkBattState_Cnt = 0 ;
+			}
+		}
+		else if(BatValue < BAT_VOL_3V20)
+		{
+			if((BatValue >= BAT_VOL_3V05 + BAT_VOL_HYS)\
+			 &&(BatValue <= BAT_VOL_3V20 - BAT_VOL_HYS))
+			{
+				if(++WorkBattState_Cnt>50)
+				{
+					WorkBattState_Cnt = 50 ;
+					if(BattState > BAT_00_20_STATUS)
+					{
+						BattState = BAT_00_20_STATUS;
+					}
+				}
+			}
+		}
+		else
+		{
+			WorkBattState_Cnt = 0 ;
+		}
+	}
+	return BattState;
+}
+
+/**************************************************************************************
+ * FunctionName   : uint8_t new_5pin_bat_idle_mode_state(void)
+ * Description    : 1ms???????
+ * EntryParameter :
+ * ReturnValue    : None
+ **************************************************************************************/
+static uint8_t new_5pin_bat_idle_mode_state(uint16_t BatValue)
+{
+	static uint8_t WorkBattState_Cnt = 0;
+	static uint8_t BattState = BAT_40_60_STATUS;
+
+	if (BatValue <= BAT_VOL_3V55 && (BatValue > BAT_VOL_3V05)) // 0
+	{
+		BattState = BAT_00_00_STATUS;
+	}
+	else if (BatValue <= BAT_VOL_3V75 && (BatValue > BAT_VOL_3V55)) // 0~20   2908 ~ 3113
+	{
+		BattState = BAT_00_20_STATUS;
+	}
+	else if (BatValue <= BAT_VOL_3V85 && (BatValue > BAT_VOL_3V75)) // 20~40  3113 ~ 3236
+	{
+		BattState = BAT_20_40_STATUS;
+	}
+	else if (BatValue <= BAT_VOL_3V95 && (BatValue > BAT_VOL_3V85)) // 40~60  3236 ~ 3317
+	{
+		BattState = BAT_40_60_STATUS;
+	}
+	else if (BatValue <= BAT_VOL_4V10 && (BatValue > BAT_VOL_3V95)) // 60~80  3317 ~ 3400
+	{
+		BattState = BAT_60_80_STATUS;
+	}
+	else if (BatValue <= BAT_VOL_4V40 && (BatValue > BAT_VOL_4V10)) // 80~100 3400 ~ 3604
+	{
+		BattState = BAT_80_100_STATUS;
+	}
+
+	return BattState;
+
+}
+
+/**************************************************************************************
+ * FunctionName   : uint8_t new_5pin_bat_idle_mode_state(void)
+ * Description    : 1ms???????
+ * EntryParameter :
+ * ReturnValue    : None
+ **************************************************************************************/
+static uint8_t old_4pin_bat_idle_mode_state(uint16_t BatValue)
+{
+	static uint8_t WorkBattState_Cnt = 0;
+	static uint8_t BattState = BAT_40_60_STATUS;
+
+	if(BatValue <= BAT_VOL_3V55 &&  (BatValue > BAT_VOL_3V05))			//0
+	{
+		BattState = BAT_00_00_STATUS;
+	}
+	else if(BatValue <= BAT_VOL_3V80  && (BatValue > BAT_VOL_3V55))	//0~20   2908 ~ 2990
+	{
+		BattState = BAT_00_20_STATUS;
+	}
+	else if(BatValue <= BAT_VOL_3V95  && (BatValue > BAT_VOL_3V80))	//20~40  2990 ~ 3072
+	{
+		BattState = BAT_20_40_STATUS;
+	}
+	else if(BatValue <= BAT_VOL_4V05  && (BatValue > BAT_VOL_3V95))	//40~60  3072 ~ 3154
+	{
+		BattState = BAT_40_60_STATUS;
+	}
+	else if(BatValue <=(BAT_VOL_4V15-20)   && (BatValue > BAT_VOL_4V05))  //60~80  3154 ~ 3277
+	{
+		BattState = BAT_60_80_STATUS;
+	}
+	else if(BatValue <=BAT_VOL_4V40    && (BatValue > (BAT_VOL_4V15-20))) //80~100 3277 ~ 3400
+	{
+		BattState = BAT_80_100_STATUS;
+	}
+	return BattState;
+}
+/**************************************************************************************
+ * FunctionName   : uint8_t Check_Batter_State(void)
+ * Description    : 1ms???????
+ * EntryParameter :
+ * ReturnValue    : None
+ **************************************************************************************/
 uint8_t Scan_Batter_State(void)
 {
 	static uint16_t BatValue;
@@ -325,14 +446,18 @@ uint8_t Scan_Batter_State(void)
 	//	if(SysInfo.Power_Value.state == System_ON || SysInfo.Test_Mode.Test_Mode_Flag!=OFF)  //ϵͳ����״̬��ؼ��
 	if (SysInfo.Power_Value.state == System_ON) // ϵͳ����״̬��ؼ��
 	{
-		BattState = CheckWorking_Batter_State(BatValue);
-		if(SysInfo.Save_Data.BattState <= BAT_00_20_STATUS)
-		{
-			if(BattState!=BAT_00_00_STATUS)
+		#if (USE_BAT_SELECT == USE_5PIN_NEW_BAT)
+			BattState = CheckWorking_Batter_State(BatValue);
+			if(SysInfo.Save_Data.BattState <= BAT_00_20_STATUS)
 			{
-				BattState = SysInfo.Save_Data.BattState;
+				if(BattState!=BAT_00_00_STATUS)
+				{
+					BattState = SysInfo.Save_Data.BattState;
+				}
 			}
-		}
+		#elif(USE_BAT_SELECT == USE_4PIN_OLD_BAT)
+			old_4pin_bat_working_mode_state(BatValue);
+		#endif
 	}
 	else if (SysInfo.Batt_Value.Usb_flag) // ����ؼ��
 	{
@@ -378,32 +503,11 @@ uint8_t Scan_Batter_State(void)
 	}
 	else // ������ѯ
 	{
-		if (BatValue <= BAT_VOL_3V55 && (BatValue > BAT_VOL_3V05)) // 0
-		{
-			BattState = BAT_00_00_STATUS;
-		}
-		else if (BatValue <= BAT_VOL_3V75 && (BatValue > BAT_VOL_3V55)) // 0~20   2908 ~ 3113
-		{
-			BattState = BAT_00_20_STATUS;
-		}
-		else if (BatValue <= BAT_VOL_3V85 && (BatValue > BAT_VOL_3V75)) // 20~40  3113 ~ 3236
-		{
-			BattState = BAT_20_40_STATUS;
-		}
-		else if (BatValue <= BAT_VOL_3V95 && (BatValue > BAT_VOL_3V85)) // 40~60  3236 ~ 3317
-		{
-			BattState = BAT_40_60_STATUS;
-		}
-		else if (BatValue <= BAT_VOL_4V10 && (BatValue > BAT_VOL_3V95)) // 60~80  3317 ~ 3400
-		{
-			BattState = BAT_60_80_STATUS;
-		}
-		else if (BatValue <= BAT_VOL_4V40 && (BatValue > BAT_VOL_4V10)) // 80~100 3400 ~ 3604
-		{
-			BattState = BAT_80_100_STATUS;
-		}
-		else
-			;
+		#if (USE_BAT_SELECT == USE_5PIN_NEW_BAT)
+			BattState = new_5pin_bat_idle_mode_state(BatValue);
+		#elif(USE_BAT_SELECT == USE_4PIN_OLD_BAT)
+			BattState = old_4pin_bat_idle_mode_state(BatValue);
+		#endif
 	}
 
 	return BattState;
