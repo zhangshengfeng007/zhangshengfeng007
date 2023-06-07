@@ -288,10 +288,11 @@ uint8_t CheckWorking_Batter_State(uint16_t WorkBatValue)
 static uint8_t old_4pin_bat_working_mode_state(uint16_t BatValue)
 {
 	static uint8_t WorkBattState_Cnt = 0;
+	static uint8_t bat_40_60_precent_delay = 0;
 	static uint8_t BattState = BAT_40_60_STATUS;
 
-	if(RF_Handle.Run_Flag) //RF�����£����
-	{
+	// if(RF_Handle.Run_Flag) //RF�����£����
+	// {
 		if(BatValue < BAT_VOL_3V05)
 		{
 			if(BatValue < (BAT_VOL_3V05-BAT_VOL_HYS))
@@ -299,6 +300,7 @@ static uint8_t old_4pin_bat_working_mode_state(uint16_t BatValue)
 				BattState = BAT_00_00_STATUS;
 				WorkBattState_Cnt = 0 ;
 			}
+			bat_40_60_precent_delay = 0;
 		}
 		else if(BatValue < BAT_VOL_3V20)
 		{
@@ -313,13 +315,19 @@ static uint8_t old_4pin_bat_working_mode_state(uint16_t BatValue)
 						BattState = BAT_00_20_STATUS;
 					}
 				}
+				bat_40_60_precent_delay = 0;
 			}
 		}
 		else
 		{
 			WorkBattState_Cnt = 0 ;
+			bat_40_60_precent_delay ++;
+			if(bat_40_60_precent_delay > 200)
+			{
+				BattState = BAT_40_60_STATUS;
+			}
 		}
-	}
+	// }
 	return BattState;
 }
 
@@ -412,6 +420,26 @@ uint8_t Scan_Batter_State(void)
 	static uint8_t BattState, BatteryFlag = 1;
 	static uint16_t TimeCount;
 	static uint16_t BattCount = 0;
+	static uint8_t first_working_mode_flag = 1;
+
+	if (SysInfo.Power_Value.state == System_ON)
+	{
+		if(first_working_mode_flag)
+		{
+			BattState = old_4pin_bat_working_mode_state(BatValue);
+			first_working_mode_flag = 0;
+			return BattState;
+		}
+		if(0 == RF_Handle.ADC_Flag) // 工作状态下，仅检测RF输出时的电池电压，
+		{                           // 应为RF输出时，会将电池电压拉低0.x V
+			return BattState;
+		}
+	}
+	else
+	{
+		first_working_mode_flag = 1;
+	}
+
 
 	if (++BattCount <= BAT_ADC_COUNT)
 	{
@@ -456,7 +484,7 @@ uint8_t Scan_Batter_State(void)
 				}
 			}
 		#elif(USE_BAT_SELECT == USE_4PIN_OLD_BAT)
-			old_4pin_bat_working_mode_state(BatValue);
+			BattState = old_4pin_bat_working_mode_state(BatValue);
 		#endif
 	}
 	else if (SysInfo.Batt_Value.Usb_flag) // ����ؼ��
@@ -509,7 +537,7 @@ uint8_t Scan_Batter_State(void)
 			BattState = old_4pin_bat_idle_mode_state(BatValue);
 		#endif
 	}
-
+	SysInfo.Test_Mode.Bat_state = BattState;
 	return BattState;
 }
 /**************************************************************************************
