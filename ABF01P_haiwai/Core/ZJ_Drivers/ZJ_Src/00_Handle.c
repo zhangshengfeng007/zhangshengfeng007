@@ -267,6 +267,7 @@ void System_Standby_Run(void)
 void Vibration_Reminder_Counts_Run(void) // 10ms����һ��
 {
 	static uint8_t LockFlag, Error_Time_Flag;
+	static uint8_t motor_run_flag = 0;
 	static uint16_t StandyCnt,NoTouch_Cnt;
 
 	if (SysInfo.Skin_Touch_Flag)
@@ -342,11 +343,16 @@ void Vibration_Reminder_Counts_Run(void) // 10ms����һ��
 		if (((SysInfo.Reminder_Cnt == EMS_Reminder_120S || SysInfo.Reminder_Cnt == EMS_Reminder_240S) && SysInfo.WorkState == upkeep_mode) ||
 			((SysInfo.Reminder_Cnt == RF_Reminder_240S || SysInfo.Reminder_Cnt == RF_Reminder_480S) && SysInfo.WorkState == repair_mode))
 		{
-			SysInfo.Montor_Flag = 1; // ������������
-			SysInfo.StayTime = 20;	 // ��ʱ��0.2s
+			if(0 == motor_run_flag)
+			{
+				SysInfo.Montor_Flag = 1; // ������������
+				SysInfo.StayTime = 20;	 // ��ʱ��0.2s
+				motor_run_flag = 1;
+			}
 		}
 		else
 		{
+			motor_run_flag = 0;
 			if ((SysInfo.Reminder_Cnt == EMS_Reminder_300S && SysInfo.WorkState == upkeep_mode) ||
 				(SysInfo.Reminder_Cnt == RF_Reminder_600S && SysInfo.WorkState == repair_mode))
 			{
@@ -362,22 +368,22 @@ void Vibration_Reminder_Counts_Run(void) // 10ms����һ��
 
 	if (SysInfo.Mode_Switch_Flag == 0x03)
 	{
-		#if ((ARF001 == DEVICE_R1_RPO)||(ARF001 == DEVICE_R1_RPO_MAX))
+		// #if ((ARF001 == DEVICE_R1_RPO)||(ARF001 == DEVICE_R1_RPO_MAX))
 		if (++StandyCnt > 5)
 		{
 			SysInfo.Mode_Switch_Flag = 0x00;
 			SysInfo.Sleep_Flag = 1; // �ػ���־λ
 		}
-		#elif (ARF001 == DEVICE_R1_HAIWAI)
-		{
-			if (++StandyCnt > SLEEP_DELAY_60S) //海外版 延时60s后再关机
-			{
-				SysInfo.Mode_Switch_Flag = 0x00;
-				SysInfo.StayTime = 50;	// 进入关机，马达震动0.5s
-				SysInfo.Sleep_Flag = 1; // �ػ���־λ
-			}
-		}
-		#endif
+		// #elif (ARF001 == DEVICE_R1_HAIWAI)
+		// {
+		// 	if (++StandyCnt > SLEEP_DELAY_60S) //海外版 延时60s后再关机
+		// 	{
+		// 		SysInfo.Mode_Switch_Flag = 0x00;
+		// 		SysInfo.StayTime = 50;	// 进入关机，马达震动0.5s
+		// 		SysInfo.Sleep_Flag = 1; // �ػ���־λ
+		// 	}
+		// }
+		// #endif
 
 		//if (SysInfo.Test_Mode.Ageing_Mode == 0x01)
 		if (SysInfo.Test_Mode.Test_Mode_Flag != OFF && SysInfo.Test_Mode.Ageing_Flag)
