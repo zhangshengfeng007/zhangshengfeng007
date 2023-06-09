@@ -268,7 +268,7 @@ void Vibration_Reminder_Counts_Run(void) // 10ms����һ��
 {
 	static uint8_t LockFlag, Error_Time_Flag;
 	static uint8_t motor_run_flag = 0;
-	static uint16_t StandyCnt,NoTouch_Cnt;
+	static uint16_t StandyCnt = 0, NoTouch_Cnt;
 
 	if (SysInfo.Skin_Touch_Flag)
 	{
