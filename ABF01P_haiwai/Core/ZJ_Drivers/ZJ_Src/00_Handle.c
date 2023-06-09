@@ -267,6 +267,7 @@ void System_Standby_Run(void)
 void Vibration_Reminder_Counts_Run(void) // 10ms����һ��
 {
 	static uint8_t LockFlag, Error_Time_Flag;
+	static uint8_t motor_run_flag = 0;
 	static uint16_t StandyCnt,NoTouch_Cnt;
 
 	if (SysInfo.Skin_Touch_Flag)
@@ -342,11 +343,16 @@ void Vibration_Reminder_Counts_Run(void) // 10ms����һ��
 		if (((SysInfo.Reminder_Cnt == EMS_Reminder_120S || SysInfo.Reminder_Cnt == EMS_Reminder_240S) && SysInfo.WorkState == upkeep_mode) ||
 			((SysInfo.Reminder_Cnt == RF_Reminder_240S || SysInfo.Reminder_Cnt == RF_Reminder_480S) && SysInfo.WorkState == repair_mode))
 		{
-			SysInfo.Montor_Flag = 1; // ������������
-			SysInfo.StayTime = 20;	 // ��ʱ��0.2s
+			if(0 == motor_run_flag)
+			{
+				SysInfo.Montor_Flag = 1; // ������������
+				SysInfo.StayTime = 20;	 // ��ʱ��0.2s
+				motor_run_flag = 1;
+			}
 		}
 		else
 		{
+			motor_run_flag = 0;
 			if ((SysInfo.Reminder_Cnt == EMS_Reminder_300S && SysInfo.WorkState == upkeep_mode) ||
 				(SysInfo.Reminder_Cnt == RF_Reminder_600S && SysInfo.WorkState == repair_mode))
 			{
