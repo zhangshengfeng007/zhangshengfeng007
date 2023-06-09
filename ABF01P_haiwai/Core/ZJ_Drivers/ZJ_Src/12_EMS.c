@@ -27,8 +27,8 @@ _PID_HANDLE_TypeDef PID;
 
 #elif (ARF001 == DEVICE_R1_HAIWAI)
 #define EMS_Freq 	1000	  //need 1khz
-#define duty 		11		  //
-#define interval 	30		  //
+#define duty 		15//11		  //
+#define interval 	30
 #define channel_p_start 5 //
 #define channel_p_stop channel_p_start + duty
 #define channel_n_start channel_p_stop + interval
