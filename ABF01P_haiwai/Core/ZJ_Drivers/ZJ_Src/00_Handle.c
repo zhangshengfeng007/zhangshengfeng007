@@ -368,22 +368,22 @@ void Vibration_Reminder_Counts_Run(void) // 10ms����һ��
 
 	if (SysInfo.Mode_Switch_Flag == 0x03)
 	{
-		// #if ((ARF001 == DEVICE_R1_RPO)||(ARF001 == DEVICE_R1_RPO_MAX))
+		#if ((ARF001 == DEVICE_R1_RPO)||(ARF001 == DEVICE_R1_RPO_MAX))
 		if (++StandyCnt > 5)
 		{
 			SysInfo.Mode_Switch_Flag = 0x00;
 			SysInfo.Sleep_Flag = 1; // �ػ���־λ
 		}
-		// #elif (ARF001 == DEVICE_R1_HAIWAI)
-		// {
-		// 	if (++StandyCnt > SLEEP_DELAY_60S) //海外版 延时60s后再关机
-		// 	{
-		// 		SysInfo.Mode_Switch_Flag = 0x00;
-		// 		SysInfo.StayTime = 50;	// 进入关机，马达震动0.5s
-		// 		SysInfo.Sleep_Flag = 1; // �ػ���־λ
-		// 	}
-		// }
-		// #endif
+		#elif (ARF001 == DEVICE_R1_HAIWAI)
+		{
+			if (++StandyCnt > SLEEP_DELAY_60S) //海外版 延时60s后再关机
+			{
+				SysInfo.Mode_Switch_Flag = 0x00;
+				SysInfo.StayTime = 50;	// 进入关机，马达震动0.5s
+				SysInfo.Sleep_Flag = 1; // �ػ���־λ
+			}
+		}
+		#endif
 
 		//if (SysInfo.Test_Mode.Ageing_Mode == 0x01)
 		if (SysInfo.Test_Mode.Test_Mode_Flag != OFF && SysInfo.Test_Mode.Ageing_Flag)
