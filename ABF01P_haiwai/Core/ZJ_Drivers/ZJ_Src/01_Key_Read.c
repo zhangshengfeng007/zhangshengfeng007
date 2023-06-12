@@ -219,11 +219,11 @@ void Key_S1_Long_Str(void)
 	if (SysInfo.Power_Value.state == System_OFF)
 	{
 		//if ((SysInfo.Batt_Value.State == BAT_00_00_STATUS) || (SysInfo.Save_Data.BattState == BAT_00_00_STATUS))
-		#if (USE_BAT_SELECT == USE_5PIN_NEW_BAT)
+		// #if (USE_BAT_SELECT == USE_5PIN_NEW_BAT)
 			if (SysInfo.Batt_Value.State < BAT_00_20_STATUS)
-		#elif(USE_BAT_SELECT == USE_4PIN_OLD_BAT)
-			if (SysInfo.Batt_Value.State < BAT_20_40_STATUS)
-		#endif
+		// #elif(USE_BAT_SELECT == USE_4PIN_OLD_BAT)
+		// 	if (SysInfo.Batt_Value.State < BAT_20_40_STATUS)
+		// #endif
 		{
 			SysInfo.WorkState = Standy_mode;
 			Led_Value.Mode = Batt_Low_0; // ??��1??LED??1Hz??????5??
