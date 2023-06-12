@@ -386,11 +386,11 @@ static uint8_t old_4pin_bat_idle_mode_state(uint16_t BatValue)
 	{
 		BattState = BAT_00_00_STATUS;
 	}
-	else if(BatValue <= BAT_VOL_3V80  && (BatValue > BAT_VOL_3V55))	//0~20   2908 ~ 2990
+	else if(BatValue <= BAT_VOL_3V75  && (BatValue > BAT_VOL_3V55))	//0~20   2908 ~ 2990
 	{
 		BattState = BAT_00_20_STATUS;
 	}
-	else if(BatValue <= BAT_VOL_3V95  && (BatValue > BAT_VOL_3V80))	//20~40  2990 ~ 3072
+	else if(BatValue <= BAT_VOL_3V95  && (BatValue > BAT_VOL_3V75))	//20~40  2990 ~ 3072
 	{
 		BattState = BAT_20_40_STATUS;
 	}
