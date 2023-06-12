@@ -644,7 +644,14 @@ void EMS_Procedure_Run(void)
 		{
 			SysInfo.Mode_Switch_Flag = 0x00;
 			Ems_DeInit();
-			RF_Init();
+			if(SysInfo.OverTemp_Flag == 0x02)  // 超过45°c时，不再输出RF
+			{
+				RF_DeInit();
+			}
+			else
+			{
+				RF_Init();
+			}
 		}
 		else if (SysInfo.Mode_Switch_Flag == 0x02) // EMS��ʼ��
 		{
@@ -741,7 +748,14 @@ void RF_Procedure_Run(void)
 		{
 			SysInfo.Mode_Switch_Flag = 0x00;
 			Ems_DeInit();
-			RF_Init();
+			if(SysInfo.OverTemp_Flag == 0x02)  // 超过45°c时，不再输出RF
+			{
+				RF_DeInit();
+			}
+			else
+			{
+				RF_Init();
+			}
 		}
 		else if (SysInfo.Mode_Switch_Flag == 0x03) // �������ģʽ
 		{
@@ -1185,6 +1199,39 @@ void System_10mS_Procedure(void)
 	Ageing_Test_Process();
 	Test_AutoMode_Run_Process();
 }
+
+/**************************************************************************************
+* FunctionName   : check_ntc_to_sleep(void)
+* Description    :
+* EntryParameter : None
+* ReturnValue    : None  100ms 进入一次
+.**************************************************************************************/
+static void check_ntc_to_sleep(void)
+{
+	static uint8_t NTC_too_High_cnt = 0;
+
+	if ((SysInfo.Sleep_Flag)||(SysInfo.Power_Value.state == System_OFF))
+	{
+		NTC_too_High_cnt = 0;
+		return;
+	}
+
+	if(SysInfo.OverTemp_Flag == 0x02)  // 超过45°c时，不再输出RF
+	{
+		NTC_too_High_cnt ++;
+		if(NTC_too_High_cnt > 150)
+		{
+			SysInfo.Sleep_Flag = 1;
+			NTC_too_High_cnt = 0;
+		}
+
+	}
+	else
+	{
+		NTC_too_High_cnt = 0;
+	}
+
+}
 /**************************************************************************************
 * FunctionName   : System_100mS_Procedure(void)
 * Description    :
@@ -1201,6 +1248,7 @@ void System_100mS_Procedure(void)
 	Set_Ems_level(&SysInfo);
 #endif
 
+	check_ntc_to_sleep();
 	System_Data_Save();
 	System_Sleep();
 	Test_UART_Deal_Process();
