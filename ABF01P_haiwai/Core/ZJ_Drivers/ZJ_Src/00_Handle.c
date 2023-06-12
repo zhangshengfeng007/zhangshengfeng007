@@ -101,16 +101,21 @@ void Led_Process_Run(void)
 				SysInfo.Batt_Value.Power_Display_Flag = 0;
 				Cnt = 0;
 				SysInfo.Save_Data.BattState = *(__IO uint32_t *)(EEPROM_STRAT_ADDR + 128); // ��ȡ�ػ�ǰ�ĵ���
-				if (SysInfo.Save_Data.BattState == BAT_00_00_STATUS)
+
+				#if (USE_BAT_SELECT == USE_5PIN_NEW_BAT)
+					if (SysInfo.Batt_Value.State < BAT_00_20_STATUS)
+				#elif(USE_BAT_SELECT == USE_4PIN_OLD_BAT)
+					if (SysInfo.Batt_Value.State < BAT_20_40_STATUS)
+				#endif
 				{
 					Led_Value.Level = 0x01;
+					Led_Value.Mode = Batt_Low_0;
 				}
 				else
 				{
-					Led_Value.Level = SysInfo.Batt_Value.State;
+					Led_Value.Level = SysInfo.Batt_Value.State - 1;
+					Led_Value.Mode = Batt_Normal;
 				}
-
-				Led_Value.Mode = Batt_Normal;
 				Led_Value.StayTime = 200;
 				Led_Value.state = 1;
 				SysInfo.Power_Value.BattState = 0;
