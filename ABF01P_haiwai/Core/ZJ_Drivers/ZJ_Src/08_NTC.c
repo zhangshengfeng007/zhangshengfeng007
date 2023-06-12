@@ -70,10 +70,10 @@ int8_t NTC_Temp_Check(void)
 }
 /**************************************************************************************
  * FunctionName   : Get_Temp()
- * Description    : »ñÈ¡ÎÂ¶È´«¸ÐÆ÷µÄÖµ
+ * Description    : ï¿½ï¿½È¡ï¿½Â¶È´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµ
  * EntryParameter :
  * Description    : --
- * ReturnValue    : ÎÂ¶ÈÖµ(µ¥Î»:¡æ.)
+ * ReturnValue    : ï¿½Â¶ï¿½Öµ(ï¿½ï¿½Î»:ï¿½ï¿½.)
  **************************************************************************************/
 const float Ka = 273.15;
 const float T2 = (273.15 + 25.0); // T2
@@ -90,7 +90,7 @@ float Get_Temp(float Rt, float Rp, float Bx)
 }
 /*************************************************************************************
  * FunctionName	 : NTC_Temp_compensation()
- * Description    : ÎÂ¶È²¹³¥
+ * Description    : ï¿½Â¶È²ï¿½ï¿½ï¿½
  * EntryParameter :
  * ReturnValue    : None
  **************************************************************************************/
@@ -111,7 +111,7 @@ uint8_t NTC_Temp_compensation(_Sys_Info_TypeDef *Temp, float Compensation_Value)
 
 /*************************************************************************************
  * FunctionName	  : NTC_Temp_compensation()
- * Description    : Ä£Ê½¼°µµÎ»ÎÂ¶È²¹³¥
+ * Description    : Ä£Ê½ï¿½ï¿½ï¿½ï¿½Î»ï¿½Â¶È²ï¿½ï¿½ï¿½
  * EntryParameter :
  * ReturnValue    : None
  **************************************************************************************/
@@ -167,21 +167,21 @@ uint8_t Gear_NTC_Temp_compensation(_Sys_Info_TypeDef *Temp)
  * EntryParameter :
  * ReturnValue    : None
  **************************************************************************************/
-void NTC_Temp_Running(void) // 1msÔËÐÐÒ»´Î
+void NTC_Temp_Running(void) // 1msï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
 {
 	//	int8_t current_temp;
 	uint32_t ntc_value, Rt_Value;
 //  static uint8_t OverTemp=42,StopTemp=45,NormalTemp =40;
-	static uint16_t over_temp_cnt;
+//	static uint16_t over_temp_cnt = 0;
 	uint8_t NormalTemp =40;
 
 	ntc_value = filter((uint16_t *)&ADC_Value, NTC_CHANNEL, ADC_CHANNEL_NUM, ADC_ADD_COUNT) * 0.61035; // 2500/4096
-	Rt_Value = ((5110 - ntc_value) * 3600 / ntc_value) - 3600;										   // ¸ù¾ÝÍ¬Ò»»ØÂ·£¬µçÁ÷ÏàµÈ£¬¼ÆËãµÃ³öNTCµç×èÖµ
+	Rt_Value = ((5110 - ntc_value) * 3600 / ntc_value) - 3600;										   // ï¿½ï¿½ï¿½ï¿½Í¬Ò»ï¿½ï¿½Â·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½ï¿½ï¿½ï¿½Ã³ï¿½NTCï¿½ï¿½ï¿½ï¿½Öµ
 
 	SysInfo.NTC_Temp = Get_Temp(Rt_Value, 10000, 3380); // 10K B=3380
-	NTC_Temp_compensation(&SysInfo, 0.042);				// ÎÂ¶È²¹³¥
+	NTC_Temp_compensation(&SysInfo, 0.042);				// ï¿½Â¶È²ï¿½ï¿½ï¿½
 
-  if(SysInfo.Temp_Protect_Flage) //¿ª»ú¼°Àë¿ªÆ¤·ô10S£¬¹ýÎÂÎÂ¶È¼õ1¡ã
+  if(SysInfo.Temp_Protect_Flage) //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ë¿ªÆ¤ï¿½ï¿½10Sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¶È¼ï¿½1ï¿½ï¿½
 	{
 		SysInfo.NTC_Temp += 1;
 		if(SysInfo.NTC_Temp<NORMAL_TEMP)
@@ -192,33 +192,39 @@ void NTC_Temp_Running(void) // 1msÔËÐÐÒ»´Î
 #if TEMP_TEST_MODE
 	if ((SysInfo.NTC_Temp > OVER_TEMP) && (SysInfo.NTC_Temp < STOP_TEMP))
 	{
-    if(SysInfo.OverTemp_Flag != 2) //³¬ÎÂ45¡ãÍ£Ö¹Êä³ö£¬Ö±µ½ÎÂ¶ÈÐ¡ÓÚ42¡ã£¬ÔÙ¿ªÊ¼Êä³öÄÜÁ¿
+    if(SysInfo.OverTemp_Flag != 2) //ï¿½ï¿½ï¿½ï¿½45ï¿½ï¿½Í£Ö¹ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½ï¿½ï¿½Â¶ï¿½Ð¡ï¿½ï¿½42ï¿½ã£¬ï¿½Ù¿ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     {
-			SysInfo.OverTemp_Flag = 1; // ¹ýÎÂ
+			SysInfo.OverTemp_Flag = 1; // ï¿½ï¿½ï¿½ï¿½
 		}
-		over_temp_cnt = 0;
+		SysInfo.NTC_higher_45_cnt = 0;
 	}
   else if((SysInfo.NTC_Temp < OVER_TEMP) && (SysInfo.NTC_Temp >= NORMAL_TEMP))
 	{
-    if(SysInfo.OverTemp_Flag == 2) //³¬ÎÂ45¡ãÍ£Ö¹Êä³ö£¬Ö±µ½ÎÂ¶ÈÐ¡ÓÚ42¡ã£¬ÔÙ¿ªÊ¼Êä³öÄÜÁ¿
+    if(SysInfo.OverTemp_Flag == 2) //ï¿½ï¿½ï¿½ï¿½45ï¿½ï¿½Í£Ö¹ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½ï¿½ï¿½Â¶ï¿½Ð¡ï¿½ï¿½42ï¿½ã£¬ï¿½Ù¿ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     {
 				SysInfo.OverTemp_Flag = 1; // ????
 		}
-		over_temp_cnt = 0;
+		SysInfo.NTC_higher_45_cnt = 0;
 	}
 	else if(SysInfo.NTC_Temp > STOP_TEMP)
 	{
-		over_temp_cnt ++;
-		if(over_temp_cnt > 500)
+		if(SysInfo.OverTemp_Flag != 2)
 		{
-			over_temp_cnt = 500;
-			SysInfo.OverTemp_Flag = 2; // ???¡ê??????
+			SysInfo.NTC_higher_45_cnt ++;
+			if(SysInfo.NTC_higher_45_cnt > 500)
+			{
+				SysInfo.NTC_higher_45_cnt = 0;
+				if(SysInfo.OverTemp_Flag != 2)
+				{
+					SysInfo.OverTemp_Flag = 2;
+				}
+			}
 		}
 	}
 	else if ((SysInfo.NTC_Temp < NORMAL_TEMP) && (SysInfo.OverTemp_Flag == 1))
 	{
 		SysInfo.OverTemp_Flag = 0; // ???????
-		over_temp_cnt = 0;
+		SysInfo.NTC_higher_45_cnt = 0;
 	}
 	else
 		;
@@ -226,11 +232,11 @@ void NTC_Temp_Running(void) // 1msÔËÐÐÒ»´Î
 
 	if ((SysInfo.NTC_Temp > OVER_TEMP) && (SysInfo.OverTemp_Flag == 0))
 	{
-		SysInfo.OverTemp_Flag = 1; // ¹ýÎÂ
+		SysInfo.OverTemp_Flag = 1; // ï¿½ï¿½ï¿½ï¿½
 	}
 	else if ((SysInfo.NTC_Temp < NORMAL_TEMP) && (SysInfo.OverTemp_Flag == 1))
 	{
-		SysInfo.OverTemp_Flag = 0; // »Ö¸´Õý³£
+		SysInfo.OverTemp_Flag = 0; // ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½
 	}
 	else
 		;
@@ -238,7 +244,7 @@ void NTC_Temp_Running(void) // 1msÔËÐÐÒ»´Î
 #endif
 #if AGEING_TEST
  	SysInfo.MotionStateFlage = 1;  //????
-  SysInfo.OverTemp_Flag = 0;     // »Ö¸´Õý³£
+  SysInfo.OverTemp_Flag = 0;     // ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½
 #endif
 }
 
