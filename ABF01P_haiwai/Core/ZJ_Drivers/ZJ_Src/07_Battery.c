@@ -382,15 +382,15 @@ static uint8_t old_4pin_bat_idle_mode_state(uint16_t BatValue)
 	static uint8_t WorkBattState_Cnt = 0;
 	static uint8_t BattState = BAT_40_60_STATUS;
 
-	if(BatValue <= BAT_VOL_3V55 &&  (BatValue > BAT_VOL_3V05))			//0
+	if(BatValue <= BAT_VOL_3V75 &&  (BatValue > BAT_VOL_3V05))			//0
 	{
 		BattState = BAT_00_00_STATUS;
 	}
-	else if(BatValue <= BAT_VOL_3V75  && (BatValue > BAT_VOL_3V55))	//0~20   2908 ~ 2990
+	else if(BatValue <= BAT_VOL_3V85  && (BatValue > BAT_VOL_3V75))	//0~20   2908 ~ 2990
 	{
 		BattState = BAT_00_20_STATUS;
 	}
-	else if(BatValue <= BAT_VOL_3V95  && (BatValue > BAT_VOL_3V75))	//20~40  2990 ~ 3072
+	else if(BatValue <= BAT_VOL_3V95  && (BatValue > BAT_VOL_3V85))	//20~40  2990 ~ 3072
 	{
 		BattState = BAT_20_40_STATUS;
 	}
@@ -491,28 +491,28 @@ uint8_t Scan_Batter_State(void)
 	{
 		//		printf ("\n\r charge\n\r");
 		//		BattState = CheckCharge_Batter_State(BatValue);
-		if (BatValue <= BAT_VOL_3V55 && (BatValue > BAT_VOL_3V05)) // 0   2499
+		if (BatValue <= BAT_VOL_3V95 && (BatValue > BAT_VOL_3V05)) // 0   2499
 		{
 			BattState = BAT_00_00_STATUS;
 		}
-		else if (BatValue <= BAT_VOL_3V95 && (BatValue > BAT_VOL_3V55)) // 0~20   2499 ~ 3154
+		else if (BatValue <= BAT_VOL_4V05 && (BatValue > BAT_VOL_3V95)) // 0~20   2499 ~ 3154
 		{
 			BattState = BAT_00_20_STATUS;
 		}
-		else if (BatValue <= BAT_VOL_4V05 && (BatValue > BAT_VOL_3V95)) // 20~40  3154 ~ 3277
+		else if (BatValue <= BAT_VOL_4V10 && (BatValue > BAT_VOL_4V05)) // 20~40  3154 ~ 3277
 		{
 			BattState = BAT_20_40_STATUS;
 			TimeCount = 0;
 		}
-		else if (BatValue <= BAT_VOL_4V10 && (BatValue > BAT_VOL_4V05)) // 40~60  3277 ~ 3317
+		else if (BatValue <= BAT_VOL_4V15 && (BatValue > BAT_VOL_4V10)) // 40~60  3277 ~ 3317
 		{
 			BattState = BAT_40_60_STATUS;
 		}
-		else if (BatValue <= BAT_VOL_4V17 && (BatValue > BAT_VOL_4V10)) // 60~80  3317 ~ 3359
+		else if (BatValue <= BAT_VOL_4V20 && (BatValue > BAT_VOL_4V15)) // 60~80  3317 ~ 3359
 		{
 			BattState = BAT_60_80_STATUS;
 		}
-		else if (BatValue > BAT_VOL_4V17) // 80~100   3359
+		else if (BatValue > BAT_VOL_4V20) // 80~100   3359
 		{
 			BattState = BAT_80_100_STATUS;
 			//			TimeCount = 0 ;
