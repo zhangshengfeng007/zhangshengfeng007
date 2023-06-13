@@ -200,8 +200,8 @@ void System_Data_Save(void)
 {
 	if (SysInfo.Save_Data.save_Data_flag && !SysInfo.Montor_Flag)
 	{
-		SysInfo.Save_Data.save_Data_flag = 0;
 		Write_Parameter_To_Eeprom(); // �ػ����浵λ
+		SysInfo.Save_Data.save_Data_flag = 0;
 	}
 }
 
