@@ -330,6 +330,7 @@ typedef struct
 	uint8_t   Restore_Flag:1;
 
 	float   NTC_Temp;
+  uint16_t NTC_higher_45_cnt;
 	uint16_t  StayTime ;
 	uint16_t  StayTime_30s_Flag ;
 	uint16_t  Sleep_Counts;

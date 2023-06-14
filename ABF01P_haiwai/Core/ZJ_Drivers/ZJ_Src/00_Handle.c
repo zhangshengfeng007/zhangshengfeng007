@@ -101,16 +101,21 @@ void Led_Process_Run(void)
 				SysInfo.Batt_Value.Power_Display_Flag = 0;
 				Cnt = 0;
 				SysInfo.Save_Data.BattState = *(__IO uint32_t *)(EEPROM_STRAT_ADDR + 128); // ��ȡ�ػ�ǰ�ĵ���
-				if (SysInfo.Save_Data.BattState == BAT_00_00_STATUS)
+
+				// #if (USE_BAT_SELECT == USE_5PIN_NEW_BAT)
+				if (SysInfo.Batt_Value.State < BAT_00_20_STATUS)
+				// #elif(USE_BAT_SELECT == USE_4PIN_OLD_BAT)
+				// 	if (SysInfo.Batt_Value.State < BAT_20_40_STATUS)
+				// #endif
 				{
 					Led_Value.Level = 0x01;
+					Led_Value.Mode = Batt_Low_0;
 				}
 				else
 				{
-					Led_Value.Level = SysInfo.Batt_Value.State;
+					Led_Value.Level = SysInfo.Batt_Value.State ;
+					Led_Value.Mode = Batt_Normal;
 				}
-
-				Led_Value.Mode = Batt_Normal;
 				Led_Value.StayTime = 200;
 				Led_Value.state = 1;
 				SysInfo.Power_Value.BattState = 0;
@@ -195,8 +200,8 @@ void System_Data_Save(void)
 {
 	if (SysInfo.Save_Data.save_Data_flag && !SysInfo.Montor_Flag)
 	{
-		SysInfo.Save_Data.save_Data_flag = 0;
 		Write_Parameter_To_Eeprom(); // �ػ����浵λ
+		SysInfo.Save_Data.save_Data_flag = 0;
 	}
 }
 
@@ -268,7 +273,7 @@ void Vibration_Reminder_Counts_Run(void) // 10ms����һ��
 {
 	static uint8_t LockFlag, Error_Time_Flag;
 	static uint8_t motor_run_flag = 0;
-	static uint16_t StandyCnt,NoTouch_Cnt;
+	static uint16_t StandyCnt = 0, NoTouch_Cnt;
 
 	if (SysInfo.Skin_Touch_Flag)
 	{
@@ -368,22 +373,22 @@ void Vibration_Reminder_Counts_Run(void) // 10ms����һ��
 
 	if (SysInfo.Mode_Switch_Flag == 0x03)
 	{
-		// #if ((ARF001 == DEVICE_R1_RPO)||(ARF001 == DEVICE_R1_RPO_MAX))
+		#if ((ARF001 == DEVICE_R1_RPO)||(ARF001 == DEVICE_R1_RPO_MAX))
 		if (++StandyCnt > 5)
 		{
 			SysInfo.Mode_Switch_Flag = 0x00;
 			SysInfo.Sleep_Flag = 1; // �ػ���־λ
 		}
-		// #elif (ARF001 == DEVICE_R1_HAIWAI)
-		// {
-		// 	if (++StandyCnt > SLEEP_DELAY_60S) //海外版 延时60s后再关机
-		// 	{
-		// 		SysInfo.Mode_Switch_Flag = 0x00;
-		// 		SysInfo.StayTime = 50;	// 进入关机，马达震动0.5s
-		// 		SysInfo.Sleep_Flag = 1; // �ػ���־λ
-		// 	}
-		// }
-		// #endif
+		#elif (ARF001 == DEVICE_R1_HAIWAI)
+		{
+			if (++StandyCnt > SLEEP_DELAY_60S) //海外版 延时60s后再关机
+			{
+				SysInfo.Mode_Switch_Flag = 0x00;
+				SysInfo.StayTime = 50;	// 进入关机，马达震动0.5s
+				SysInfo.Sleep_Flag = 1; // �ػ���־λ
+			}
+		}
+		#endif
 
 		//if (SysInfo.Test_Mode.Ageing_Mode == 0x01)
 		if (SysInfo.Test_Mode.Test_Mode_Flag != OFF && SysInfo.Test_Mode.Ageing_Flag)
@@ -644,7 +649,14 @@ void EMS_Procedure_Run(void)
 		{
 			SysInfo.Mode_Switch_Flag = 0x00;
 			Ems_DeInit();
-			RF_Init();
+			if(SysInfo.OverTemp_Flag == 0x02)  // 超过45°c时，不再输出RF
+			{
+				RF_DeInit();
+			}
+			else
+			{
+				RF_Init();
+			}
 		}
 		else if (SysInfo.Mode_Switch_Flag == 0x02) // EMS��ʼ��
 		{
@@ -741,7 +753,14 @@ void RF_Procedure_Run(void)
 		{
 			SysInfo.Mode_Switch_Flag = 0x00;
 			Ems_DeInit();
-			RF_Init();
+			if(SysInfo.OverTemp_Flag == 0x02)  // 超过45°c时，不再输出RF
+			{
+				RF_DeInit();
+			}
+			else
+			{
+				RF_Init();
+			}
 		}
 		else if (SysInfo.Mode_Switch_Flag == 0x03) // �������ģʽ
 		{
@@ -1185,6 +1204,39 @@ void System_10mS_Procedure(void)
 	Ageing_Test_Process();
 	Test_AutoMode_Run_Process();
 }
+
+/**************************************************************************************
+* FunctionName   : check_ntc_to_sleep(void)
+* Description    :
+* EntryParameter : None
+* ReturnValue    : None  100ms 进入一次
+.**************************************************************************************/
+static void check_ntc_to_sleep(void)
+{
+	static uint8_t NTC_too_High_cnt = 0;
+
+	if ((SysInfo.Sleep_Flag)||(SysInfo.Power_Value.state == System_OFF))
+	{
+		NTC_too_High_cnt = 0;
+		return;
+	}
+
+	if(SysInfo.OverTemp_Flag == 0x02)  // 超过45°c时，不再输出RF
+	{
+		NTC_too_High_cnt ++;
+		if(NTC_too_High_cnt > 150)
+		{
+			SysInfo.Sleep_Flag = 1;
+			NTC_too_High_cnt = 0;
+		}
+
+	}
+	else
+	{
+		NTC_too_High_cnt = 0;
+	}
+
+}
 /**************************************************************************************
 * FunctionName   : System_100mS_Procedure(void)
 * Description    :
@@ -1201,6 +1253,7 @@ void System_100mS_Procedure(void)
 	Set_Ems_level(&SysInfo);
 #endif
 
+	check_ntc_to_sleep();
 	System_Data_Save();
 	System_Sleep();
 	Test_UART_Deal_Process();

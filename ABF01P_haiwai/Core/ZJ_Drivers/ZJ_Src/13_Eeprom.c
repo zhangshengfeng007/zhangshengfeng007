@@ -1,7 +1,7 @@
 #include "includes.h"
 #include "eeprom.h"
 
-uint32_t PageError = 0; // ÉèÖÃPageError,Èç¹û³öÏÖ´íÎóÕâ¸ö±äÁ¿»á±»ÉèÖÃÎª³ö´íµÄFLASHµØÖ·
+uint32_t PageError = 0; // ï¿½ï¿½ï¿½ï¿½PageError,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½á±»ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½FLASHï¿½ï¿½Ö·
 
 /**************************************************************************************
  * FunctionName   : GetPage()
@@ -108,19 +108,19 @@ void save_flash_flag(uint32_t address, uint64_t data1, uint64_t data2, uint64_t 
  **************************************************************************************/
 void Write_Current_Level_To_Eeprom(uint32_t level)
 {
-	FLASH_EraseInitTypeDef My_Flash; // ÉùÃ÷ FLASH_EraseInitTypeDef ½á¹¹ÌåÎª My_Flash
+	FLASH_EraseInitTypeDef My_Flash; // ï¿½ï¿½ï¿½ï¿½ FLASH_EraseInitTypeDef ï¿½á¹¹ï¿½ï¿½Îª My_Flash
 
-	HAL_FLASH_Unlock(); // ½âËøFlash
+	HAL_FLASH_Unlock(); // ï¿½ï¿½ï¿½ï¿½Flash
 
-	My_Flash.TypeErase = FLASH_TYPEERASE_PAGES; // ±êÃ÷FlashÖ´ÐÐÒ³ÃæÖ»×ö²Á³ý²Ù×÷
+	My_Flash.TypeErase = FLASH_TYPEERASE_PAGES; // ï¿½ï¿½ï¿½ï¿½FlashÖ´ï¿½ï¿½Ò³ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	My_Flash.Page = FLASH_PAGE_NB - 1;
 	My_Flash.Banks = FLASH_BANK_1;
-	My_Flash.NbPages = 1; // ËµÃ÷Òª²Á³ýµÄÒ³Êý£¬´Ë²ÎÊý±ØÐëÊÇMin_Data = 1ºÍMax_Data =(×î´óÒ³Êý-³õÊ¼Ò³µÄÖµ)Ö®¼äµÄÖµ
+	My_Flash.NbPages = 1; // Ëµï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò³ï¿½ï¿½ï¿½ï¿½ï¿½Ë²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Min_Data = 1ï¿½ï¿½Max_Data =(ï¿½ï¿½ï¿½Ò³ï¿½ï¿½-ï¿½ï¿½Ê¼Ò³ï¿½ï¿½Öµ)Ö®ï¿½ï¿½ï¿½Öµ
 
-	HAL_FLASHEx_Erase(&My_Flash, &PageError); // µ÷ÓÃ²Á³ýº¯Êý²Á³ý
+	HAL_FLASHEx_Erase(&My_Flash, &PageError); // ï¿½ï¿½ï¿½Ã²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	HAL_FLASH_Program(FLASH_TYPEPROGRAM_DOUBLEWORD, EEPROM_STRAT_ADDR, level);
 
-	HAL_FLASH_Lock(); // Ëø×¡Flash
+	HAL_FLASH_Lock(); // ï¿½ï¿½×¡Flash
 }
 
 /**************************************************************************************
@@ -131,7 +131,7 @@ void Write_Current_Level_To_Eeprom(uint32_t level)
  **************************************************************************************/
 void Read_Current_Level_For_Eeprom(void)
 {
-	//*(__IO uint16_t *)ÊÇ¶ÁÈ¡¸ÃµØÖ·µÄ²ÎÊýÖµ,ÆäÖµÎª16Î»Êý¾Ý,Ò»´Î¶ÁÈ¡Á½¸ö×Ö½Ú£¬*(__IO uint32_t *)¾ÍÒ»´Î¶Á4¸ö×Ö½Ú
+	//*(__IO uint16_t *)ï¿½Ç¶ï¿½È¡ï¿½Ãµï¿½Ö·ï¿½Ä²ï¿½ï¿½ï¿½Öµ,ï¿½ï¿½ÖµÎª16Î»ï¿½ï¿½ï¿½ï¿½,Ò»ï¿½Î¶ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½Ö½Ú£ï¿½*(__IO uint32_t *)ï¿½ï¿½Ò»ï¿½Î¶ï¿½4ï¿½ï¿½ï¿½Ö½ï¿½
 	SysInfo.repair_level = *(__IO uint32_t *)(EEPROM_STRAT_ADDR);
 	SysInfo.upkeep_level = *(__IO uint32_t *)(EEPROM_STRAT_ADDR + 64);
 	SysInfo.Batt_Value.State = *(__IO uint32_t *)(EEPROM_STRAT_ADDR + 128);
@@ -195,7 +195,7 @@ void Write_Parameter_To_Eeprom(void)
 					(uint64_t)SysInfo.Save_Data.upkeep_level,
 					(uint64_t)SysInfo.Save_Data.BattState,
 					(uint64_t)SysInfo.Save_Data.WorkState);
-	BOOST_5V_OFF();
+	// BOOST_5V_OFF();
 }
 /**************************************************************************************
  * FunctionName   : HAL_GPIO_EXTI_Falling_Callback()
@@ -209,23 +209,23 @@ void Sys_IWDG_STOP_Mode(void)
 	uint8_t flag_IWDG;
 
 	__disable_irq();
-	flag_IWDG = READ_BIT(FLASH->OPTR, FLASH_OPTR_IWDG_STOP) != 0; // ÉèÖÃÆì±ê£¬±ÜÃâ·´¸´¼ÓÔØflashµ¼ÖÂÖØÆô
+	flag_IWDG = READ_BIT(FLASH->OPTR, FLASH_OPTR_IWDG_STOP) != 0; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê£¬ï¿½ï¿½ï¿½â·´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½flashï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	if (flag_IWDG != 0)
 	{
 		HAL_FLASH_Unlock();
-		HAL_FLASH_OB_Unlock(); // ½âËøFLASH
+		HAL_FLASH_OB_Unlock(); // ï¿½ï¿½ï¿½ï¿½FLASH
 
-		CLEAR_BIT(FLASH->OPTR, FLASH_OPTR_IWDG_STOP); // ÐÞ¸Ä¿´ÃÅ¹·²ÎÊýÎª£ºÐÝÃßÊ±¿´ÃÅ¹·Í£Ö¹¼ÆÊý
+		CLEAR_BIT(FLASH->OPTR, FLASH_OPTR_IWDG_STOP); // ï¿½Þ¸Ä¿ï¿½ï¿½Å¹ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Å¹ï¿½Í£Ö¹ï¿½ï¿½ï¿½ï¿½
 		/* Set OPTSTRT Bit */
-		SET_BIT(FLASH->CR, FLASH_CR_OPTSTRT); // ÒÔÏÂ3¾ä²»¿ÉÈ±ÉÙ£¬·ñÔòÎÞ·¨ÐÞ¸ÄFLASH->OPTR
+		SET_BIT(FLASH->CR, FLASH_CR_OPTSTRT); // ï¿½ï¿½ï¿½ï¿½3ï¿½ä²»ï¿½ï¿½È±ï¿½Ù£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ·ï¿½ï¿½Þ¸ï¿½FLASH->OPTR
 		/* Wait for last operation to be completed */
 		FLASH_WaitForLastOperation((uint32_t)FLASH_TIMEOUT_VALUE);
 		/* If the option byte program operation is completed, disable the OPTSTRT Bit */
 		CLEAR_BIT(FLASH->CR, FLASH_CR_OPTSTRT);
-		HAL_FLASH_OB_Launch(); // ¼ÓÔØflash£¬»áµ¼ÖÂÖØÆô
+		HAL_FLASH_OB_Launch(); // ï¿½ï¿½ï¿½ï¿½flashï¿½ï¿½ï¿½áµ¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	}
 	HAL_FLASH_OB_Lock();
-	HAL_FLASH_Lock(); // ÐÞ¸ÄÍêºó¹Ø±Õflash£¬ÒÑ¾­ÉÏËøÔÙÖ´ÐÐÒ»±éÎÊÌâ²»´ó
+	HAL_FLASH_Lock(); // ï¿½Þ¸ï¿½ï¿½ï¿½ï¿½Ø±ï¿½flashï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½â²»ï¿½ï¿½
 	__enable_irq();
 }
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
