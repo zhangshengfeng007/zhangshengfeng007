@@ -780,160 +780,6 @@ void RF_Procedure_Run(void)
 #endif
 }
 
-void MX_GPIO_DISInit(void)
-{
-	GPIO_InitTypeDef GPIO_InitStruct = {0};
-	/* GPIO Ports Clock Enable */
-	__HAL_RCC_GPIOC_CLK_ENABLE();
-	__HAL_RCC_GPIOF_CLK_ENABLE();
-	__HAL_RCC_GPIOA_CLK_ENABLE();
-	__HAL_RCC_GPIOB_CLK_ENABLE();
-	__HAL_RCC_GPIOD_CLK_ENABLE();
-
- //	HAL_GPIO_DeInit(GPIOC, GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15 | GPIO_PIN_6 | GPIO_PIN_7);
- 	HAL_GPIO_DeInit(GPIOC, GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);
-
- 	HAL_GPIO_DeInit(GPIOF, GPIO_PIN_0);
-
- 	HAL_GPIO_DeInit(GPIOA, GPIO_PIN_0 | GPIO_PIN_12);
-
- //	HAL_GPIO_DeInit(GPIOA, GPIO_PIN_4 | GPIO_PIN_7 | GPIO_PIN_11 | GPIO_PIN_15);
- 	HAL_GPIO_DeInit(GPIOA, GPIO_PIN_4 | GPIO_PIN_7 | GPIO_PIN_15);
-
- //	HAL_GPIO_DeInit(GPIOB, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_10 | GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);
- 	HAL_GPIO_DeInit(GPIOB, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_10 | GPIO_PIN_13);
-
- //	HAL_GPIO_DeInit(GPIOD, GPIO_PIN_0 | GPIO_PIN_2 | GPIO_PIN_3);
- 	HAL_GPIO_DeInit(GPIOD, GPIO_PIN_0 );
-
- 	HAL_GPIO_DeInit(GPIOA, GPIO_PIN_8 | GPIO_PIN_15 | GPIO_PIN_9 | GPIO_PIN_10 | GPIO_PIN_13 | GPIO_PIN_14);
- //	HAL_GPIO_DeInit(GPIOF, GPIO_PIN_1);
-
-
-	/*Configure GPIO pin : PF1 */
-//	GPIO_InitStruct.Pin = GPIO_PIN_1;
-//	GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-//	GPIO_InitStruct.Pull = GPIO_NOPULL;
-//	HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
-
-	/*Configure GPIO pins : PA4 PA7 PA11 PA15 */
-	GPIO_InitStruct.Pin = GPIO_PIN_4 ;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_RESET);
-
-	/*Configure GPIO pins : PB10 PB11*/
-//	GPIO_InitStruct.Pin = GPIO_PIN_10| GPIO_PIN_11;
-//	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-//	GPIO_InitStruct.Pull = GPIO_NOPULL;
-//	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-//	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-//	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10| GPIO_PIN_11, GPIO_PIN_SET);
-
-	GPIO_InitStruct.Pin =GPIO_PIN_10| GPIO_PIN_11;
-	GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-	Upkeep_LED_OFF();
-	Repair_LED_OFF();
-	GEAR_LED1_DOWN();
-	GEAR_LED2_DOWN();
-	GEAR_LED3_DOWN();
-	GEAR_LED4_DOWN();
-	GEAR_LED5_DOWN();
-  BOOST_5V_OFF();
-  RF_CHANNEL_OFF();
-  EMS_CHANNEL_OFF();
-	VCC3V3_OUT_OFF();
-	Vref_EN_OFF();
-//	BAT_ADC_DISABLE();
-//	MOTOR_OFF();
-//	RF_EN_DOWN();
-//	VBAT_OUT_OFF();
-}
-void MX_GPIO_ONT_Init(void)
-{
-	GPIO_InitTypeDef GPIO_InitStruct = {0};
-
-	/* GPIO Ports Clock Enable */
-	__HAL_RCC_GPIOC_CLK_ENABLE();
-	__HAL_RCC_GPIOF_CLK_ENABLE();
-	__HAL_RCC_GPIOA_CLK_ENABLE();
-	__HAL_RCC_GPIOB_CLK_ENABLE();
-	__HAL_RCC_GPIOD_CLK_ENABLE();
-
-	/*Configure GPIO pin Output Level */
-	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15 | GPIO_PIN_6 | GPIO_PIN_7, GPIO_PIN_RESET);
-
-	/*Configure GPIO pin Output Level */
-	HAL_GPIO_WritePin(GPIOF, GPIO_PIN_0, GPIO_PIN_RESET);
-
-	/*Configure GPIO pin Output Level */
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4 | GPIO_PIN_7 | GPIO_PIN_11 | GPIO_PIN_15, GPIO_PIN_RESET);
-
-	/*Configure GPIO pin Output Level */
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_10 | GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15, GPIO_PIN_RESET);
-
-	/*Configure GPIO pin Output Level */
-	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_2 | GPIO_PIN_3, GPIO_PIN_RESET);
-
-	/*Configure GPIO pins : PC13 PC14 PC15 PC6
-							 PC7 */
-	GPIO_InitStruct.Pin = GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15 | GPIO_PIN_6 | GPIO_PIN_7;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-
-	/*Configure GPIO pin : PF0 */
-	GPIO_InitStruct.Pin = GPIO_PIN_0;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
-
-	/*Configure GPIO pins : PA0 PA12 */
-	GPIO_InitStruct.Pin = GPIO_PIN_0 | GPIO_PIN_12;
-	GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-	/*Configure GPIO pins : PA4 PA7 PA11 PA15 */
-	GPIO_InitStruct.Pin = GPIO_PIN_4 | GPIO_PIN_7 | GPIO_PIN_11 | GPIO_PIN_15;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-	/*Configure GPIO pins : PB0 PB1 PB2 PB10
-							 PB13 PB14 PB15 */
-	GPIO_InitStruct.Pin = GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_10 | GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-	/*Configure GPIO pin : PD0 */
-	GPIO_InitStruct.Pin = GPIO_PIN_0;
-	GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
-
-	/*Configure GPIO pins : PD2 PD3 */
-	GPIO_InitStruct.Pin = GPIO_PIN_2 | GPIO_PIN_3;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
-
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10 | GPIO_PIN_14 | GPIO_PIN_15 | GPIO_PIN_2, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_6 | GPIO_PIN_7, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_2, GPIO_PIN_SET);
-}
 /**************************************************************************************
  * FunctionName   : System_Sleep(void)
  * Description    :
@@ -1054,7 +900,7 @@ IRled_stop();
 	EMS_Pwm_Stop();
 	RF_Osc_Off();
 
-	MX_GPIO_DISInit();
+	MX_close_gpio();
 
 
 	HAL_NVIC_EnableIRQ(EXTI0_1_IRQn); // ʹ��KEY_ON_OFF_Pin�ж�
@@ -1094,6 +940,8 @@ void exit_sleep_mode(void)
 	HAL_IWDG_Refresh(&hiwdg);
 	SystemClock_Config();
 	MX_GPIO_ONT_Init();
+	//ONLY_MX_GPIO_Init();
+
 	HAL_SPI_MspInit(&hspi1);
 #if (G_SENSOR_SELECT == USE_G_SENSOR)
 	HAL_I2C_MspInit(&hi2c2);

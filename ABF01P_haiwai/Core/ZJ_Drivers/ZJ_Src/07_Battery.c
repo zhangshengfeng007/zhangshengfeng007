@@ -85,8 +85,9 @@ void ADC_DMA_COV_START(void)
 {
 	BAT_ADC_ENABLE();
 	Vref_EN_ON();
+ HAL_Delay(10);
 	HAL_ADCEx_Calibration_Start(&hadc1);
-	// HAL_Delay(10);
+
 	HAL_ADC_Start_DMA(&hadc1, (uint32_t *)&ADC_Value, ADC_CHANNEL_NUM * ADC_ADD_COUNT);
 	//	HAL_ADC_Start_DMA(&hadc1,(uint32_t *)&ADC_Value,ADC_CHANNLE_NUM);
 }
@@ -502,7 +503,7 @@ uint8_t Scan_Batter_State(void)
 		else if (BatValue <= BAT_VOL_4V10 && (BatValue > BAT_VOL_4V05)) // 20~40  3154 ~ 3277
 		{
 			BattState = BAT_20_40_STATUS;
-			TimeCount = 0;
+
 		}
 		else if (BatValue <= BAT_VOL_4V15 && (BatValue > BAT_VOL_4V10)) // 40~60  3277 ~ 3317
 		{
@@ -515,12 +516,13 @@ uint8_t Scan_Batter_State(void)
 		else if (BatValue > BAT_VOL_4V20) // 80~100   3359
 		{
 			BattState = BAT_80_100_STATUS;
-			//			TimeCount = 0 ;
 		}
 		else
 			;
 
-		if (((VIN_DET_IN() == 0) && (BAT_CHARGE_STATE_IN())) && BatValue > BAT_60_80_STATUS)
+		//if (((VIN_DET_IN() == 0) && (BAT_CHARGE_STATE_IN())) && BatValue > BAT_60_80_STATUS)
+		//if (((VIN_DET_IN() == 0) && (BAT_CHARGE_STATE_IN())) || BatValue > BAT_60_80_STATUS)
+		if ((VIN_DET_IN() == 0) && BAT_CHARGE_STATE_IN()) // 2023 07 06
 		{
 			if (++TimeCount >= 200) // 26s 200*130MS
 			{
@@ -538,6 +540,7 @@ uint8_t Scan_Batter_State(void)
 		#endif
 	}
 	SysInfo.Test_Mode.Bat_state = BattState;
+//	printf ("\n\r charge adc_val:%d mV,LVL =%d\n\r", 2 * BatValue * 2500 /4096, BattState);
 	return BattState;
 }
 /**************************************************************************************
