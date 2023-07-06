@@ -202,16 +202,23 @@ void StartTask03(void const * argument)
   {
 
     SLIDE_MODE_Run();
-// 		if(Counts_1000ms++>40)
-// 		{
-// 			printf ("\n\r%.1f, OverTemp_Flag = %d \n\r",SysInfo.NTC_Temp, SysInfo.OverTemp_Flag);	             //����
-// //			HAL_UART_Transmit(&huart1, (uint8_t *)(SysInfo.NTC_Temp), 1, 50);
-// 			Counts_1000ms = 0;
-// 	//		printf ("\n\r NTC: %.1f ??\n\r",SysInfo.NTC_Temp);	 //����
 
-// 		}
+		if(Counts_1000ms++ >= 40)
+		{
+			// printf ("\n\r%.1f, OverTemp_Flag = %d \n\r",SysInfo.NTC_Temp, SysInfo.OverTemp_Flag);	             //����
+//			HAL_UART_Transmit(&huart1, (uint8_t *)(SysInfo.NTC_Temp), 1, 50);
+//      printf ("\n\rSkin_Flag:%d, AgeTimer_Cnt :%d, state:%d ,Test_Mode_Flag:%d, Test_Mode:%d, Ageing_Mode:%d\n\r", SysInfo.Skin_Touch_Flag,
+//                                                    SysInfo.Test_Mode.AgeTimer_Cnt, SysInfo.Power_Value.state,
+//                                                      SysInfo.Test_Mode.Test_Mode_Flag, SysInfo.Test_Mode.Test_Mode, SysInfo.Test_Mode.Ageing_Mode);
 
-    if (++Counts_100ms > 4)
+      // printf ("\n\r bat_adc:%d, bat= %d mV \n\r", SysInfo.Test_Mode.BatValue, SysInfo.Test_Mode.BatValue *5000/4096);
+			Counts_1000ms = 0;
+			// printf ("\n\r save_flag:%d,Motor_Flag:%d, upkeep_lvl:%d, repair_lvl:%d \n\r",SysInfo.Save_Data.save_Data_flag, SysInfo.Montor_Flag, SysInfo.Save_Data.upkeep_level, SysInfo.Save_Data.repair_level);	 //����
+
+
+		}
+
+    if (++Counts_100ms >= 4)
     {
       Counts_100ms = 0;
       System_100mS_Procedure();
