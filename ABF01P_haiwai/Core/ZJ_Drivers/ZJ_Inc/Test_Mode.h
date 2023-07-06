@@ -7,7 +7,7 @@
 #elif (ARF001 == DEVICE_R1_RPO_MAX)
 	#define version  "V1.3.1"
 #elif (ARF001 == DEVICE_R1_HAIWAI)
-	#define version  "V1.8.0"
+	#define version  "V2.0.0"
 #endif
 
 #define AutoTest 1
@@ -40,7 +40,7 @@
 #define Model_Number_L  0x02
 #define Device_Number_H 0x00
 #define Device_Number_L 0x10
-#define Soft_Version  	0x18
+#define Soft_Version  	0x20
 #define Hardware_Version  0x15
 
 #endif
