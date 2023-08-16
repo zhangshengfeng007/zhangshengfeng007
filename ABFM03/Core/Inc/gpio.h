@@ -2,7 +2,7 @@
 /**
   ******************************************************************************
   * @file    gpio.h
-  * @brief   This file contains all the function prototypes for
+  * @brief   This file contains all the function prototypes foraaa
   *          the gpio.c file
   ******************************************************************************
   * @attention

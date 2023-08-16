@@ -2,7 +2,7 @@
 /**
   ******************************************************************************
   * @file    i2c.h
-  * @brief   This file contains all the function prototypes for
+  * @brief   This file contains all the function prototypes for aaa
   *          the i2c.c file
   ******************************************************************************
   * @attention

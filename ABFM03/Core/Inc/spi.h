@@ -2,7 +2,7 @@
 /**
   ******************************************************************************
   * @file    spi.h
-  * @brief   This file contains all the function prototypes for
+  * @brief   This file contains all the function prototypes foraaa
   *          the spi.c file
   ******************************************************************************
   * @attention
