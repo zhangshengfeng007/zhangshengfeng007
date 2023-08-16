@@ -4,7 +4,7 @@
 * FunctionName   : Montor_Drive(_Sys_Info_TypeDef* SysInfo ,uint16_t StayTime)
 * Description    : ������������
 * EntryParameter : None
-* ReturnValue    : None 10ms ����һ��
+* ReturnValue    : None 10ms ����һ�� 123
 **************************************************************************************/
 void Montor_Drive(_Sys_Info_TypeDef* SysInfo )
 {

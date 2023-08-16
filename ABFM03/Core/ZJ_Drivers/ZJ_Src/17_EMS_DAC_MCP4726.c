@@ -9,7 +9,7 @@ MCP4726_ADDR_e mcp4726_array[] = {MCP4726_A0_ADDR, MCP4726_A1_ADDR, MCP4726_A2_A
 /**************************************************************************************
 * FunctionName   : DAC_Device_ReadData(uint8_t add)
 * Description    : DAC������
-* EntryParameter : None
+* EntryParameter : None 123
 * ReturnValue    : None
 **************************************************************************************/
 uint8_t DAC_Device_ReadData(uint8_t add)

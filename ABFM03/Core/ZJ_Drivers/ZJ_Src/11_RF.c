@@ -7,7 +7,7 @@ _RF_HANDLE_TypeDef RF_Handle;
 * FunctionName	: RF_Osc_ON(void)
 * Description		: RF PWM ����
 * EntryParameter:
-* ReturnValue		:
+* ReturnValue		: 123
 **************************************************************************************/
 void RF_Osc_ON(void)
 {

@@ -382,7 +382,7 @@ void Vibration_Reminder_Counts_Run(void) //10ms运�?�一�?
 }
 /**************************************************************************************
 * FunctionName   : Set_OverTemp_Parameter(void)
-* Description    : 过温参数设置
+* Description    : 过温参数设置 123
 * EntryParameter : None
 * ReturnValue    : None
 **************************************************************************************/

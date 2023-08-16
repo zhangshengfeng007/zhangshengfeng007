@@ -94,7 +94,7 @@ uint8_t  Check_Idle_Time(void) //10ms����
 * FunctionName	: skin_rf_scan(void)
 * Description		: ��ȡADC��ֵ
 * EntryParameter:
-* ReturnValue		: 1ms����1��
+* ReturnValue		: 1ms����1��  123
 **************************************************************************************/
 static void read_RF_ADC_value(void)
 {

@@ -2,7 +2,7 @@
 /**
   ******************************************************************************
   * @file    usart.c
-  * @brief   This file provides code for the configuration
+  * @brief   This file provides code for the configuration 123
   *          of the USART instances.
   ******************************************************************************
   * @attention

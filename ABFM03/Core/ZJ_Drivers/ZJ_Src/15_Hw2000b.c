@@ -9,7 +9,7 @@
  * @author   fudl
  *
  * @note
- * @Copyright (C) 2017 Shanghai Eastsoft Microelectronics C0., Ltd.
+ * @Copyright (C) 2017 Shanghai Eastsoft Microelectronics C0., Ltd. 123
  ******************************************************************************/
 #include "includes.h"
 #include "hw2000b.h"

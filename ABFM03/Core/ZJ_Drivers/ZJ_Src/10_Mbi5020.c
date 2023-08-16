@@ -2,13 +2,13 @@
 #include "mbi5020.h"
 
 /**************************************************************************************
-* FunctionName   : Set_Mbi5020_Out(uint16_t output_on_bit)	
-* Description    : mbi5020Ð´º¯Êý  16bit
-* EntryParameter : 
-* ReturnValue    : None
-**************************************************************************************/ 
+* FunctionName   : Set_Mbi5020_Out(uint16_t output_on_bit)
+* Description    : mbi5020Ð´ï¿½ï¿½ï¿½ï¿½  16bit
+* EntryParameter :
+* ReturnValue    : None  123
+**************************************************************************************/
 
-void Set_Mbi5020_Out(uint16_t output_on_bit)	
+void Set_Mbi5020_Out(uint16_t output_on_bit)
 {
 	if((output_on_bit & RF_CH1_ON_BIT)||(output_on_bit & RF_CH2_ON_BIT)||(output_on_bit & RF_CH3_ON_BIT))  //rf
 	{
@@ -22,15 +22,15 @@ void Set_Mbi5020_Out(uint16_t output_on_bit)
 		EMS_CHANNEL_ON();
 		RF_CHANNEL_OFF();
 //		EMS_CHANNEL_OFF();
-//		RF_CHANNEL_ON();		
+//		RF_CHANNEL_ON();
 	}
-	else 
+	else
 	{
 		EMS_CHANNEL_OFF();
-		RF_CHANNEL_OFF();		
+		RF_CHANNEL_OFF();
 	}
-	
-}	
+
+}
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
 

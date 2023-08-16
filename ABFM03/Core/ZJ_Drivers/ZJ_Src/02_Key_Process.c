@@ -139,7 +139,7 @@ void Dealwith_power_key_up(void) //
 
 /**************************************************************************************
 * FunctionName   : Dealwith_power_key_long
-* Description    : 长按开关机  BAT_30_40_STATUS
+* Description    : 长按开关机  BAT_30_40_STATUS  123
 * EntryParameter :
 * ReturnValue    :
 **************************************************************************************/
