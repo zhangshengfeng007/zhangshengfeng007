@@ -20,7 +20,7 @@
   *
   *   After each device reset the HSI (8 MHz then 16 MHz) is used as system clock source.
   *   Then SystemInit() function is called, in "startup_stm32g0xx.s" file, to
-  *   configure the system clock before to branch to main program.
+  *   configure the system clock before to branch to main program. 123
   *
   *   This file configures the system clock as follows:
   *=============================================================================
@@ -274,7 +274,7 @@ void SystemCoreClockUpdate(void)
 
       SystemCoreClock = pllvco/pllr;
       break;
-      
+
     case 0x00000000U:                   /* HSI used as system clock */
     default:                            /* HSI used as system clock */
       hsidiv = (1UL << ((READ_BIT(RCC->CR, RCC_CR_HSIDIV))>> RCC_CR_HSIDIV_Pos));

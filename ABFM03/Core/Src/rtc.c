@@ -2,7 +2,7 @@
 /**
   ******************************************************************************
   * @file    rtc.c
-  * @brief   This file provides code for the configuration
+  * @brief   This file provides code for the configuration123
   *          of the RTC instances.
   ******************************************************************************
   * @attention

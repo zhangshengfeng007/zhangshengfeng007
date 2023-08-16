@@ -52,7 +52,7 @@ void sys_swd_clk_init(void)
         * EVENT_OUT
         * EXTI
         * Free pins are configured automatically as Analog (this feature is enabled through
-        * the Code Generation settings)
+        * the Code Generation settings) 123
 */
 void MX_GPIO_Init(void)
 {
