@@ -35,7 +35,7 @@ void Skin_Touch_Scan(void)  //10ms����һ��
 			}
 		}
 	}
-	SysInfo.Skin_Touch_Flag = 1; //2023 08 02  debug ,测试波形
+	//SysInfo.Skin_Touch_Flag = 1; //2023 08 02  debug ,测试波形
 }
 
 /*************************************************************************************
