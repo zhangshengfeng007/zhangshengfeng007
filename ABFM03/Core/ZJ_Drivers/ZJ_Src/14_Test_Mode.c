@@ -331,7 +331,7 @@ void Test_Pole_run(uint8_t Pole_Counts)
 * FunctionName   : EMS_Procedure_Run(void)
 * Description    : 1s RF �� 2S EMS
 * EntryParameter : None
-* ReturnValue    : None  10ms ����һ��
+* ReturnValue    : None  10ms ����һ�� 123
 **************************************************************************************/
 void Test_Mode_EMS_RF_ctrl(void)
 {

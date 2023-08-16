@@ -841,7 +841,7 @@ void Normal_Led_Display(uint8_t Level)
 	Level_led_scan(Level);
 }
 /**************************************************************************************
-* FunctionName   : sys_err_display(void)
+* FunctionName   : sys_err_display(void)   123
 * ReturnValue    : None
 **************************************************************************************/
 static void sys_err_display(void)

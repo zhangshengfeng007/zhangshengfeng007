@@ -6,7 +6,7 @@ extern I2C_HandleTypeDef hi2c2;
 //example, writing to point register 0x00 sets the SGM5355-16 to normal mode, we need the following order:
 // 1. First byte, 0b0001100 (first 7-bit is I2C address), the 8th bit is read/write bit which is low writing now
 // 2. Second byte, 0b00000000 (points to register 0x00)
-// 3. Third byte, 0b00000000 (value 0x00 is wrote, which means PD[1:0] = 00)
+// 3. Third byte, 0b00000000 (value 0x00 is wrote, which means PD[1:0] = 00)  123
 //****************************************************
 static HAL_StatusTypeDef DAC_SGM5355_write_reg(uint8_t reg, uint8_t* data, uint8_t len)
 {

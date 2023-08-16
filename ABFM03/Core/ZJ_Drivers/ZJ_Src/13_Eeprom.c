@@ -8,7 +8,7 @@ uint32_t PageError = 0;                    //����PageError,�����
 * FunctionName   : GetPage()
 * Description    :
 * EntryParameter :
-* Description    : --
+* Description    : -- 123
 * ReturnValue    :
 **************************************************************************************/
 static uint32_t GetPage(uint32_t Addr)
@@ -185,17 +185,17 @@ static void save_msg_to_flash(void)
 	EMS_level += EMS_Handle.vol_value;// 电压值档位：bit7~bit0
 
 	__disable_irq();
-	
+
 	__disable_irq();
 	__ISB();
 	__DSB();
 	__DMB();   // 2023 07 28 汇编代码 FAE建议新增，（确保 之前的代码均已执行完毕）
-	
+
 	FLASH_Unlock();
 
 	__HAL_FLASH_INSTRUCTION_CACHE_DISABLE(); // 2023 07 28 FAE建议，操作flash之前，先将缓存 和 buffer关闭，
 	__HAL_FLASH_PREFETCH_BUFFER_DISABLE();
-	
+
 	FLASH_ErasePage(EEPROM_STRAT_ADDR);
 
 	FLASH_ProgramHalfWord(FLASH_REPAIR_LVL_ADDR, (uint64_t)SysInfo.Save_Data.repair_level);
@@ -205,7 +205,7 @@ static void save_msg_to_flash(void)
 
 	FLASH_ProgramHalfWord(FLASH_NTC_OFFSET_ADDR, (uint64_t)SysInfo.NTC_offset);  // 后面改为，老化结束标记位
 	FLASH_ProgramHalfWord(FLASH_AGING_FINISH_FLAG_ADDR, (uint64_t)SysInfo.Test_Mode.Ageing_finish_Flag);
-	
+
 	__HAL_FLASH_INSTRUCTION_CACHE_ENABLE(); // 2023 07 28 FAE建议，操作flash之后，还原缓存和 buffer
     __HAL_FLASH_PREFETCH_BUFFER_ENABLE();
 	FLASH_Lock();
@@ -296,7 +296,7 @@ volatile void SavePeerCode(uint64_t PeerCode)
 
   FLASH_ErasePage(PEERCODE_START_ADDR);
   FLASH_ProgramHalfWord(PEERCODE_START_ADDR, PeerCode);
-	
+
 	__HAL_FLASH_INSTRUCTION_CACHE_ENABLE(); // 2023 07 28 FAE建议，操作flash之后，还原缓存和 buffer
 	__HAL_FLASH_PREFETCH_BUFFER_ENABLE();
 

@@ -8,7 +8,7 @@ BAT_DATA_t BAT_Data;
 * FunctionName   : USB_Plug_Scan(void)
 * Description    :
 * EntryParameter :
-* ReturnValue    : None
+* ReturnValue    : None  123
 **************************************************************************************/
 void USB_Plug_Scan(void)	//10ms����һ��
 {

@@ -1,6 +1,6 @@
 #include "includes.h"
 
-///时钟计算  每1ms执行一次，用来做整体时钟
+///时锟接硷拷锟斤拷  每1ms执锟斤拷一锟轿ｏ拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷时锟斤拷  123
 extern 	uint32_t hw2000_log_time;
 // void Base_Time_Const(void)
 // {

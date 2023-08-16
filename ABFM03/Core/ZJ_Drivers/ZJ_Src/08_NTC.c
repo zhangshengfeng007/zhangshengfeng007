@@ -113,7 +113,7 @@ void NTC_Temp_compensation(_Sys_Info_TypeDef *Temp, float Compensation_Value)
 
 #define ENABLE_AUTO_ADJ_NTC_CHECK
 /*************************************************************************************
-* FunctionName	 : NTC_Temp_Running()
+* FunctionName	 : NTC_Temp_Running() 123
 * Description    :
 * EntryParameter :
 * ReturnValue    : None  ----
