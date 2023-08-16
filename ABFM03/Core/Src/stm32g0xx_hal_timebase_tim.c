@@ -35,7 +35,7 @@ TIM_HandleTypeDef        htim3;
   *         Tick interrupt priority.
   * @note   This function is called  automatically at the beginning of program after
   *         reset by HAL_Init() or at any time when clock is configured, by HAL_RCC_ClockConfig().
-  * @param  TickPriority: Tick interrupt priority.
+  * @param  TickPriority: Tick interrupt priority. 123
   * @retval HAL status
   */
 HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)

@@ -42,7 +42,7 @@ extern uint16_t crc16_compute(uint8_t const * p_data, uint32_t size);
 
 
 //HAL_UART_Receive_DMA(uartHandle, FrameBuf.frame[FrameBuf.index].data, RX_BUF_MAX_LEN);
-//__HAL_UART_ENABLE_IT(&huart2,UART_IT_RXFNE);//UART_IT_IDLE);
+//__HAL_UART_ENABLE_IT(&huart2,UART_IT_RXFNE);//UART_IT_IDLE); 123
 
 //download test peer code:
 //0x00 0A 00 15 AA 55 55 AA 37 74

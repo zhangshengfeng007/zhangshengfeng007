@@ -3,7 +3,7 @@
   ******************************************************************************
   * @file    adc.c
   * @brief   This file provides code for the configuration
-  *          of the ADC instances.
+  *          of the ADC instances.123
   ******************************************************************************
   * @attention
   *

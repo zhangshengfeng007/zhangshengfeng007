@@ -251,10 +251,7 @@ void StartTask03(void const * argument)
 		 if(Printf_delay_cnt >= 10)
 		  {
 		 	Printf_delay_cnt = 0;
-			//Write_Parameter_To_Eeprom(); //debug --flash
-			//
 			// printf ("\n\r Dev_id =0x%0x \n\r", SysInfo.Device_id);
-			//hw_2_4G_data.mode
 			//printf ("\n\r 2.4G_mode =0x%0x \n\r", hw_2_4G_data.mode);
 			// printf ("\n\r skin_adc_val: %d \n\r", RF_Handle.ADC_value);
 			// printf ("\n\r Led_Value.Mode %d \n\r", Led_Value.Mode);

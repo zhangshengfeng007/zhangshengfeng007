@@ -3,7 +3,7 @@
   ******************************************************************************
   * @file    iwdg.c
   * @brief   This file provides code for the configuration
-  *          of the IWDG instances.
+  *          of the IWDG instances.123
   ******************************************************************************
   * @attention
   *
