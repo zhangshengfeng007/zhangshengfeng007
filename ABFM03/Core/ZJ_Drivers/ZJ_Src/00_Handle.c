@@ -384,7 +384,7 @@ void Vibration_Reminder_Counts_Run(void) //10ms运�?�一�?
 * FunctionName   : Set_OverTemp_Parameter(void)
 * Description    : 过温参数设置 123
 * EntryParameter : None
-* ReturnValue    : None
+* ReturnValue    : None 100ms 调用一次
 **************************************************************************************/
 void Set_OverTemp_Parameter(void)
 {
@@ -399,23 +399,38 @@ void Set_OverTemp_Parameter(void)
 		}
 	}
 
-	if(!SysInfo.OverTemp_Flag && SysInfo.WorkState == repair_mode)    //过温后恢复�?�常，参数恢复�?�常  淡纹�?�?
+	switch(SysInfo.WorkState)
 	{
-		SysInfo.repair_level = SysInfo.Save_Data.repair_level ;
-	}
-	else if(SysInfo.OverTemp_Flag && SysInfo.WorkState == repair_mode)//过温参数设置
-	{
-		SysInfo.repair_level = Level_None ;
+		case repair_mode:
+		{
+			if(SysInfo.OverTemp_Flag)
+			{
+				SysInfo.repair_level = Level_None;	// 过温关闭输出
+			}
+			else
+			{
+				SysInfo.repair_level = SysInfo.Save_Data.repair_level ;
+			}
+			break;
+		}
+		case upkeep_mode:
+		{
+			if(SysInfo.OverTemp_Flag)
+			{
+				SysInfo.upkeep_level = Level_None; // 过温关闭输出
+			}
+			else
+			{
+				SysInfo.upkeep_level = SysInfo.Save_Data.upkeep_level;
+			}
+			break;
+		}
+		default:
+		{
+			break;
+		}
 	}
 
-	if(!SysInfo.OverTemp_Flag && SysInfo.WorkState == upkeep_mode)    //过温后恢复�?�常，参数恢复�?�常  紧致提拉
-	{
-		SysInfo.upkeep_level = SysInfo.Save_Data.upkeep_level ;
-	}
-	else if(SysInfo.OverTemp_Flag && SysInfo.WorkState == upkeep_mode)//过温参数设置
-	{
-		SysInfo.upkeep_level = Level_None ;
-	}
 
 	// if(SysInfo.Test_Mode.Ageing_Flag && SysInfo.Test_Mode.Ageing_Mode!=0x03)
 	// if(SysInfo.Test_Mode.Ageing_Flag)
