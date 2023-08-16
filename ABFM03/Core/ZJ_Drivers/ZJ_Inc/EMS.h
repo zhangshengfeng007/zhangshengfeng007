@@ -5,7 +5,7 @@
 #define EMS_BOOST_ADC_AN	    0
 #define EMS_VOL_ERROR			20
 #define EMS_BOOST_DEADLINE		38
-#define EMS_BOOST_SW_PERIOD		20		//20KHz  400
+#define EMS_BOOST_SW_PERIOD		20		//20KHz  400 //123
 #define EMS_Mode                0
 #define EMS_1000_ms             100
 #define EMS_1500_ms             150

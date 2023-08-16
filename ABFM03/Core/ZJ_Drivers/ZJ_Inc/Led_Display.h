@@ -3,7 +3,7 @@
 #include "main.h"
 #include "includes.h"
 #include "Handle.h"
-
+//222
 #define LED_UP_STATS   0x01
 #define LED_DOWN_STATS 0x00
 
@@ -16,7 +16,7 @@
 extern void IRled_stop(void);
 extern void IRled_start(void);
 
-// 档位灯枚举
+// 档位灯枚举 123
 typedef enum
 {
     LEVEL_NULL_DISP = 0,

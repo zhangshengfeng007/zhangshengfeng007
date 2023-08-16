@@ -6,7 +6,7 @@
 #define RF_CHANNEL   TIM_CHANNEL_1
 
 #if ARF001
-//	#define Frequency_2M0_CNT 5
+//	#define Frequency_2M0_CNT 5			//123
 //	#define Frequency_1M5_CNT 20
 //	#define Frequency_1M0_CNT 50
 	#define Frequency_2M0_CNT 50

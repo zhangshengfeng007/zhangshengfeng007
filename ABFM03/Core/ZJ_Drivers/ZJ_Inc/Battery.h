@@ -2,7 +2,7 @@
 #define _BATTERY_H
 #include "includes.h"
 
-/*******************USB������*******************************************/
+/*******************USB������***************************123****************/
 //#define DC5V_IN_DET_PIN        	DC5V_IN_DET_PIN
 //#define VIN_DET_PORT		   	DC5V_IN_DET_PORT
 #define VIN_DET_IN()		   	HAL_GPIO_ReadPin(DC5V_IN_DET_PORT, DC5V_IN_DET_PIN)

@@ -5,7 +5,7 @@
 #include "Key_Read.h"
 
 void Key_Proc(void);
-
+///123
 
 void Dealwith_power_key_up(void);
 void Dealwith_power_key_long(void);
@@ -20,6 +20,6 @@ void Dealwith_testmode_power_key_up(void);
 void Dealwith_testmode_level_add_key_up(void);
 void Dealwith_testmode_level_dec_up(void);
 void Dealwith_testmode_power_key_long(void);
-
+//123
 #endif
 
