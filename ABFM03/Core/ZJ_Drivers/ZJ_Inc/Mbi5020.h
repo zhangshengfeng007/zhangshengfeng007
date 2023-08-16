@@ -3,7 +3,7 @@
 #include "includes.h"
 
 //ע�������ת��
-//ͬһ���֣����ֽ��ȷ��ͣ�ͬһ���ֽڸ�λ�ȷ���
+//ͬһ���֣����ֽ��ȷ��ͣ�ͬһ���ֽڸ�λ�ȷ��� 123
 #define CLOSE_RF_EMS_OUT_BIT	0x0000
 #define RF_CH1_ON_BIT	0x0003
 #define RF_CH2_ON_BIT	0x0003 << 2

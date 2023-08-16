@@ -2,7 +2,7 @@
 #define _SKIN_H
 #include "includes.h"
 
-#define RF_TOUCH_THRESHOLD      85//45//85  ///�Ӵ���� ��ֵ
+#define RF_TOUCH_THRESHOLD      85//45//85  ///�Ӵ���� ��ֵ 123
 #define TEST_RF_TOUCH_THRESHOLD 85  ///�Ӵ���� ����ģʽ
 //#if ARF001
 //#define Skin_Remove_Cnt 30
