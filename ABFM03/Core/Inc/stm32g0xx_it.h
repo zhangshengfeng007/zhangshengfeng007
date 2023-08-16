@@ -2,7 +2,7 @@
 /**
   ******************************************************************************
   * @file    stm32g0xx_it.h
-  * @brief   This file contains the headers of the interrupt handlers.
+  * @brief   This file contains the headers of the interrupt handler s aaa.
   ******************************************************************************
   * @attention
   *

@@ -2,7 +2,7 @@
 /**
   ******************************************************************************
   * @file    iwdg.h
-  * @brief   This file contains all the function prototypes for
+  * @brief   This file contains all the function prototypes for aaa
   *          the iwdg.c file
   ******************************************************************************
   * @attention
