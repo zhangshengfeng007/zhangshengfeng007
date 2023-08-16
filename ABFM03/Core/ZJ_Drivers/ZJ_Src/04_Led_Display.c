@@ -808,7 +808,7 @@ void Fault_Led_Display(uint8_t Fault)
 static void state_led_disp(void)
 {
 	//if(!SysInfo.System_Err_status && SysInfo.MotionStateFlage)
-	if(0 == SysInfo.Skin_Touch_Flag)
+	if((0 == SysInfo.Skin_Touch_Flag) || (SysInfo.OverTemp_Flag))
 	{
 		State_led_scan(BLACK); //离开皮肤，状态灯熄灭
 		return;
