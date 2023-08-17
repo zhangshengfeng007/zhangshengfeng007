@@ -56,7 +56,7 @@ static void dealwith_wake_up_mode(void)
 		// {
 		// 	Led_Value.Level = Bat_level_check();
 		// }
-		Led_Value.StayTime --;
+		//Led_Value.StayTime --;
 		Led_Value.Mode = WAKE_UP_DISP;
 	}
 }
@@ -167,7 +167,7 @@ void Led_Process_Run(void)
 	{
 		if(Led_Value.StayTime)
 		{
-			Led_Value.StayTime --;
+			//Led_Value.StayTime --;
 			Led_Value.Mode = WAKE_UP_DISP;
 		}
 		else
@@ -176,6 +176,11 @@ void Led_Process_Run(void)
 			charge_mode_Flag = 0;
 		}
 	}
+	if(Led_Value.StayTime) // 2023 0817 显示计时函数，统一在这里进行处理
+	{
+		Led_Value.StayTime --;
+	}
+
 	Led_Display(&Led_Value);
 }
 /**************************************************************************************
