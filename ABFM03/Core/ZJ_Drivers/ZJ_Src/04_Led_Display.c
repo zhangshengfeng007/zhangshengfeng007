@@ -1200,9 +1200,17 @@ uint8_t Led_Display(_LED_VALUE_TypeDef * LED )
 			//Fault_Led_Display(LED->Level);
 			//break;
 		}
-		case Batt_Low_0:
+		case Batt_Low_0:				// 2023 08 17低电量，长按开机时，根据prd，第一个档位灯闪烁5次（亮5次）
 		{
-			Bat_low_led_Filcker(50);
+			if(Led_Value.StayTime)
+			{
+				Bat_low_led_Filcker(50);
+			}
+			else
+			{
+				Level_led_scan(LEVEL_NULL_DISP);
+			}
+
 			break;
 		}
 		case Batt_Normal:

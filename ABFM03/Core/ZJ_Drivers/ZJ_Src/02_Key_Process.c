@@ -63,7 +63,7 @@ void Sys_Wakeup_init(void)
   //SysInfo.Power_Value.BattState = 0;
   SysInfo.Power_Value.state = System_OFF;
   SysInfo.Sleep_Counts = 0;
-  Led_Value.StayTime = 200;
+
   RGB_Init();
 
 }
@@ -132,6 +132,7 @@ void Dealwith_power_key_up(void) //
 		case System_OFF:
 		{
       Sys_Wakeup_init();
+      Led_Value.StayTime = 200;
 			break;
 		}
 	}
@@ -153,8 +154,12 @@ void Dealwith_power_key_long(void)
     // if(SysInfo.Batt_Value.State == BAT_00_00_STATUS)
 		{
 		  Sys_Wakeup_init();
-		  Led_Value.Mode = Batt_Low_0 ; //缺电，1档LED灯1Hz频率闪烁5次
-		  Led_Value.StayTime = 400;
+      SysInfo.Batt_Value.Power_Display_Flag = 0;
+		  Led_Value.Mode = Batt_Low_0; //缺电，1档LED灯1Hz频率闪烁5次
+      if(Led_Value.StayTime == 0)
+      {
+		      Led_Value.StayTime = 500;
+      }
       printf ("\n\r bat too low !!!\n\r");
 		}
 		else
@@ -588,10 +593,6 @@ static void get_key_msg(struct_KeyInfo* pInfo)
 
         case POWER_KEY_Press:
         {
-            if((System_OFF == SysInfo.Power_Value.state)&&((power_key_press_cnt <= 10)||(power_key_press_cnt >= 50)&&(power_key_press_cnt < 200)))
-            {
-                BOOST_3V3_OFF();
-            }
             if((power_key_press_cnt > 10)&&(power_key_press_cnt < 50))
             {
               pInfo->key_msg = POWER_KEY_UP_MSG;
