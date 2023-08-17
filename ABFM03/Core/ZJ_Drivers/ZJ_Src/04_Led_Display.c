@@ -1230,7 +1230,8 @@ uint8_t Led_Display(_LED_VALUE_TypeDef * LED )
 			}
 			else
 			{
-				Twink1hz_Display(E1_Bat_Low, 50, 0);
+				//Twink1hz_Display(E1_Bat_Low, 50, 0);
+				Normal_Led_Display(LEVEL1_DISP); //2023/08/17 根据prd，电量查询时，低电量情况下，led1常亮即可
 			}
 			break;
 		}

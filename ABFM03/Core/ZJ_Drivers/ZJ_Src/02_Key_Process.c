@@ -60,7 +60,7 @@ void Sys_Wakeup_init(void)
   BOOST_3V3_ON();
   HAL_SPI_MspInit(&hspi1);
   SysInfo.Batt_Value.Power_Display_Flag = 1; // 电量显示标志
-  SysInfo.Power_Value.BattState = 0;
+  //SysInfo.Power_Value.BattState = 0;
   SysInfo.Power_Value.state = System_OFF;
   SysInfo.Sleep_Counts = 0;
   Led_Value.StayTime = 200;
