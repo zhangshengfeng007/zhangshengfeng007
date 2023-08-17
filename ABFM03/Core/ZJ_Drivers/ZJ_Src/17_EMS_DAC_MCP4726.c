@@ -84,7 +84,7 @@ HAL_StatusTypeDef DAC_MCP4726_probe(void)
 		}
 		else
 		{
-			printf ("\n\r mcp4726 serial_probe fail");
+			printf ("\n\r mcp4726 probe fail cnt:%d", i);
 		}
 	}
 	return HAL_ERROR;

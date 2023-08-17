@@ -162,13 +162,6 @@ void Dealwith_power_key_long(void)
 			BOOST_5V_ON();
 			BOOST_3V3_ON();
 
-			HAL_SPI_MspInit(&hspi1);
-			HAL_SPI_MspInit(&hspi2);
-			HAL_I2C_MspInit(&hi2c1);
-			HAL_I2C_MspInit(&hi2c2);
-			HAL_TIM_Base_MspInit(&htim1);
-			HAL_TIM_Base_MspInit(&htim17);
-
 			Read_Current_Level_For_Eeprom();
 			SysInfo.Mode_Switch_Flag = 0x01 ; //RF模式开启
 
@@ -182,16 +175,12 @@ void Dealwith_power_key_long(void)
 			SysInfo.Freq_Cnt=0;
 
 			//			Mode_led_scan(SysInfo.WorkState);
-			SysInfo.Montor_Flag = 1; //电机振动标志
-			SysInfo.StayTime = 20;
 			// HAL_NVIC_DisableIRQ(EXTI0_1_IRQn);     //关闭外部中断POWER_KEY_PIN使能   ---占用4个字节
 			hw2000b_init_250k();
 			GY6550_INIT();   //陀螺仪初始化
 			RGB_Init();
 			MX_USART2_UART_Init();
-
 			sys_swd_clk_init();
-
 			Ems_dac_probe();
       ReadDevice_ID();
       IRled_start();
@@ -199,6 +188,8 @@ void Dealwith_power_key_long(void)
 			SysInfo.Lock_State  = Lock_ON;
 			SysInfo.Batt_Value.Power_Display_Flag = 0;
       hw_2_4G_data.mode = NORMAL_MODE;
+      SysInfo.Montor_Flag = 1; //电机振动标志
+			SysInfo.StayTime = 20;
       printf ("\n\r key long _ inside_ver: %s \n\r", inside_version);
 		}
 		SysInfo.StayTime_30s_Flag = 1; //切换档位后,在该档位维持30s,避免因温度过高，导致切换档位一直维持1档运行

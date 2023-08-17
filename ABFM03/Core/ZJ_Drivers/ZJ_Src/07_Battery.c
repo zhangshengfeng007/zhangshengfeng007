@@ -288,9 +288,9 @@ void CheckWorking_Batter_State(void)
 		{
 			BattState_Cnt = 50;
 
-			if(BAT_Data.status > BAT_00_20_STATUS)
+			if(BAT_Data.status > BAT_00_00_STATUS) //低电关机百分比
 			{
-				BAT_Data.status = BAT_00_20_STATUS;
+				BAT_Data.status = BAT_00_00_STATUS;
 			}
 		}
 	}
@@ -334,8 +334,9 @@ uint8_t Scan_Batter_State(void)
 	static uint16_t BattCount = 0;
 
 
-	if((SysInfo.Power_Value.state == System_ON) && (0 == RF_Handle.Read_ADC_Flag)||(SysInfo.Montor_Flag))
+	if(SysInfo.Montor_Flag)
 	{
+		BAT_Data.status = BAT_40_60_STATUS; // 开机时，马达震动显示中间档位，防止电池有点开机出现低电的情况
 		return BAT_Data.status;
 	}
 
