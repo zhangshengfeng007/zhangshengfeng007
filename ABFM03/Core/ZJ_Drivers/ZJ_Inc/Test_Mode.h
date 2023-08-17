@@ -4,19 +4,24 @@
 
 #if ARF001
 		////////////////���������汾��(ע������2�׺�Ҫͬʱ����)///////////////123
-	#define version  "V0.1.0.0"
+	#define version  "V0.1.1.0"    // 2023 0817 根据试产bom 将版本号更新为V0.1.1.0
 
 	#define EXTERNAL_VERSION_0	0
 	#define EXTERNAL_VERSION_1	1
-	#define EXTERNAL_VERSION_2	0
+	#define EXTERNAL_VERSION_2	1   // 2023 0817 根据试产bom 将版本号更新为V0.1.1.0
 	#define EXTERNAL_VERSION_3	0
 ////////////////////////////////////////////////////////////////////
-	#define inside_version  "V0.1.2.4"
+	#define inside_version  "V0.1.1.0" // 2023 0817 根据试产bom 将版本号更新为V0.1.1.0
 //�ڲ��汾��,����0001�Ծ͵ľ���V0.0.01
-	#define INTERNAL_VERSION_0	0
-	#define INTERNAL_VERSION_1	1  // 2023 03 14 �޸İ汾Ϊv 0.1.2.0
-	#define INTERNAL_VERSION_2	2  //  2023 03 20 �޸İ汾λv 0.1.2.1
-	#define INTERNAL_VERSION_3	4  // 2023 03 29 �޸İ汾λv 0.1.2.4
+	// #define INTERNAL_VERSION_0	0
+	// #define INTERNAL_VERSION_1	1  // 2023 03 14 �޸İ汾Ϊv 0.1.2.0
+	// #define INTERNAL_VERSION_2	2  //  2023 03 20 �޸İ汾λv 0.1.2.1
+	// #define INTERNAL_VERSION_3	4  // 2023 03 29 �޸İ汾λv 0.1.2.4
+
+   	#define INTERNAL_VERSION_0	0
+	#define INTERNAL_VERSION_1	1  //
+	#define INTERNAL_VERSION_2	1  // 2023 0817 根据试产bom 将版本号更新为V0.1.1.0
+	#define INTERNAL_VERSION_3	0  //
 #else
 	#define version  "V1.2.0"
 #endif
