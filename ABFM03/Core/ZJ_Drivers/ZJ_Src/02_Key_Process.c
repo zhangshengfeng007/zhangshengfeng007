@@ -155,6 +155,7 @@ void Dealwith_power_key_long(void)
 		  Sys_Wakeup_init();
 		  Led_Value.Mode = Batt_Low_0 ; //缺电，1档LED灯1Hz频率闪烁5次
 		  Led_Value.StayTime = 400;
+      printf ("\n\r bat too low !!!\n\r");
 		}
 		else
 		{
@@ -190,7 +191,7 @@ void Dealwith_power_key_long(void)
       hw_2_4G_data.mode = NORMAL_MODE;
       SysInfo.Montor_Flag = 1; //电机振动标志
 			SysInfo.StayTime = 20;
-      printf ("\n\r key long _ inside_ver: %s \n\r", inside_version);
+      printf ("\n\r ver:%s ,inside_ver: %s \n\r", version, inside_version);
 		}
 		SysInfo.StayTime_30s_Flag = 1; //切换档位后,在该档位维持30s,避免因温度过高，导致切换档位一直维持1档运行
 
