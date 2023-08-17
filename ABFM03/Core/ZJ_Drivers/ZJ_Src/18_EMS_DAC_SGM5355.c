@@ -123,7 +123,11 @@ HAL_StatusTypeDef DAC_SGM5355_Probe(void)
 			printf ("\n\r sgm5355_probe succ:0x%0x \n\r", EMS_dac_dev.iic_addr);
 			return HAL_OK;
 		}
+		else
+		{
+			printf ("\n\r sgm5355_probe fail, cnt :%d", i);
+		}
 	}
-	printf ("\n\r sgm5355_probe fail \n\r");
+
 	return HAL_ERROR;
 }
