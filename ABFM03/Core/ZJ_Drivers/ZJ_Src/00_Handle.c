@@ -452,8 +452,8 @@ void System_Error_Deal(void)
 	static uint8_t Ntc_Err_Cnt,Temp_high_Err_cnt;
 	static uint16_t Err_to_sleep_delay = 0;
 
-	if(SysInfo.Batt_Value.State <= BAT_00_20_STATUS  && SysInfo.Power_Value.state == System_ON )
-	{
+	if(SysInfo.Batt_Value.State < BAT_00_20_STATUS  && SysInfo.Power_Value.state == System_ON )
+	{									// 2023 08 17 将条件中的 <= 修改未 <,
 		SystemError_DelayCnt ++;
 		if(SystemError_DelayCnt >= 40)  //切换档位�?,在�?�档位维�?30s,避免因温度过高，导致切换档位�?直维�?1档运�? 主�?�针对EMS
 		{
