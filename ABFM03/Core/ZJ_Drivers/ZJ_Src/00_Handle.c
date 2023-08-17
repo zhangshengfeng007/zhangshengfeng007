@@ -987,7 +987,7 @@ void exit_sleep_mode(void)
 	MX_USART2_UART_Init();
     MX_I2C1_Init();
 
-
+  	Led_Value.Mode = SLEEP_MODE_DISP; // 2023 08 17
 	SysInfo.Test_Mode.Test_Mode_Flag = OFF;
 	RGB_Init();
 	BOOST_5V_OFF();
