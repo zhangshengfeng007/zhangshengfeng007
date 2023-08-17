@@ -50,17 +50,7 @@ static void dealwith_wake_up_mode(void)
 	{
 		if(200 == Led_Value.StayTime)
 		{
-			// SysInfo.Save_Data.BattState  = *(__IO uint32_t*)(FLASH_BAT_STATE_ADDR);		//读取关机前的电量
-			// if(SysInfo.Save_Data.BattState == BAT_00_00_STATUS)
-			// {
-			// 	Led_Value.Level = LEVEL_NULL_DISP;
-			// }
-			// else
-			{
-				Led_Value.Level = Bat_level_check();
-			}
-			// Led_Value.state = 1 ;
-
+			Led_Value.Level = Bat_level_check();
 		}
 		// if(Led_Value.StayTime % 10 == 0)
 		// {
