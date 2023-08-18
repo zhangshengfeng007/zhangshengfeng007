@@ -156,9 +156,9 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 */
 void send_data_to_usart(uint8_t *pbuf, uint8_t len)
 {
-  taskENTER_CRITICAL();
+  //taskENTER_CRITICAL();
 	HAL_UART_Transmit(&huart2, pbuf, len, 5);
-  taskEXIT_CRITICAL();
+ // taskEXIT_CRITICAL();
 }
 
 /**********************************************/
