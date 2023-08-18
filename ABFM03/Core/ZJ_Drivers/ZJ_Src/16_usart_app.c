@@ -818,6 +818,7 @@ static void dealwith_adjust_ntc_temp(void)
 
 	SysInfo.Test_Mode.STATUS = ADJUST_NTC_TEST;
 	SysInfo.Test_Mode.ADJUST_NTC_Delay = 0;
+	SysInfo.Test_Mode.Test_Mode_Flag = 1;
 }
 
 //***********************************************************
