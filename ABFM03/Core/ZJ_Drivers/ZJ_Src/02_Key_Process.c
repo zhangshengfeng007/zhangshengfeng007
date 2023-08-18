@@ -225,6 +225,7 @@ void Dealwith_power_key_long(void)
 		// SysInfo.Flag = 0x01;
 		SysInfo.Test_Mode.EMS_Flag = 0;
 		SysInfo.Test_Mode.RF_Flag = 0;
+    SysInfo.Test_Mode.Test_Mode_Flag = 0;
 
 //		VBAT_OUT_OFF() ;
 		Key_Call_Data();
