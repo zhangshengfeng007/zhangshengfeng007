@@ -539,9 +539,9 @@ void Dealwith_testmode_level_dec_long(void) //
 **************************************************************************************/
 static void get_key_msg(struct_KeyInfo* pInfo)
 {
-  static uint8_t power_key_press_cnt;
-  static uint8_t level_add_key_press_cnt;
-  static uint8_t level_dec_key_press_cnt;
+  static uint16_t power_key_press_cnt;
+  static uint16_t level_add_key_press_cnt;
+  static uint16_t level_dec_key_press_cnt;
 
   switch(pInfo->CurKey)
   {
