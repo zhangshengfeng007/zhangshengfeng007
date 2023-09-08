@@ -1023,10 +1023,13 @@ void System_Data_Init(void)
 	// PID.Kd = 0.1;
 	// PID.Constant=50;
 	// PID.temp = 500;
+	SysInfo.Test_Mode.Quit_Test_30s_Cnt = 0;
+	SysInfo.Test_Mode.Test_Mode_Flag = 0;
 
 	GY6550_INIT();   //�?螺仪初�?�化
 	RGB_Init();
 	hw2000b_init_250k();
+	Ems_dac_probe();
 
 }
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
