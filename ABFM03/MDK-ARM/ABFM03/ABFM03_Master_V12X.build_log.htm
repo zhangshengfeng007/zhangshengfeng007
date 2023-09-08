@@ -1,0 +1,133 @@
+<html>
+<body>
+<pre>
+<h1>�Vision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: ��Vision V5.29.0.0
+Copyright (C) 2019 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: 1 1, 1, LIC=QF8G8-3AMPI-GIX5Q-N5ZJU-H3ETI-WXM51
+
+Tool Versions:
+Toolchain:       MDK-ARM Plus  Version: 5.29.0.0
+Toolchain Path:  D:\Keil_v5\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.06 update 6 (build 750)
+Assembler:       Armasm.exe V5.06 update 6 (build 750)
+Linker/Locator:  ArmLink.exe V5.06 update 6 (build 750)
+Library Manager: ArmAr.exe V5.06 update 6 (build 750)
+Hex Converter:   FromElf.exe V5.06 update 6 (build 750)
+CPU DLL:         SARMCM3.DLL V5.29.0.0
+Dialog DLL:      DARMCM1.DLL V1.19.2.0
+Target DLL:      Segger\JL2CM3.dll V2.99.36.0
+Dialog DLL:      TARMCM1.DLL V1.14.1.0
+
+<h2>Project:</h2>
+F:\R1_YiLiao\trunk\ABFM03\ABFM03_V1.2.0\MDK-ARM\ABFM03.uvprojx
+Project File Date:  03/21/2023
+
+<h2>Output:</h2>
+*** Using Compiler 'V5.06 update 6 (build 750)', folder: 'D:\Keil_v5\ARM\ARMCC\Bin'
+Build target 'ABFM03'
+compiling 03_base_time.c...
+compiling 02_Key_Process.c...
+compiling 09_Skin.c...
+..\Core\ZJ_Drivers\ZJ_Src\09_Skin.c(112): warning:  #520-D: initialization with "{...}" expected for aggregate object
+  	uint8_t print_buff[2] = 0;
+..\Core\ZJ_Drivers\ZJ_Src\09_Skin.c(111): warning:  #177-D: variable "print_cnt"  was declared but never referenced
+  	static  uint8_t print_cnt =0;
+..\Core\ZJ_Drivers\ZJ_Src\09_Skin.c(112): warning:  #177-D: variable "print_buff"  was declared but never referenced
+  	uint8_t print_buff[2] = 0;
+..\Core\ZJ_Drivers\ZJ_Src\09_Skin.c: 3 warnings, 0 errors
+compiling 01_Key_Read.c...
+..\Core\ZJ_Drivers\ZJ_Src\01_Key_Read.c(596): warning:  #550-D: variable "Flag"  was set but never used
+  	uint8_t Flag;
+..\Core\ZJ_Drivers\ZJ_Src\01_Key_Read.c: 1 warning, 0 errors
+compiling 05_Montor_Control.c...
+compiling 07_Battery.c...
+compiling 10_Mbi5020.c...
+compiling 15_Hw2000b.c...
+compiling 13_Eeprom.c...
+compiling 06_YG6550.c...
+compiling 11_RF.c...
+compiling 08_NTC.c...
+..\Core\ZJ_Drivers\ZJ_Src\08_NTC.c(110): warning:  #177-D: variable "test_count"  was declared but never referenced
+  	static uint32_t test_count=0;
+..\Core\ZJ_Drivers\ZJ_Src\08_NTC.c: 1 warning, 0 errors
+compiling 00_Handle.c...
+..\Core\ZJ_Drivers\ZJ_Src\00_Handle.c(255): warning:  #177-D: variable "StandyCnt"  was declared but never referenced
+  	static uint16_t StandyCnt;
+..\Core\ZJ_Drivers\ZJ_Src\00_Handle.c(442): warning:  #177-D: variable "Ntc_Err_Cnt"  was declared but never referenced
+  	static uint8_t Ntc_Err_Cnt,Temp_high_Err_cnt;
+..\Core\ZJ_Drivers\ZJ_Src\00_Handle.c(442): warning:  #177-D: variable "Temp_high_Err_cnt"  was declared but never referenced
+  	static uint8_t Ntc_Err_Cnt,Temp_high_Err_cnt;
+..\Core\ZJ_Drivers\ZJ_Src\00_Handle.c: 3 warnings, 0 errors
+compiling 04_Led_Display.c...
+..\Core\ZJ_Drivers\ZJ_Src\04_Led_Display.c(48): warning:  #177-D: variable "Counts"  was declared but never referenced
+  	static uint8_t Flag,Counts;
+..\Core\ZJ_Drivers\ZJ_Src\04_Led_Display.c: 1 warning, 0 errors
+compiling 12_EMS.c...
+..\Core\ZJ_Drivers\ZJ_Src\12_EMS.c(433): warning:  #186-D: pointless comparison of unsigned integer with zero
+      if(EmsLevel->vol_value >= Level_None && EmsLevel->vol_value <= Level_20)
+..\Core\ZJ_Drivers\ZJ_Src\12_EMS.c: 1 warning, 0 errors
+compiling 14_Test_Mode.c...
+..\Core\ZJ_Drivers\ZJ_Src\14_Test_Mode.c(163): warning:  #177-D: variable "motor_run_flag"  was declared but never referenced
+  	static uint8_t motor_run_flag;
+..\Core\ZJ_Drivers\ZJ_Src\14_Test_Mode.c(576): warning:  #223-D: function "Level_leds_set" declared implicitly
+  			Level_leds_set(Null_LED);
+..\Core\ZJ_Drivers\ZJ_Src\14_Test_Mode.c(680): warning:  #223-D: function "Fault_Led_Display" declared implicitly
+  				Fault_Led_Display(0x04);
+..\Core\ZJ_Drivers\ZJ_Src\14_Test_Mode.c(737): warning:  #223-D: function "Level_leds_set" declared implicitly
+  						Level_leds_set(RED);
+..\Core\ZJ_Drivers\ZJ_Src\14_Test_Mode.c(746): warning:  #223-D: function "Level_leds_set" declared implicitly
+  						Level_leds_set(GREEN);
+..\Core\ZJ_Drivers\ZJ_Src\14_Test_Mode.c(756): warning:  #223-D: function "Level_leds_set" declared implicitly
+  						Level_leds_set(BLUE);
+..\Core\ZJ_Drivers\ZJ_Src\14_Test_Mode.c(764): warning:  #223-D: function "Level_leds_set" declared implicitly
+  						Level_leds_set(White);
+..\Core\ZJ_Drivers\ZJ_Src\14_Test_Mode.c(1113): warning:  #177-D: variable "Lock_Flag"  was declared but never referenced
+  	static uint8_t Lock_Flag,Test_Last_Mode=0;
+..\Core\ZJ_Drivers\ZJ_Src\14_Test_Mode.c(1113): warning:  #177-D: variable "Test_Last_Mode"  was declared but never referenced
+  	static uint8_t Lock_Flag,Test_Last_Mode=0;
+..\Core\ZJ_Drivers\ZJ_Src\14_Test_Mode.c(1417): warning:  #940-D: missing return statement at end of non-void function "Auto_Continuity_Test_Process"
+  }
+..\Core\ZJ_Drivers\ZJ_Src\14_Test_Mode.c(2340): warning:  #177-D: variable "LockFlag"  was declared but never referenced
+  	static uint8_t  LockFlag;
+..\Core\ZJ_Drivers\ZJ_Src\14_Test_Mode.c(2342): warning:  #177-D: variable "StandyCnt"  was declared but never referenced
+  	static uint16_t StandyCnt;
+..\Core\ZJ_Drivers\ZJ_Src\14_Test_Mode.c: 12 warnings, 0 errors
+compiling main.c...
+compiling app_freertos.c...
+../Core/Src/app_freertos.c(199): warning:  #223-D: function "Test_Mode_EMS_RF_ctrl" declared implicitly
+  		Test_Mode_EMS_RF_ctrl();
+../Core/Src/app_freertos.c: 1 warning, 0 errors
+compiling usart.c...
+linking...
+Program Size: Code=49892 RO-data=544 RW-data=428 ZI-data=7428
+FromELF: creating hex file...
+After Build - User command #1: D:\Keil_v5\\ARM\ARMCC\bin\fromelf.exe --bin --output=ABFM03_Master_V12x.bin .\ABFM03\ABFM03_Master_V12x.axf
+".\ABFM03\ABFM03_Master_V12x.axf" - 0 Error(s), 23 Warning(s).
+
+<h2>Software Packages used:</h2>
+
+Package Vendor: ARM
+                http://www.keil.com/pack/ARM.CMSIS.5.6.0.pack
+                ARM.CMSIS.5.6.0
+                CMSIS (Cortex Microcontroller Software Interface Standard)
+   * Component: CORE Version: 5.3.0
+
+Package Vendor: Keil
+                http://www.keil.com/pack/Keil.STM32G0xx_DFP.1.4.0.pack
+                Keil.STM32G0xx_DFP.1.4.0
+                STMicroelectronics STM32G0 Series Device Support
+
+<h2>Collection of Component include folders:</h2>
+  .\RTE\_ABFM03
+  D:\Keil_v5\ARM\PACK\ARM\CMSIS\5.6.0\CMSIS\Core\Include
+  D:\Keil_v5\ARM\PACK\Keil\STM32G0xx_DFP\1.4.0\Drivers\CMSIS\Device\ST\STM32G0xx\Include
+
+<h2>Collection of Component Files used:</h2>
+
+   * Component: ARM::CMSIS:CORE:5.3.0
+Build Time Elapsed:  00:00:06
+</pre>
+</body>
+</html>
