@@ -197,6 +197,7 @@ void Dealwith_power_key_long(void)
       SysInfo.Montor_Flag = 1; //电机振动标志
 			SysInfo.StayTime = 20;
       printf ("\n\r ver:%s ,inside_ver: %s \n\r", version, inside_version);
+      printf ("\n\r NTC_offset:%0.1f \n\r", SysInfo.NTC_offset);
 		}
 		SysInfo.StayTime_30s_Flag = 1; //切换档位后,在该档位维持30s,避免因温度过高，导致切换档位一直维持1档运行
 
@@ -226,6 +227,7 @@ void Dealwith_power_key_long(void)
 		SysInfo.Test_Mode.EMS_Flag = 0;
 		SysInfo.Test_Mode.RF_Flag = 0;
     SysInfo.Test_Mode.Test_Mode_Flag = 0;
+	  SysInfo.Test_Mode.STATUS = NONE_TEST;
 
 //		VBAT_OUT_OFF() ;
 		Key_Call_Data();

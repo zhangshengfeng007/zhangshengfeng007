@@ -148,6 +148,16 @@ void NTC_Temp_Running(void)		//1ms����һ��
 	}
 
 #ifdef ENABLE_AUTO_ADJ_NTC_CHECK
+	if((SysInfo.Test_Mode.Test_Mode_Flag) && (SysInfo.Test_Mode.STATUS == ADJUST_NTC_TEST))
+	{
+		if(SysInfo.System_Err_status != System_LowPower_Fault)		// 温度校准时，不需要报ntc错误
+		{
+			SysInfo.System_Err_status = System_Normal;
+		}
+		return;
+	}
+
+
 	//����NTC�¶ȱ仯�������Ȳ�ǿ�������ӱ仯�ʷ����жϣ����ӷ�Ӧ�ָ���
 	if(++diff_value_check_count>=500)
 	{

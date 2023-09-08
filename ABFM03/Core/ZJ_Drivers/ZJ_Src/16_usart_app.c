@@ -177,6 +177,8 @@ static void get_NTC_temp(void)
 	}
 	SysInfo.Test_Mode.Printf_NTC_Flag = 0;
 	Send_Data_with_crc(Tx_buff, 0x08);
+	SysInfo.Test_Mode.Test_Mode_Flag = OFF;
+	SysInfo.Test_Mode.STATUS = NONE_TEST;
 }
 
 //****************************************
@@ -204,6 +206,8 @@ static void get_Battery_val(void)
 	Tx_buff[4] = temp / 1000;
 	Tx_buff[5] = (temp % 1000) / 10;
 	Send_Data_with_crc(Tx_buff, 0x08);
+	SysInfo.Test_Mode.Test_Mode_Flag = OFF;
+	SysInfo.Test_Mode.STATUS = NONE_TEST;
 }
 
 
@@ -872,7 +876,7 @@ void Uart_Protocol_Process(void)
 			case Comm_Ntc_Temp:// 0x03
 			{
 				get_NTC_temp();
-				enter_fast_read_NTC();
+				//enter_fast_read_NTC();
 				break;
 			}
 			case Comm_Batter_Value://0x04
