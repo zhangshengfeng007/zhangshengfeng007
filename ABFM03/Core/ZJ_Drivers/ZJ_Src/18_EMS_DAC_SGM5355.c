@@ -8,17 +8,19 @@ extern I2C_HandleTypeDef hi2c2;
 // 2. Second byte, 0b00000000 (points to register 0x00)
 // 3. Third byte, 0b00000000 (value 0x00 is wrote, which means PD[1:0] = 00)  123
 //****************************************************
-static HAL_StatusTypeDef DAC_SGM5355_write_reg(uint8_t reg, uint8_t* data, uint8_t len)
+static HAL_StatusTypeDef DAC_SGM5355_write_reg(uint8_t reg, uint8_t* p_data, uint8_t len)
 {
 	HAL_StatusTypeDef ret;
-	uint8_t send_data[5] = {0};
-	send_data[0] = reg;
+	// uint8_t send_data[5] = {0};
+	// send_data[0] = reg;
 
-	for(int i = 0; i < len; i++)
-	{
-		send_data[i + 1] = data[i];
-	}
-	ret = HAL_I2C_Master_Transmit(&hi2c2, SGM5355_ADDRESS, send_data, len + 1, 100);
+	// for(int i = 0; i < len; i++)
+	// {
+	// 	send_data[i + 1] = data[i];
+	// }
+	// ret = HAL_I2C_Master_Transmit(&hi2c2, SGM5355_ADDRESS, send_data, len + 1, 100);
+	gpio_iic_send_bytes(SGM5355_ADDRESS, reg, p_data, len);
+
 	return ret;
 }
 
@@ -51,15 +53,17 @@ static uint16_t DAC_SGM5355_read_reg(uint8_t reg)
 	{
 		case SGM5355_MODE_REG:
 		{
-			HAL_I2C_Master_Transmit(&hi2c2, SGM5355_ADDRESS, &reg, 1, 100);
-			HAL_I2C_Mem_Read(&hi2c2, SGM5355_ADDRESS, reg, 1, recv_buff, 1, 100);
+			// HAL_I2C_Master_Transmit(&hi2c2, SGM5355_ADDRESS, &reg, 1, 100);
+			// HAL_I2C_Mem_Read(&hi2c2, SGM5355_ADDRESS, reg, 1, recv_buff, 1, 100);
+			gpio_iic_read_bytes(SGM5355_ADDRESS, reg, recv_buff, 1);
 			recv_data = recv_buff[0];
 			break;
 		}
 		case SGM5355_OUTPUT_REG:
 		{
-			HAL_I2C_Master_Transmit(&hi2c2, SGM5355_ADDRESS, &reg, 1, 100);
-			HAL_I2C_Mem_Read(&hi2c2, SGM5355_ADDRESS, reg, 1, recv_buff, 2, 100);
+			// HAL_I2C_Master_Transmit(&hi2c2, SGM5355_ADDRESS, &reg, 1, 100);
+			// HAL_I2C_Mem_Read(&hi2c2, SGM5355_ADDRESS, reg, 1, recv_buff, 2, 100);
+			gpio_iic_read_bytes(SGM5355_ADDRESS, reg, recv_buff, 2);
 
 			 recv_data = recv_buff[0];
 			 recv_data <<= 8;
@@ -108,24 +112,55 @@ static void DAC_SGM5355_Init(void)
 HAL_StatusTypeDef DAC_SGM5355_Probe(void)
 {
 	uint8_t i;
-	uint8_t data[3];
+	uint8_t send_data[3];
+	uint8_t recv_data[3];
+	uint16_t tmp;
 	HAL_StatusTypeDef ret;
 
-	data[0] = 0;
+	// data[0] = 0;
 	for(i = 0; i < 3; i++)
 	{
-		if(HAL_OK == DAC_SGM5355_write_reg(SGM5355_MODE_REG, data, 1))
+		// if(HAL_OK == DAC_SGM5355_write_reg(SGM5355_MODE_REG, data, 1))
+		// {
+		// 	EMS_dac_dev.iic_addr = SGM5355_ADDRESS;
+		// 	EMS_dac_dev.dac_probe.p_init = DAC_SGM5355_Init;
+		// 	EMS_dac_dev.dac_probe.p_read = DAC_SGM5355_read_reg;
+		// 	EMS_dac_dev.dac_probe.p_write = DAC_SGM5355_OUT;
+		// 	printf ("\n\r sgm5355_probe succ:0x%0x \n\r", EMS_dac_dev.iic_addr);
+		// 	return HAL_OK;
+		// }
+		// else
+		// {
+		// 	printf ("\n\r sgm5355_probe fail, cnt :%d", i);
+		// }
+
+		send_data[0] = 0x3;
+		DAC_SGM5355_write_reg(SGM5355_MODE_REG, send_data, 1);
+		recv_data[0] =(uint8_t) DAC_SGM5355_read_reg(SGM5355_MODE_REG);
+
+		if(recv_data[0] == send_data[0])
 		{
-			EMS_dac_dev.iic_addr = SGM5355_ADDRESS;
-			EMS_dac_dev.dac_probe.p_init = DAC_SGM5355_Init;
-			EMS_dac_dev.dac_probe.p_read = DAC_SGM5355_read_reg;
-			EMS_dac_dev.dac_probe.p_write = DAC_SGM5355_OUT;
-			printf ("\n\r sgm5355_probe succ:0x%0x \n\r", EMS_dac_dev.iic_addr);
-			return HAL_OK;
+			//printf ("\n\r sgm5355_probe init ok1 \n\r");
+			send_data[0] = 0x0;
+			DAC_SGM5355_write_reg(SGM5355_MODE_REG, send_data, 1);
+			recv_data[0] =(uint8_t) DAC_SGM5355_read_reg(SGM5355_MODE_REG);
+			if(recv_data[0] == send_data[0])
+			{
+					EMS_dac_dev.iic_addr = SGM5355_ADDRESS;
+					EMS_dac_dev.dac_probe.p_init = DAC_SGM5355_Init;
+					EMS_dac_dev.dac_probe.p_read = DAC_SGM5355_read_reg;
+					EMS_dac_dev.dac_probe.p_write = DAC_SGM5355_OUT;
+					printf ("\n\r sgm5355_probe succ:0x%0x \n\r", EMS_dac_dev.iic_addr);
+					return HAL_OK;
+			}
+			// else
+			// {
+			// 	printf ("\n\r recv_check:%d \n\r", recv_data[0]);
+			// }
 		}
 		else
 		{
-			printf ("\n\r sgm5355_probe fail, cnt :%d", i);
+			printf ("\n\r sgm5355_probe: recv_data1:%d ,cnt:%d \n\r", recv_data[0], i);
 		}
 	}
 

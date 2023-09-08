@@ -68,10 +68,10 @@ void Key_Enter_Test_Mode_Check(void)
 	static uint8_t  Enter_Test_STEP = 0;
 	static uint16_t Test_timer_cnt, Key_Cnt;
 
-	if(0 == SysInfo.Batt_Value.Usb_flag)
-	{
-		return;
-	}
+	// if(0 == SysInfo.Batt_Value.Usb_flag)
+	// {
+	// 	return;
+	// }
 
 	if(ON == SysInfo.Test_Mode.Test_Mode_Flag)
 	{
@@ -90,6 +90,10 @@ void Key_Enter_Test_Mode_Check(void)
 	{
 		case 0:
 		{
+			if(0 == SysInfo.Batt_Value.Usb_flag)
+			{
+				return;
+			}
 			Test_timer_cnt ++ ;
 			if(Test_timer_cnt < 50)
 			{
@@ -421,7 +425,7 @@ void NTC_Temp_SendData(void)
 		if(NTC_Cnt > 50)
 		{
 			NTC_Cnt = 0;
-			printf ("\n\r NTC:%.1f��C \n\r",SysInfo.NTC_Temp);
+			printf ("\n\r NTC:%.1f C \n\r",SysInfo.NTC_Temp);
 		}
 	}
 	else
