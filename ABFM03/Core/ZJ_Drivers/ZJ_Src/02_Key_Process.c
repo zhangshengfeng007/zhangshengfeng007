@@ -64,7 +64,7 @@ void Sys_Wakeup_init(void)
   SysInfo.Power_Value.state = System_OFF;
   SysInfo.Sleep_Counts = 0;
 
-  RGB_Init();
+  //RGB_Init();
 
 }
 
