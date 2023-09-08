@@ -1,0 +1,258 @@
+<html>
+<body>
+<pre>
+<h1>�Vision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: ��Vision V5.36.0.0
+Copyright (C) 2021 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: y EDZ, HP Inc., LIC=CZLZX-HNY2C-NNKAF-6H3RQ-K8DHR-80FXF
+ 
+Tool Versions:
+Toolchain:       MDK-ARM Plus  Version: 5.36.0.0
+Toolchain Path:  C:\Keil_v5\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.06 update 7 (build 960)
+Assembler:       Armasm.exe V5.06 update 7 (build 960)
+Linker/Locator:  ArmLink.exe V5.06 update 7 (build 960)
+Library Manager: ArmAr.exe V5.06 update 7 (build 960)
+Hex Converter:   FromElf.exe V5.06 update 7 (build 960)
+CPU DLL:         SARMCM3.DLL V5.36.0.0
+Dialog DLL:      DARMCM1.DLL V1.19.4.0
+Target DLL:      Segger\JL2CM3.dll V2.99.40.0
+Dialog DLL:      TARMCM1.DLL V1.14.4.0
+ 
+<h2>Project:</h2>
+F:\git_work_file\zhangshengfeng007\ABFM03\MDK-ARM\ABFM03.uvprojx
+Project File Date:  09/08/2023
+
+<h2>Output:</h2>
+*** Using Compiler 'V5.06 update 7 (build 960)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
+Rebuild target 'ABFM03'
+assembling startup_stm32g030xx.s...
+compiling 01_Key_Read.c...
+../Core/ZJ_Drivers/ZJ_Inc/hw2000b.h(80): warning:  #47-D: incompatible redefinition of macro "CLEAR_REG"  (declared at line 176 of "../Drivers/CMSIS/Device/ST/STM32G0xx/Include/stm32g0xx.h")
+  #define  CLEAR_REG           0x3B   // FIFO 指针寄存�?
+..\Core\ZJ_Drivers\ZJ_Src\01_Key_Read.c: 1 warning, 0 errors
+compiling 04_Led_Display.c...
+../Core/ZJ_Drivers/ZJ_Inc/hw2000b.h(80): warning:  #47-D: incompatible redefinition of macro "CLEAR_REG"  (declared at line 176 of "../Drivers/CMSIS/Device/ST/STM32G0xx/Include/stm32g0xx.h")
+  #define  CLEAR_REG           0x3B   // FIFO 指针寄存�?
+..\Core\ZJ_Drivers\ZJ_Src\04_Led_Display.c(22): warning:  #177-D: variable "Counts"  was declared but never referenced
+  	static uint8_t Flag, Counts;
+..\Core\ZJ_Drivers\ZJ_Src\04_Led_Display.c(1034): warning:  #177-D: variable "last_disp_mode"  was declared but never referenced
+  	static uint8_t  last_disp_mode;
+..\Core\ZJ_Drivers\ZJ_Src\04_Led_Display.c(1035): warning:  #177-D: variable "led_disp_color"  was declared but never referenced
+  	static uint8_t led_disp_color;
+..\Core\ZJ_Drivers\ZJ_Src\04_Led_Display.c: 4 warnings, 0 errors
+compiling 00_Handle.c...
+../Core/ZJ_Drivers/ZJ_Inc/hw2000b.h(80): warning:  #47-D: incompatible redefinition of macro "CLEAR_REG"  (declared at line 176 of "../Drivers/CMSIS/Device/ST/STM32G0xx/Include/stm32g0xx.h")
+  #define  CLEAR_REG           0x3B   // FIFO 指针寄存�?
+..\Core\ZJ_Drivers\ZJ_Src\00_Handle.c(268): warning:  #177-D: variable "StandyCnt"  was declared but never referenced
+  	static uint16_t StandyCnt;
+..\Core\ZJ_Drivers\ZJ_Src\00_Handle.c(447): warning:  #177-D: variable "Ntc_Err_Cnt"  was declared but never referenced
+  	static uint8_t Ntc_Err_Cnt,Temp_high_Err_cnt;
+..\Core\ZJ_Drivers\ZJ_Src\00_Handle.c(447): warning:  #177-D: variable "Temp_high_Err_cnt"  was declared but never referenced
+  	static uint8_t Ntc_Err_Cnt,Temp_high_Err_cnt;
+..\Core\ZJ_Drivers\ZJ_Src\00_Handle.c(813): warning:  #177-D: variable "GPIO_InitStruct"  was declared but never referenced
+    GPIO_InitTypeDef GPIO_InitStruct = {0};
+..\Core\ZJ_Drivers\ZJ_Src\00_Handle.c: 5 warnings, 0 errors
+compiling 03_base_time.c...
+../Core/ZJ_Drivers/ZJ_Inc/hw2000b.h(80): warning:  #47-D: incompatible redefinition of macro "CLEAR_REG"  (declared at line 176 of "../Drivers/CMSIS/Device/ST/STM32G0xx/Include/stm32g0xx.h")
+  #define  CLEAR_REG           0x3B   // FIFO 指针寄存�?
+..\Core\ZJ_Drivers\ZJ_Src\03_base_time.c: 1 warning, 0 errors
+compiling 05_Montor_Control.c...
+../Core/ZJ_Drivers/ZJ_Inc/hw2000b.h(80): warning:  #47-D: incompatible redefinition of macro "CLEAR_REG"  (declared at line 176 of "../Drivers/CMSIS/Device/ST/STM32G0xx/Include/stm32g0xx.h")
+  #define  CLEAR_REG           0x3B   // FIFO 指针寄存�?
+..\Core\ZJ_Drivers\ZJ_Src\05_Montor_Control.c: 1 warning, 0 errors
+compiling 06_YG6550.c...
+../Core/ZJ_Drivers/ZJ_Inc/hw2000b.h(80): warning:  #47-D: incompatible redefinition of macro "CLEAR_REG"  (declared at line 176 of "../Drivers/CMSIS/Device/ST/STM32G0xx/Include/stm32g0xx.h")
+  #define  CLEAR_REG           0x3B   // FIFO 指针寄存�?
+..\Core\ZJ_Drivers\ZJ_Src\06_YG6550.c: 1 warning, 0 errors
+compiling 02_Key_Process.c...
+../Core/ZJ_Drivers/ZJ_Inc/hw2000b.h(80): warning:  #47-D: incompatible redefinition of macro "CLEAR_REG"  (declared at line 176 of "../Drivers/CMSIS/Device/ST/STM32G0xx/Include/stm32g0xx.h")
+  #define  CLEAR_REG           0x3B   // FIFO 指针寄存�?
+..\Core\ZJ_Drivers\ZJ_Src\02_Key_Process.c: 1 warning, 0 errors
+compiling 09_Skin.c...
+../Core/ZJ_Drivers/ZJ_Inc/hw2000b.h(80): warning:  #47-D: incompatible redefinition of macro "CLEAR_REG"  (declared at line 176 of "../Drivers/CMSIS/Device/ST/STM32G0xx/Include/stm32g0xx.h")
+  #define  CLEAR_REG           0x3B   // FIFO 指针寄存�?
+..\Core\ZJ_Drivers\ZJ_Src\09_Skin.c(104): warning:  #520-D: initialization with "{...}" expected for aggregate object
+  	uint8_t print_buff[2] = 0;
+..\Core\ZJ_Drivers\ZJ_Src\09_Skin.c(103): warning:  #177-D: variable "print_cnt"  was declared but never referenced
+  	static  uint8_t print_cnt =0;
+..\Core\ZJ_Drivers\ZJ_Src\09_Skin.c(104): warning:  #177-D: variable "print_buff"  was declared but never referenced
+  	uint8_t print_buff[2] = 0;
+..\Core\ZJ_Drivers\ZJ_Src\09_Skin.c: 4 warnings, 0 errors
+compiling 08_NTC.c...
+../Core/ZJ_Drivers/ZJ_Inc/hw2000b.h(80): warning:  #47-D: incompatible redefinition of macro "CLEAR_REG"  (declared at line 176 of "../Drivers/CMSIS/Device/ST/STM32G0xx/Include/stm32g0xx.h")
+  #define  CLEAR_REG           0x3B   // FIFO 指针寄存�?
+..\Core\ZJ_Drivers\ZJ_Src\08_NTC.c(129): warning:  #177-D: variable "test_count"  was declared but never referenced
+  	static uint32_t test_count=0;
+..\Core\ZJ_Drivers\ZJ_Src\08_NTC.c: 2 warnings, 0 errors
+compiling 10_Mbi5020.c...
+../Core/ZJ_Drivers/ZJ_Inc/hw2000b.h(80): warning:  #47-D: incompatible redefinition of macro "CLEAR_REG"  (declared at line 176 of "../Drivers/CMSIS/Device/ST/STM32G0xx/Include/stm32g0xx.h")
+  #define  CLEAR_REG           0x3B   // FIFO 指针寄存�?
+..\Core\ZJ_Drivers\ZJ_Src\10_Mbi5020.c: 1 warning, 0 errors
+compiling 11_RF.c...
+../Core/ZJ_Drivers/ZJ_Inc/hw2000b.h(80): warning:  #47-D: incompatible redefinition of macro "CLEAR_REG"  (declared at line 176 of "../Drivers/CMSIS/Device/ST/STM32G0xx/Include/stm32g0xx.h")
+  #define  CLEAR_REG           0x3B   // FIFO 指针寄存�?
+..\Core\ZJ_Drivers\ZJ_Src\11_RF.c: 1 warning, 0 errors
+compiling 13_Eeprom.c...
+../Core/ZJ_Drivers/ZJ_Inc/hw2000b.h(80): warning:  #47-D: incompatible redefinition of macro "CLEAR_REG"  (declared at line 176 of "../Drivers/CMSIS/Device/ST/STM32G0xx/Include/stm32g0xx.h")
+  #define  CLEAR_REG           0x3B   // FIFO 指针寄存�?
+..\Core\ZJ_Drivers\ZJ_Src\13_Eeprom.c: 1 warning, 0 errors
+compiling 12_EMS.c...
+../Core/ZJ_Drivers/ZJ_Inc/hw2000b.h(80): warning:  #47-D: incompatible redefinition of macro "CLEAR_REG"  (declared at line 176 of "../Drivers/CMSIS/Device/ST/STM32G0xx/Include/stm32g0xx.h")
+  #define  CLEAR_REG           0x3B   // FIFO 指针寄存�?
+..\Core\ZJ_Drivers\ZJ_Src\12_EMS.c(8): warning:  #144-D: a value of type "uint8_t (*)(uint8_t)" cannot be used to initialize an entity of type "dac_read"
+  	.dac_probe.p_read = DAC_Device_ReadData,
+..\Core\ZJ_Drivers\ZJ_Src\12_EMS.c(392): warning:  #186-D: pointless comparison of unsigned integer with zero
+      if(EmsLevel->vol_value >= Level_None && EmsLevel->vol_value <= Level_20)
+..\Core\ZJ_Drivers\ZJ_Src\12_EMS.c: 3 warnings, 0 errors
+compiling 07_Battery.c...
+../Core/ZJ_Drivers/ZJ_Inc/hw2000b.h(80): warning:  #47-D: incompatible redefinition of macro "CLEAR_REG"  (declared at line 176 of "../Drivers/CMSIS/Device/ST/STM32G0xx/Include/stm32g0xx.h")
+  #define  CLEAR_REG           0x3B   // FIFO 指针寄存�?
+..\Core\ZJ_Drivers\ZJ_Src\07_Battery.c: 1 warning, 0 errors
+compiling gpio.c...
+compiling 15_Hw2000b.c...
+../Core/ZJ_Drivers/ZJ_Inc/hw2000b.h(80): warning:  #47-D: incompatible redefinition of macro "CLEAR_REG"  (declared at line 176 of "../Drivers/CMSIS/Device/ST/STM32G0xx/Include/stm32g0xx.h")
+  #define  CLEAR_REG           0x3B   // FIFO 指针寄存�?
+..\Core\ZJ_Drivers\ZJ_Src\15_Hw2000b.c(261): warning:  #177-D: variable "temp"  was declared but never referenced
+  	uint32_t temp;
+..\Core\ZJ_Drivers\ZJ_Src\15_Hw2000b.c: 2 warnings, 0 errors
+compiling 17_EMS_DAC_MCP4726.c...
+../Core/ZJ_Drivers/ZJ_Inc/hw2000b.h(80): warning:  #47-D: incompatible redefinition of macro "CLEAR_REG"  (declared at line 176 of "../Drivers/CMSIS/Device/ST/STM32G0xx/Include/stm32g0xx.h")
+  #define  CLEAR_REG           0x3B   // FIFO 指针寄存�?
+..\Core\ZJ_Drivers\ZJ_Src\17_EMS_DAC_MCP4726.c(79): warning:  #513-D: a value of type "uint8_t (*)(uint8_t)" cannot be assigned to an entity of type "dac_read"
+  			EMS_dac_dev.dac_probe.p_read = DAC_Device_ReadData;
+..\Core\ZJ_Drivers\ZJ_Src\17_EMS_DAC_MCP4726.c: 2 warnings, 0 errors
+compiling 18_EMS_DAC_SGM5355.c...
+../Core/ZJ_Drivers/ZJ_Inc/hw2000b.h(80): warning:  #47-D: incompatible redefinition of macro "CLEAR_REG"  (declared at line 176 of "../Drivers/CMSIS/Device/ST/STM32G0xx/Include/stm32g0xx.h")
+  #define  CLEAR_REG           0x3B   // FIFO 指针寄存�?
+..\Core\ZJ_Drivers\ZJ_Src\18_EMS_DAC_SGM5355.c(45): warning:  #550-D: variable "send_buff"  was set but never used
+  	uint8_t send_buff[5];
+..\Core\ZJ_Drivers\ZJ_Src\18_EMS_DAC_SGM5355.c(121): warning:  #513-D: a value of type "uint16_t (*)(uint8_t)" cannot be assigned to an entity of type "dac_read"
+  			EMS_dac_dev.dac_probe.p_read = DAC_SGM5355_read_reg;
+..\Core\ZJ_Drivers\ZJ_Src\18_EMS_DAC_SGM5355.c(133): warning:  #1-D: last line of file ends without a newline
+  }
+..\Core\ZJ_Drivers\ZJ_Src\18_EMS_DAC_SGM5355.c(112): warning:  #177-D: variable "ret"  was declared but never referenced
+  	HAL_StatusTypeDef ret;
+..\Core\ZJ_Drivers\ZJ_Src\18_EMS_DAC_SGM5355.c: 5 warnings, 0 errors
+compiling main.c...
+../Core/ZJ_Drivers/ZJ_Inc/hw2000b.h(80): warning:  #47-D: incompatible redefinition of macro "CLEAR_REG"  (declared at line 176 of "../Drivers/CMSIS/Device/ST/STM32G0xx/Include/stm32g0xx.h")
+  #define  CLEAR_REG           0x3B   // FIFO 指针寄存�?
+../Core/Src/main.c: 1 warning, 0 errors
+compiling 14_Test_Mode.c...
+../Core/ZJ_Drivers/ZJ_Inc/hw2000b.h(80): warning:  #47-D: incompatible redefinition of macro "CLEAR_REG"  (declared at line 176 of "../Drivers/CMSIS/Device/ST/STM32G0xx/Include/stm32g0xx.h")
+  #define  CLEAR_REG           0x3B   // FIFO 指针寄存�?
+..\Core\ZJ_Drivers\ZJ_Src\14_Test_Mode.c(196): warning:  #177-D: variable "motor_run_delay"  was declared but never referenced
+  	static uint8_t motor_run_delay;
+..\Core\ZJ_Drivers\ZJ_Src\14_Test_Mode.c(540): warning:  #177-D: variable "Lock_Flag"  was declared but never referenced
+  	static uint8_t Lock_Flag,Test_Last_Mode=0;
+..\Core\ZJ_Drivers\ZJ_Src\14_Test_Mode.c(540): warning:  #177-D: variable "Test_Last_Mode"  was declared but never referenced
+  	static uint8_t Lock_Flag,Test_Last_Mode=0;
+..\Core\ZJ_Drivers\ZJ_Src\14_Test_Mode.c(837): warning:  #177-D: variable "LockFlag"  was declared but never referenced
+  	static uint8_t  LockFlag;
+..\Core\ZJ_Drivers\ZJ_Src\14_Test_Mode.c(839): warning:  #177-D: variable "StandyCnt"  was declared but never referenced
+  	static uint16_t StandyCnt;
+..\Core\ZJ_Drivers\ZJ_Src\14_Test_Mode.c: 6 warnings, 0 errors
+compiling 16_usart_app.c...
+../Core/ZJ_Drivers/ZJ_Inc/hw2000b.h(80): warning:  #47-D: incompatible redefinition of macro "CLEAR_REG"  (declared at line 176 of "../Drivers/CMSIS/Device/ST/STM32G0xx/Include/stm32g0xx.h")
+  #define  CLEAR_REG           0x3B   // FIFO 指针寄存�?
+..\Core\ZJ_Drivers\ZJ_Src\16_usart_app.c(839): warning:  #177-D: variable "temp"  was declared but never referenced
+  	int temp;
+..\Core\ZJ_Drivers\ZJ_Src\16_usart_app.c(187): warning:  #177-D: function "enter_fast_read_NTC"  was declared but never referenced
+  static void enter_fast_read_NTC(void)
+..\Core\ZJ_Drivers\ZJ_Src\16_usart_app.c(276): warning:  #177-D: function "RF_test_level_select"  was declared but never referenced
+  static void RF_test_level_select(uint8_t level)
+..\Core\ZJ_Drivers\ZJ_Src\16_usart_app.c: 4 warnings, 0 errors
+compiling dma.c...
+compiling iwdg.c...
+compiling adc.c...
+compiling spi.c...
+compiling rtc.c...
+compiling i2c.c...
+compiling app_freertos.c...
+../Core/ZJ_Drivers/ZJ_Inc/hw2000b.h(80): warning:  #47-D: incompatible redefinition of macro "CLEAR_REG"  (declared at line 176 of "../Drivers/CMSIS/Device/ST/STM32G0xx/Include/stm32g0xx.h")
+  #define  CLEAR_REG           0x3B   // FIFO 指针寄存�?
+../Core/Src/app_freertos.c(187): warning:  #223-D: function "Test_Mode_EMS_RF_ctrl" declared implicitly
+  		Test_Mode_EMS_RF_ctrl();
+../Core/Src/app_freertos.c: 2 warnings, 0 errors
+compiling stm32g0xx_hal_msp.c...
+compiling tim.c...
+compiling stm32g0xx_hal_timebase_tim.c...
+compiling stm32g0xx_hal_adc_ex.c...
+compiling stm32g0xx_it.c...
+../Core/Src/stm32g0xx_it.c(245): warning:  #223-D: function "uart_idle_callback" declared implicitly
+  	uart_idle_callback(&huart2);
+../Core/Src/stm32g0xx_it.c: 1 warning, 0 errors
+compiling stm32g0xx_ll_adc.c...
+compiling stm32g0xx_ll_rcc.c...
+compiling stm32g0xx_hal_adc.c...
+compiling usart.c...
+../Core/ZJ_Drivers/ZJ_Inc/hw2000b.h(80): warning:  #47-D: incompatible redefinition of macro "CLEAR_REG"  (declared at line 176 of "../Drivers/CMSIS/Device/ST/STM32G0xx/Include/stm32g0xx.h")
+  #define  CLEAR_REG           0x3B   // FIFO 指针寄存�?
+../Core/Src/usart.c: 1 warning, 0 errors
+compiling stm32g0xx_hal_flash.c...
+compiling stm32g0xx_hal_flash_ex.c...
+compiling stm32g0xx_hal_dma_ex.c...
+compiling stm32g0xx_ll_dma.c...
+compiling stm32g0xx_hal_rcc_ex.c...
+compiling stm32g0xx_hal_gpio.c...
+compiling stm32g0xx_hal_dma.c...
+compiling stm32g0xx_hal_rcc.c...
+compiling stm32g0xx_hal_pwr.c...
+compiling stm32g0xx_hal_exti.c...
+compiling stm32g0xx_hal_pwr_ex.c...
+compiling stm32g0xx_hal_i2c_ex.c...
+compiling stm32g0xx_hal_cortex.c...
+compiling stm32g0xx_hal.c...
+compiling stm32g0xx_hal_i2c.c...
+compiling stm32g0xx_hal_spi_ex.c...
+compiling stm32g0xx_hal_iwdg.c...
+compiling stm32g0xx_hal_rtc.c...
+compiling stm32g0xx_hal_rtc_ex.c...
+compiling croutine.c...
+compiling stm32g0xx_hal_spi.c...
+compiling stm32g0xx_hal_tim_ex.c...
+compiling event_groups.c...
+compiling list.c...
+compiling queue.c...
+compiling stream_buffer.c...
+compiling stm32g0xx_hal_tim.c...
+compiling tasks.c...
+compiling timers.c...
+compiling heap_4.c...
+compiling port.c...
+compiling cmsis_os.c...
+compiling system_stm32g0xx.c...
+compiling stm32g0xx_hal_uart_ex.c...
+compiling stm32g0xx_hal_uart.c...
+linking...
+Program Size: Code=49704 RO-data=540 RW-data=400 ZI-data=6664  
+FromELF: creating hex file...
+After Build - User command #1: C:\Keil_v5\\ARM\ARMCC\bin\fromelf.exe --bin --output=ABFM03_Master_debug.bin .\ABFM03\ABFM03_Master_debug.axf
+".\ABFM03\ABFM03_Master_debug.axf" - 0 Error(s), 51 Warning(s).
+
+<h2>Software Packages used:</h2>
+
+Package Vendor: ARM
+                http://www.keil.com/pack/ARM.CMSIS.5.8.0.pack
+                ARM.CMSIS.5.8.0
+                CMSIS (Common Microcontroller Software Interface Standard)
+   * Component: CORE Version: 5.5.0
+
+Package Vendor: Keil
+                https://www.keil.com/pack/Keil.STM32G0xx_DFP.1.2.0.pack
+                Keil.STM32G0xx_DFP.1.2.0
+                STMicroelectronics STM32G0 Series Device Support
+
+<h2>Collection of Component include folders:</h2>
+  .\RTE\_ABFM03
+  C:\Users\EDZ\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include
+  C:\Users\EDZ\AppData\Local\Arm\Packs\Keil\STM32G0xx_DFP\1.2.0\Drivers\CMSIS\Device\ST\STM32G0xx\Include
+
+<h2>Collection of Component Files used:</h2>
+
+   * Component: ARM::CMSIS:CORE:5.5.0
+Build Time Elapsed:  00:00:56
+</pre>
+</body>
+</html>
