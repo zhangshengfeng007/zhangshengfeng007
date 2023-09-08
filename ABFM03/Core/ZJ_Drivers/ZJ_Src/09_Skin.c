@@ -71,7 +71,7 @@ uint8_t  Check_Idle_Time(void) //10ms����
 				No_Touch_Cnt = 0;
 			}
 		}
-		if(SysInfo.MotionStateFlage)   // 2023 03 20 g_sensor �˶���ʱ��
+		if((SysInfo.MotionStateFlage) && (SysInfo.Skin_Touch_Flag))   // 2023 08 29 g_sensor 接触皮肤，并且有gsenser移动，才将空闲计时情空
 		{                                    //  �Ž�idle��0. ����Ӵ����أ����ƶ�ʱ��һֱ����0
 			SysInfo.Idle_Run_Cnt = 0;
 		}
