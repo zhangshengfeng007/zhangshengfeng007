@@ -1,0 +1,37 @@
+---- SMG_Write_Byte Æ¥Åä (37 in 8 ÎÄ¼þ) ----
+74HC595.c (f:\source\jr3\jr3\driver):void SMG_Write_Byte(uint8_t dat)
+74HC595.h (f:\source\jr3\jr3\driver\inc):void SMG_Write_Byte(uint8_t dat);
+Display.c (f:\source\jr3\jr3\app)://				SMG_Write_Byte(LED_send_buf);
+Display.c (f:\source\jr3\jr3\app)://				SMG_Write_Byte(LED_send_buf);
+Display.c (f:\source\jr3\jr3\app)://			SMG_Write_Byte(LED_send_buf);
+Display.c (f:\source\jr3\jr3\app)://			SMG_Write_Byte(LED_send_buf);
+Display.c (f:\source\jr3\jr3\app)://			SMG_Write_Byte(LED_send_buf);
+Display.c (f:\source\jr3\jr3\app)://			SMG_Write_Byte(LED_send_buf);
+Display.c (f:\source\jr3\jr3\app):		{SMG_Write_Byte(LED_send_buf);SMG_Write_Byte(LED_send_buf);}
+Display.c (f:\source\jr3\jr3\app):		SMG_Write_Byte(errordisplay_buf);
+Display.c (f:\source\jr3\jr3\app):	SMG_Write_Byte(0);
+Display.h (f:\source\jr3\jr3\app\inc)://#define		LED_MODE1_ON()					{LED_send_buf&=~LED_MODE_1;SMG_Write_Byte(LED_send_buf);}
+Display.h (f:\source\jr3\jr3\app\inc)://#define		LED_MODE2_ON()					{LED_send_buf&=~LED_MODE_2;SMG_Write_Byte(LED_send_buf);}
+Display.h (f:\source\jr3\jr3\app\inc)://#define		LED_MODE3_ON()					{LED_send_buf&=~LED_MODE_3;SMG_Write_Byte(LED_send_buf);}
+Display.h (f:\source\jr3\jr3\app\inc)://#define		LED_MODE4_ON()					{LED_send_buf&=~LED_MODE_4;SMG_Write_Byte(LED_send_buf);}
+Display.h (f:\source\jr3\jr3\app\inc)://#define		LED_MODE5_ON()					{LED_send_buf&=~LED_MODE_5;SMG_Write_Byte(LED_send_buf);}
+Display.h (f:\source\jr3\jr3\app\inc)://#define		LED_MODE1_OFF()					{LED_send_buf|=LED_MODE_1;SMG_Write_Byte(LED_send_buf);}
+Display.h (f:\source\jr3\jr3\app\inc)://#define		LED_MODE2_OFF()					{LED_send_buf|=LED_MODE_2;SMG_Write_Byte(LED_send_buf);}
+Display.h (f:\source\jr3\jr3\app\inc)://#define		LED_MODE3_OFF()					{LED_send_buf|=LED_MODE_3;SMG_Write_Byte(LED_send_buf);}
+Display.h (f:\source\jr3\jr3\app\inc)://#define		LED_MODE4_OFF()					{LED_send_buf|=LED_MODE_4;SMG_Write_Byte(LED_send_buf);}
+Display.h (f:\source\jr3\jr3\app\inc)://#define		LED_MODE5_OFF()					{LED_send_buf|=LED_MODE_5;SMG_Write_Byte(LED_send_buf);}
+Error_det.c (f:\source\jr3\jr3\app)://			//SMG_Write_Byte(errordisplay_buf);
+Key.c (f:\source\jr3\jr3\app)://			if(i) SMG_Write_Byte(0x20);
+Key.c (f:\source\jr3\jr3\app)://			else SMG_Write_Byte(0x00);
+Key.c (f:\source\jr3\jr3\app)://			if(test) SMG_Write_Byte(0x08);
+Key.c (f:\source\jr3\jr3\app)://			else SMG_Write_Byte(0x00);
+Main.c (f:\source\jr3\jr3\user):			//SMG_Write_Byte(Rotary_Read());
+Main.c (f:\source\jr3\jr3\user)://		if(KEY_LIGHT)SMG_Write_Byte(0x20);
+Main.c (f:\source\jr3\jr3\user)://		else SMG_Write_Byte(0x00);
+Rotary.c (f:\source\jr3\jr3\driver):			case 1:SMG_Write_Byte(LED_MODE_1);break;
+Rotary.c (f:\source\jr3\jr3\driver):			case 2:SMG_Write_Byte(LED_MODE_2);break;
+Rotary.c (f:\source\jr3\jr3\driver):			case 3:SMG_Write_Byte(LED_MODE_3);break;
+Rotary.c (f:\source\jr3\jr3\driver):			case 4:SMG_Write_Byte(LED_MODE_4);break;
+Rotary.c (f:\source\jr3\jr3\driver):			case 5:SMG_Write_Byte(LED_MODE_5);break;
+Rotary.c (f:\source\jr3\jr3\driver):			case 6:SMG_Write_Byte(LED_MODE_6);break;
+Rotary.c (f:\source\jr3\jr3\driver):			case 7:SMG_Write_Byte(LED_AUTO);break;

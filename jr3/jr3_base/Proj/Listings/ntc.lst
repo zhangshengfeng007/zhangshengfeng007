@@ -1,0 +1,89 @@
+C51 COMPILER V9.60.7.0   NTC                                                               04/16/2024 15:41:19 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE NTC
+OBJECT MODULE PLACED IN .\Objects\ntc.obj
+COMPILER INVOKED BY: F:\tool_start\keil_c51\C51\BIN\C51.EXE ..\App\ntc.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\App\inc;..\D
+                    -river\inc) DEBUG OBJECTEXTEND PRINT(.\Listings\ntc.lst) TABS(2) OBJECT(.\Objects\ntc.obj)
+
+line level    source
+
+   1          #include "ntc.h"
+   2          
+   3          xdata xNTCStatus_t_ sxNTCStatus = {0};
+   4          
+   5          #define   NTCOVERVALUE    500
+   6          #define   NTCNORMALVALUE    2000
+   7          
+   8          static uint8_t errortimes = 0;
+   9          static uint8_t normaltimes = 0;
+  10          
+  11          void NTC_Handler(void)
+  12          {
+  13   1        uint16_t tempbuf;
+  14   1        
+  15   1        if(ErrorType_Get()&(~ERROR_TYPE_NTC))return;
+  16   1        if(BurninEntering()||b_BurninFlag_Get())return;
+  17   1        if(vrefunstableflag)return;
+  18   1        
+  19   1        if((b_DetInitFlag_Get()==DETECTIVE_INIT_FINISH || ErrorType_Get()&ERROR_TYPE_NTC) && !b_ChargeBusy_Get())
+  20   1        {
+  21   2          tempbuf = (uint16_t)(Get_ADC_Value(ADCChannelNTC) * (ADCREFRATIO/4096.0));
+  22   2      //    for(i=0;i<2;i++)
+  23   2      //      sxNTCStatus.ntcbuff[i] = sxNTCStatus.ntcbuff[i+1];
+  24   2      //    sxNTCStatus.ntcbuff[i] = tempbuf;
+  25   2      //    for(i=0;i<3;i++)
+  26   2      //      tempbuf += sxNTCStatus.ntcbuff[i];
+  27   2          sxNTCStatus.ntcvalue = tempbuf;
+  28   2          if(sxNTCStatus.ntcvalue<NTCOVERVALUE){
+  29   3            normaltimes = 0;
+  30   3            if(errortimes++ >= 50)
+  31   3            {
+  32   4              errortimes = 0;
+  33   4              ErrorType_Set(ERROR_TYPE_NTC);
+  34   4              PowerOnOff_Set(0);
+  35   4            }
+  36   3          }else if(sxNTCStatus.ntcvalue>NTCNORMALVALUE){
+  37   3            errortimes = 0;
+  38   3            if(ErrorType_Get()&ERROR_TYPE_NTC){
+  39   4              if(normaltimes++ >= 50)
+  40   4              {
+  41   5                normaltimes = 0;
+  42   5                ErrorType_Reset(ERROR_TYPE_NTC);
+  43   5                if(uc_Level_Get()){
+  44   6                  PowerOnOff_Set(1);
+  45   6                  b_IsPowerOnFlag_Set(1);
+  46   6                  set_led_event(LED_EVENT_CLEAR);
+  47   6                  reset_led_event(LED_EVENT_OFF);
+  48   6                  //set_led_event(LED_EVENT_MODE);
+  49   6                }
+  50   5              }
+  51   4              
+  52   4            }
+  53   3          }
+  54   2        }
+C51 COMPILER V9.60.7.0   NTC                                                               04/16/2024 15:41:19 PAGE 2   
+
+  55   1      }
+  56          
+  57          
+  58          //void NTC_Init(void)
+  59          //{
+  60          //  
+  61          //}
+  62          
+  63          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    180    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =      2    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      2    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

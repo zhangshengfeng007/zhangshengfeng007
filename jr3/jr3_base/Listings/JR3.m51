@@ -1,0 +1,611 @@
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    05/24/2022  18:18:57  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22.2.0, INVOKED BY:
+D:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\system.obj, .\Objects\work.obj, .\Objects\display.obj, .\Objects\pwm_driver.obj, .
+>> \Objects\timer.obj, .\Objects\adc_driver.obj, .\Objects\main.obj, .\Objects\OPTIONS_SN8F5703.obj, .\Objects\STARTUP.o
+>> bj TO .\Objects\JR3 PRINT (.\Listings\JR3.m51) RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\system.obj (SYSTEM)
+  .\Objects\work.obj (WORK)
+  .\Objects\display.obj (DISPLAY)
+  .\Objects\pwm_driver.obj (PWM_DRIVER)
+  .\Objects\timer.obj (TIMER)
+  .\Objects\adc_driver.obj (ADC_DRIVER)
+  .\Objects\main.obj (MAIN)
+  .\Objects\OPTIONS_SN8F5703.obj (OPTIONS_SN8F5703)
+  .\Objects\STARTUP.obj (?C_STARTUP)
+  D:\KEIL_V5\C51\LIB\C51S.LIB (?C_INIT)
+  D:\KEIL_V5\C51\LIB\C51S.LIB (?C?ULSHR)
+
+
+LINK MAP OF MODULE:  .\Objects\JR3 (SYSTEM)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0007H     UNIT         ?DT?WORK
+            DATA    000FH     0006H     UNIT         ?DT?_PWM_SET?PWM_DRIVER
+            DATA    0015H     0004H     UNIT         ?DT?DISPLAY
+            IDATA   0019H     0001H     UNIT         ?STACK
+
+            * * * * * * *  X D A T A   M E M O R Y  * * * * * * *
+            XDATA   0000H     0012H     UNIT         ?XD?WORK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+                    0003H     0008H                  *** GAP ***
+            CODE    000BH     0003H     ABSOLUTE     
+                    000EH     000DH                  *** GAP ***
+            CODE    001BH     0003H     ABSOLUTE     
+                    001EH     07E2H                  *** GAP ***
+            CODE    0800H     008CH     UNIT         ?C_C51STARTUP
+            CODE    088CH     0061H     UNIT         ?PR?DISPLAY_HANDLER?DISPLAY
+            CODE    08EDH     003BH     UNIT         ?PR?T1INTERRUPT?TIMER
+            CODE    0928H     0030H     UNIT         ?PR?DISPLAY_CB?DISPLAY
+            CODE    0958H     0027H     UNIT         ?PR?_GET_ADC_VALUE?ADC_DRIVER
+            CODE    097FH     0025H     UNIT         ?C_INITSEG
+            CODE    09A4H     0021H     UNIT         ?PR?TRRIGER_LIGHT?WORK
+            CODE    09C5H     001DH     UNIT         ?PR?_PWM_SET?PWM_DRIVER
+            CODE    09E2H     0019H     UNIT         ?PR?PWM_INIT?PWM_DRIVER
+            CODE    09FBH     0013H     UNIT         ?C?LIB_CODE
+            CODE    0A0EH     0012H     UNIT         ?PR?TIMER1_CONFIGURATION?TIMER
+            CODE    0A20H     0012H     UNIT         ?PR?TIMER0_CONFIGURATION?TIMER
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/24/2022  18:18:57  PAGE 2
+
+
+            CODE    0A32H     0010H     UNIT         ?PR?ADCINIT?ADC_DRIVER
+            CODE    0A42H     000AH     UNIT         ?PR?GPIO_INIT?SYSTEM
+            CODE    0A4CH     0007H     UNIT         ?PR?SYSCLK_INIT?SYSTEM
+            CODE    0A53H     0003H     UNIT         ?PR?WORK_HANDLER?WORK
+            CODE    0A56H     0003H     UNIT         ?PR?T0INTERRUPT?TIMER
+            CODE    0A59H     0002H     UNIT         ?PR?MAIN?MAIN
+            CODE    0A5BH     0001H     UNIT         ?PR?SYSTEM_RUN?SYSTEM
+            CODE    0A5CH     0001H     UNIT         ?PR?FIGHT_LIGHT_TIMES?WORK
+            CODE    0A5DH     0001H     UNIT         ?PR?DISPLAY_INIT?DISPLAY
+                    0A5EH     1598H                  *** GAP ***
+            CODE    1FF6H     000AH     ABSOLUTE     
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\JR3 (SYSTEM)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?PR?T1INTERRUPT?TIMER
+  +--> ?PR?DISPLAY_CB?DISPLAY
+
+*** NEW ROOT ***************************************************
+
+?C_C51STARTUP
+  +--> ?PR?MAIN?MAIN
+  +--> ?C_INITSEG
+
+
+
+UNRESOLVED EXTERNAL SYMBOLS:
+   B_AUTOSWITCHFLAG_GET
+   GPIO_IPL_ON
+   LED_AUTO_OFF
+   LED_AUTO_ON
+   UC_MODE_GET
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\JR3 (SYSTEM)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        SYSTEM
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00A8H         PUBLIC        IEN0
+  D:00B8H         PUBLIC        IEN1
+  D:00D8H         PUBLIC        S0CON2
+  C:0A5BH         PUBLIC        System_Run
+  C:0A42H         PUBLIC        GPIO_Init
+  D:00E6H         PUBLIC        CLKCMD
+  D:0088H         PUBLIC        TCON
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/24/2022  18:18:57  PAGE 3
+
+
+  D:00E5H         PUBLIC        CLKSEL
+  D:00F9H         PUBLIC        P0M
+  D:00FAH         PUBLIC        P1M
+  D:00FBH         PUBLIC        P2M
+  C:0A4CH         PUBLIC        SYSCLK_Init
+  D:0098H         PUBLIC        S0CON
+  D:00C8H         PUBLIC        T2CON
+  D:00D0H         PUBLIC        PSW
+  D:00C0H         PUBLIC        IRCON
+  -------         PROC          SYSTEM_RUN
+  C:0A5BH         LINE#         27
+  C:0A5BH         LINE#         28
+  C:0A5BH         LINE#         30
+  -------         ENDPROC       SYSTEM_RUN
+  -------         PROC          GPIO_INIT
+  C:0A42H         LINE#         33
+  C:0A42H         LINE#         34
+  C:0A42H         LINE#         36
+  C:0A45H         LINE#         37
+  C:0A48H         LINE#         38
+  C:0A4BH         LINE#         39
+  -------         ENDPROC       GPIO_INIT
+  -------         PROC          SYSCLK_INIT
+  C:0A4CH         LINE#         42
+  C:0A4CH         LINE#         43
+  C:0A4CH         LINE#         44
+  C:0A4FH         LINE#         45
+  C:0A52H         LINE#         46
+  -------         ENDPROC       SYSCLK_INIT
+  -------         ENDMOD        SYSTEM
+
+  -------         MODULE        WORK
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00A8H         PUBLIC        IEN0
+  D:00B8H         PUBLIC        IEN1
+  D:00D8H         PUBLIC        S0CON2
+  D:0088H         PUBLIC        TCON
+  C:0A5CH         PUBLIC        Fight_Light_Times
+  C:09A4H         PUBLIC        Trriger_Light
+  D:0008H         PUBLIC        sx_FightLightStatus
+  C:0A53H         PUBLIC        Work_Handler
+  X:0000H         PUBLIC        FightLightBuffer
+  D:0098H         PUBLIC        S0CON
+  D:00C8H         PUBLIC        T2CON
+  D:00D0H         PUBLIC        PSW
+  D:00C0H         PUBLIC        IRCON
+  -------         PROC          WORK_HANDLER
+  C:0A53H         LINE#         11
+  C:0A53H         LINE#         12
+  C:0A53H         LINE#         13
+  -------         ENDPROC       WORK_HANDLER
+  -------         PROC          TRRIGER_LIGHT
+  C:09A4H         LINE#         20
+  C:09A4H         LINE#         21
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/24/2022  18:18:57  PAGE 4
+
+
+  C:09A4H         LINE#         22
+  C:09A7H         LINE#         23
+  C:09AAH         LINE#         24
+  C:09BBH         LINE#         26
+  C:09BEH         LINE#         27
+  C:09C4H         LINE#         30
+  -------         ENDPROC       TRRIGER_LIGHT
+  -------         PROC          FIGHT_LIGHT_TIMES
+  C:0A5CH         LINE#         32
+  C:0A5CH         LINE#         33
+  C:0A5CH         LINE#         35
+  -------         ENDPROC       FIGHT_LIGHT_TIMES
+  -------         ENDMOD        WORK
+
+  -------         MODULE        DISPLAY
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:0015H         PUBLIC        sx_DisplayStatus_t
+  D:00A8H         PUBLIC        IEN0
+  B:00A0H.2       PUBLIC        LED_MODE1
+  D:00B8H         PUBLIC        IEN1
+  B:00A0H.2       PUBLIC        LED_MODE2
+  B:00A0H.2       PUBLIC        LED_MODE3
+  D:00D8H         PUBLIC        S0CON2
+  D:0088H         PUBLIC        TCON
+  C:0928H         PUBLIC        Display_Cb
+  B:00A0H.2       PUBLIC        LED_LEVEL1
+  B:00A0H.2       PUBLIC        LED_LEVEL2
+  B:00A0H.2       PUBLIC        LED_LEVEL3
+  B:00A0H.2       PUBLIC        LED_LEVEL4
+  D:0098H         PUBLIC        S0CON
+  B:00A0H.2       PUBLIC        LED_LEVEL5
+  B:00A0H.2       PUBLIC        LED_LEVEL6
+  D:00C8H         PUBLIC        T2CON
+  C:0A5DH         PUBLIC        Display_init
+  D:00D0H         PUBLIC        PSW
+  D:00C0H         PUBLIC        IRCON
+  C:088CH         PUBLIC        Display_Handler
+  -------         PROC          DISPLAY_HANDLER
+  C:088CH         LINE#         5
+  C:088CH         LINE#         6
+  C:088CH         LINE#         7
+  C:0891H         LINE#         8
+  C:0891H         LINE#         9
+  C:0894H         LINE#         10
+  C:0896H         LINE#         11
+  C:0898H         LINE#         12
+  C:089AH         LINE#         13
+  C:08B1H         LINE#         14
+  C:08B1H         LINE#         15
+  C:08B1H         LINE#         16
+  C:08B5H         LINE#         17
+  C:08B9H         LINE#         18
+  C:08BBH         LINE#         19
+  C:08BBH         LINE#         20
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/24/2022  18:18:57  PAGE 5
+
+
+  C:08BBH         LINE#         21
+  C:08C0H         LINE#         22
+  C:08C0H         LINE#         23
+  C:08C3H         LINE#         24
+  C:08CAH         LINE#         25
+  C:08CFH         LINE#         27
+  C:08D2H         LINE#         28
+  C:08D2H         LINE#         29
+  C:08D7H         LINE#         30
+  C:08D7H         LINE#         31
+  C:08DAH         LINE#         32
+  C:08E0H         LINE#         33
+  C:08ECH         LINE#         34
+  C:08ECH         LINE#         35
+  -------         ENDPROC       DISPLAY_HANDLER
+  -------         PROC          DISPLAY_CB
+  C:0928H         LINE#         37
+  C:0928H         LINE#         38
+  C:0928H         LINE#         39
+  C:0930H         LINE#         40
+  C:093AH         LINE#         42
+  C:093FH         LINE#         43
+  C:094AH         LINE#         44
+  C:094FH         LINE#         45
+  C:0957H         LINE#         46
+  C:0957H         LINE#         47
+  -------         ENDPROC       DISPLAY_CB
+  -------         PROC          DISPLAY_INIT
+  C:0A5DH         LINE#         49
+  C:0A5DH         LINE#         50
+  C:0A5DH         LINE#         52
+  -------         ENDPROC       DISPLAY_INIT
+  -------         ENDMOD        DISPLAY
+
+  -------         MODULE        PWM_DRIVER
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:00ACH         PUBLIC        PW1YL
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00A8H         PUBLIC        IEN0
+  D:00B8H         PUBLIC        IEN1
+  D:00D8H         PUBLIC        S0CON2
+  D:00BDH         PUBLIC        PW1A
+  D:00ABH         PUBLIC        PW1M
+  C:09E2H         PUBLIC        Pwm_Init
+  D:0088H         PUBLIC        TCON
+  C:09C5H         PUBLIC        _Pwm_Set
+  D:00AFH         PUBLIC        PW1BH
+  D:00BEH         PUBLIC        PW1CH
+  D:0098H         PUBLIC        S0CON
+  D:00BCH         PUBLIC        PW1DH
+  D:00C8H         PUBLIC        T2CON
+  D:00AEH         PUBLIC        PW1BL
+  D:00BBH         PUBLIC        PW1DL
+  D:00D0H         PUBLIC        PSW
+  D:00ADH         PUBLIC        PW1YH
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/24/2022  18:18:57  PAGE 6
+
+
+  D:00C0H         PUBLIC        IRCON
+  -------         PROC          PWM_INIT
+  C:09E2H         LINE#         7
+  C:09E2H         LINE#         8
+  C:09E2H         LINE#         10
+  C:09E5H         LINE#         11
+  C:09E7H         LINE#         12
+  C:09E9H         LINE#         13
+  C:09ECH         LINE#         14
+  C:09EFH         LINE#         15
+  C:09F1H         LINE#         16
+  C:09F4H         LINE#         19
+  C:09F7H         LINE#         21
+  C:09FAH         LINE#         22
+  -------         ENDPROC       PWM_INIT
+  -------         PROC          _PWM_SET
+  D:000FH         SYMBOL        Frq_value
+  D:0013H         SYMBOL        duty_value
+  C:09C5H         LINE#         25
+  C:09CDH         LINE#         26
+  C:09CDH         LINE#         27
+  C:09D4H         LINE#         28
+  C:09D9H         LINE#         29
+  C:09DDH         LINE#         30
+  C:09E1H         LINE#         31
+  -------         ENDPROC       _PWM_SET
+  -------         ENDMOD        PWM_DRIVER
+
+  -------         MODULE        TIMER
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00A8H         PUBLIC        IEN0
+  D:00B8H         PUBLIC        IEN1
+  D:00D8H         PUBLIC        S0CON2
+  D:0088H         PUBLIC        TCON
+  B:00A8H.1       PUBLIC        ET0
+  B:00A8H.3       PUBLIC        ET1
+  B:0088H.5       PUBLIC        TF0
+  B:0088H.7       PUBLIC        TF1
+  D:008CH         PUBLIC        TH0
+  D:008DH         PUBLIC        TH1
+  D:008AH         PUBLIC        TL0
+  D:008BH         PUBLIC        TL1
+  B:00A8H.7       PUBLIC        EAL
+  B:0088H.4       PUBLIC        TR0
+  B:0088H.6       PUBLIC        TR1
+  C:0A56H         PUBLIC        T0Interrupt
+  C:08EDH         PUBLIC        T1Interrupt
+  D:0098H         PUBLIC        S0CON
+  D:00C8H         PUBLIC        T2CON
+  C:0A20H         PUBLIC        TIMER0_Configuration
+  C:0A0EH         PUBLIC        TIMER1_Configuration
+  D:00D0H         PUBLIC        PSW
+  D:00C0H         PUBLIC        IRCON
+  -------         PROC          T0INTERRUPT
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/24/2022  18:18:57  PAGE 7
+
+
+  C:0A56H         LINE#         13
+  C:0A56H         LINE#         15
+  C:0A58H         LINE#         16
+  -------         ENDPROC       T0INTERRUPT
+  -------         PROC          T1INTERRUPT
+  C:08EDH         LINE#         18
+  C:090AH         LINE#         20
+  C:090DH         LINE#         21
+  -------         ENDPROC       T1INTERRUPT
+  -------         PROC          TIMER1_CONFIGURATION
+  C:0A0EH         LINE#         24
+  C:0A0EH         LINE#         25
+  C:0A0EH         LINE#         27
+  C:0A11H         LINE#         28
+  C:0A14H         LINE#         30
+  C:0A17H         LINE#         32
+  C:0A19H         LINE#         33
+  C:0A1BH         LINE#         35
+  C:0A1DH         LINE#         37
+  C:0A1FH         LINE#         38
+  -------         ENDPROC       TIMER1_CONFIGURATION
+  -------         PROC          TIMER0_CONFIGURATION
+  C:0A20H         LINE#         40
+  C:0A20H         LINE#         41
+  C:0A20H         LINE#         43
+  C:0A23H         LINE#         44
+  C:0A26H         LINE#         46
+  C:0A29H         LINE#         48
+  C:0A2BH         LINE#         49
+  C:0A2DH         LINE#         51
+  C:0A2FH         LINE#         53
+  C:0A31H         LINE#         54
+  -------         ENDPROC       TIMER0_CONFIGURATION
+  -------         ENDMOD        TIMER
+
+  -------         MODULE        ADC_DRIVER
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00A8H         PUBLIC        IEN0
+  D:00B8H         PUBLIC        IEN1
+  D:00D8H         PUBLIC        S0CON2
+  C:0958H         PUBLIC        _Get_ADC_Value
+  D:0088H         PUBLIC        TCON
+  D:00D3H         PUBLIC        ADB
+  D:00D2H         PUBLIC        ADM
+  D:00D4H         PUBLIC        ADR
+  C:0A32H         PUBLIC        ADCInit
+  D:009EH         PUBLIC        P2CON
+  D:0098H         PUBLIC        S0CON
+  D:00C8H         PUBLIC        T2CON
+  D:00D0H         PUBLIC        PSW
+  D:00D5H         PUBLIC        VREFH
+  D:00C0H         PUBLIC        IRCON
+  -------         PROC          ADCINIT
+  C:0A32H         LINE#         14
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/24/2022  18:18:57  PAGE 8
+
+
+  C:0A32H         LINE#         15
+  C:0A32H         LINE#         17
+  C:0A35H         LINE#         19
+  C:0A38H         LINE#         21
+  C:0A3BH         LINE#         23
+  C:0A3EH         LINE#         25
+  C:0A41H         LINE#         26
+  -------         ENDPROC       ADCINIT
+  -------         PROC          _GET_ADC_VALUE
+  D:0007H         SYMBOL        channel
+  C:0958H         LINE#         28
+  C:0958H         LINE#         29
+  C:0958H         LINE#         31
+  C:095DH         LINE#         33
+  C:0960H         LINE#         34
+  C:0965H         LINE#         36
+  C:097EH         LINE#         37
+  -------         ENDPROC       _GET_ADC_VALUE
+  -------         ENDMOD        ADC_DRIVER
+
+  -------         MODULE        MAIN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00A8H         PUBLIC        IEN0
+  D:00B8H         PUBLIC        IEN1
+  D:00D8H         PUBLIC        S0CON2
+  C:0A59H         PUBLIC        main
+  D:0088H         PUBLIC        TCON
+  D:0098H         PUBLIC        S0CON
+  D:00C8H         PUBLIC        T2CON
+  D:00D0H         PUBLIC        PSW
+  D:00C0H         PUBLIC        IRCON
+  -------         PROC          MAIN
+  C:0A59H         LINE#         3
+  C:0A59H         LINE#         4
+  C:0A59H         LINE#         5
+  C:0A59H         LINE#         6
+  C:0A59H         LINE#         8
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        MAIN
+
+  -------         MODULE        OPTIONS_SN8F5703
+  N:000EH         SYMBOL        CLOCKSRC_SET
+  N:0001H         SYMBOL        NOISEFILT_SET
+  N:0030H         SYMBOL        RESETPIN_SET
+  N:2000H         SYMBOL        ROM_SIZE
+  N:0001H         SYMBOL        SECURITY_SET
+  N:00C0H         SYMBOL        WATCHCLK_SET
+  N:00A0H         SYMBOL        WATCHDOG_SET
+  -------         ENDMOD        OPTIONS_SN8F5703
+
+  -------         MODULE        ?C_STARTUP
+  C:0800H         SEGMENT       ?C_C51STARTUP
+  I:0019H         SEGMENT       ?STACK
+  C:0000H         PUBLIC        ?C_STARTUP
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/24/2022  18:18:57  PAGE 9
+
+
+  D:00E0H         SYMBOL        ACC
+  D:00F0H         SYMBOL        B
+  D:0083H         SYMBOL        DPH
+  D:0082H         SYMBOL        DPL
+  N:0000H         SYMBOL        IBPSTACK
+  N:0100H         SYMBOL        IBPSTACKTOP
+  N:0080H         SYMBOL        IDATALEN
+  C:0803H         SYMBOL        IDATALOOP
+  N:0000H         SYMBOL        PBPSTACK
+  N:0100H         SYMBOL        PBPSTACKTOP
+  N:0000H         SYMBOL        PDATALEN
+  N:0000H         SYMBOL        PDATASTART
+  N:0000H         SYMBOL        PPAGE
+  N:0000H         SYMBOL        PPAGEENABLE
+  D:00A0H         SYMBOL        PPAGE_SFR
+  D:0081H         SYMBOL        SP
+  C:0800H         SYMBOL        STARTUP1
+  N:0000H         SYMBOL        XBPSTACK
+  N:0000H         SYMBOL        XBPSTACKTOP
+  N:0000H         SYMBOL        XDATALEN
+  N:0000H         SYMBOL        XDATASTART
+  C:0000H         LINE#         126
+  C:0800H         LINE#         133
+  C:0802H         LINE#         134
+  C:0803H         LINE#         135
+  C:0804H         LINE#         136
+  C:0806H         LINE#         185
+  C:0809H         LINE#         196
+  -------         ENDMOD        ?C_STARTUP
+
+  -------         MODULE        ?C?ULSHR
+  C:09FBH         PUBLIC        ?C?ULSHR
+  -------         ENDMOD        ?C?ULSHR
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?SYSTEM_RUN?SYSTEM
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?GPIO_INIT?SYSTEM
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?SYSCLK_INIT?SYSTEM
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?WORK_HANDLER?WORK
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?TRRIGER_LIGHT?WORK
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?DISPLAY_HANDLER?DISPLAY
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?DISPLAY_INIT?DISPLAY
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?PWM_INIT?PWM_DRIVER
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/24/2022  18:18:57  PAGE 10
+
+
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?TIMER1_CONFIGURATION?TIMER
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?TIMER0_CONFIGURATION?TIMER
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?ADCINIT?ADC_DRIVER
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_GET_ADC_VALUE?ADC_DRIVER
+
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  GPIO_IPL_ON
+    MODULE:  .\Objects\work.obj (WORK)
+
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GPIO_IPL_ON
+    MODULE:  .\Objects\work.obj (WORK)
+    ADDRESS: 09A5H
+
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  LED_AUTO_OFF
+    MODULE:  .\Objects\display.obj (DISPLAY)
+
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  UC_MODE_GET
+    MODULE:  .\Objects\display.obj (DISPLAY)
+
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  B_AUTOSWITCHFLAG_GET
+    MODULE:  .\Objects\display.obj (DISPLAY)
+
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  LED_AUTO_ON
+    MODULE:  .\Objects\display.obj (DISPLAY)
+
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  UC_MODE_GET
+    MODULE:  .\Objects\display.obj (DISPLAY)
+    ADDRESS: 089BH
+
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  B_AUTOSWITCHFLAG_GET
+    MODULE:  .\Objects\display.obj (DISPLAY)
+    ADDRESS: 08C4H
+
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  LED_AUTO_ON
+    MODULE:  .\Objects\display.obj (DISPLAY)
+    ADDRESS: 08CBH
+
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  LED_AUTO_OFF
+    MODULE:  .\Objects\display.obj (DISPLAY)
+    ADDRESS: 08D0H
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/24/2022  18:18:57  PAGE 11
+
+
+
+******************************************************************************
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 01DDH BYTE (23%) *
+******************************************************************************
+
+Program Size: data=26.0 xdata=18 code=625
+LINK/LOCATE RUN COMPLETE.  22 WARNING(S),  0 ERROR(S)

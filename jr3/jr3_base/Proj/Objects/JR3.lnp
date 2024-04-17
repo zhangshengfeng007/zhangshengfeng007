@@ -1,0 +1,25 @@
+".\Objects\system.obj",
+".\Objects\work.obj",
+".\Objects\display.obj",
+".\Objects\key.obj",
+".\Objects\fan.obj",
+".\Objects\touch_key.obj",
+".\Objects\charge.obj",
+".\Objects\touch.obj",
+".\Objects\ntc.obj",
+".\Objects\error_det.obj",
+".\Objects\sleep.obj",
+".\Objects\burnin.obj",
+".\Objects\pwm_driver.obj",
+".\Objects\timer.obj",
+".\Objects\adc_driver.obj",
+".\Objects\bs83b.obj",
+".\Objects\74HC595.obj",
+".\Objects\rotary.obj",
+".\Objects\main.obj",
+".\Objects\OPTIONS_SN8F5703.obj",
+".\Objects\STARTUP.obj" 
+TO ".\Objects\JR3" 
+PRINT(".\Listings\JR3.m51") RAMSIZE(256) 
+CODE( 0X0000-0X1FF5 )
+XDATA( 0X0000-0X00FF )

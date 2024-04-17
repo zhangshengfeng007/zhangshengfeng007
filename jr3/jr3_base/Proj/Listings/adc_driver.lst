@@ -1,0 +1,83 @@
+C51 COMPILER V9.60.7.0   ADC_DRIVER                                                        04/16/2024 15:41:20 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE ADC_DRIVER
+OBJECT MODULE PLACED IN .\Objects\adc_driver.obj
+COMPILER INVOKED BY: F:\tool_start\keil_c51\C51\BIN\C51.EXE ..\Driver\adc_driver.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\Ap
+                    -p\inc;..\Driver\inc) DEBUG OBJECTEXTEND PRINT(.\Listings\adc_driver.lst) TABS(2) OBJECT(.\Objects\adc_driver.obj)
+
+line level    source
+
+   1          #include "adc_driver.h"
+   2          
+   3          #define   ADCEn     (1 << 7)
+   4          #define   GCHS      (0x40)      //enable ADC channel
+   5          #define   ADCKS     (0x02 << 4)   //ADC clock = fosc/1
+   6          #define   VHSH      (0 << 2)    //Vrefh = VDD
+   7          #define   VHSL      (0x02 << 0)
+   8          #define   ADCStart    (0x40)      //start ADC conversion
+   9          #define   EOC       (0x20)      //ADC Status
+  10          
+  11          
+  12          
+  13          void ADCInit(void)
+  14          {
+  15   1        ADM &= ~0x0c;
+  16   1        // set AIN5 pin¡¯s mode at pure analog pin
+  17   1        P2CON |= 0x0d;  //AIN0/P20 AIN2/P22 AIN3/P23
+  18   1        P1CON |= 0x80;  //AIN6/P17
+  19   1        // configure ADC channel and enable ADC.
+  20   1        ADM |= ADCEn;
+  21   1        ADM |= ADCChannel400V;
+  22   1        // enable channel and select conversion speed
+  23   1        ADR |= GCHS;
+  24   1        ADR |= ADCKS;
+  25   1        // configure reference voltage
+  26   1        VREFH = VHSH | VHSL;
+  27   1        // start ADC conversion
+  28   1        //ADM |= ADCStart;
+  29   1        Get_ADC_Value(ADCChannel400V);
+  30   1        
+  31   1      //  if(Supply_Test()){
+  32   1      //    PowerOnOff_Set(0);
+  33   1      //    ErrorType_Set(ERROR_TYPE_SUPPLY);
+  34   1      //  }
+  35   1      }
+  36          
+  37          uint16_t Get_ADC_Value(uint8_t channel)
+  38          {
+  39   1        uint16_t temp_ad_data = 0;
+  40   1        
+  41   1        // configure ADC channel and enable ADC.
+  42   1        ADM &= 0xf0;
+  43   1        ADM |= channel;
+  44   1        // start ADC conversion
+  45   1        ADM |= ADCStart;
+  46   1        while((ADM&EOC)!= EOC);
+  47   1        ADM &= ~ADCStart;
+  48   1        
+  49   1        temp_ad_data = ADB;
+  50   1        temp_ad_data = (temp_ad_data<<4) + (ADR&0x0f);
+  51   1        
+  52   1        return temp_ad_data;
+  53   1      }
+  54          
+C51 COMPILER V9.60.7.0   ADC_DRIVER                                                        04/16/2024 15:41:20 PAGE 2   
+
+  55          
+  56          
+  57          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     81    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

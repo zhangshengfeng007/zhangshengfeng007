@@ -1,0 +1,127 @@
+C51 COMPILER V9.60.7.0   TIMER                                                             04/16/2024 15:41:20 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE TIMER
+OBJECT MODULE PLACED IN .\Objects\timer.obj
+COMPILER INVOKED BY: F:\tool_start\keil_c51\C51\BIN\C51.EXE ..\Driver\timer.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\App\inc
+                    -;..\Driver\inc) DEBUG OBJECTEXTEND PRINT(.\Listings\timer.lst) TABS(2) OBJECT(.\Objects\timer.obj)
+
+line level    source
+
+   1          #include "timer.h"
+   2          
+   3          #define   T1Fre     (65535-1000*32/12)
+   4          #define   T1GATE      (0<<7)
+   5          #define   T1CT      (0<<6)      //Ftimer = Fcpu / 12
+   6          #define   T1M       (0x01<<4)   //16 位向上计数定时器
+   7          
+   8          #define   T0Fre     (62868)   //2ms
+   9          #define   T0GATE      (0<<3)
+  10          #define   T0CT      (0<<2)
+  11          #define   T0M       (0x01<<0)
+  12          
+  13          #define   T2Fre     (65268)   //2ms 65535-50*32/12
+  14          
+  15          void Timer2ISR(void) interrupt ISRTimer2
+  16          {// TF0 clear by hardware
+  17   1        if(TF2){
+  18   2          TF2 = 0;
+  19   2          TH2 = T2Fre/256;
+  20   2          TL2 = T2Fre%256;
+  21   2          Display_Breath_Cb();
+  22   2        }
+  23   1      }
+  24          void Timer0ISR(void) interrupt ISRTimer0
+  25          {// TF0 clear by hardware
+  26   1        TR0 = 0;
+  27   1        TH0 = T0Fre/256;
+  28   1        TL0 = T0Fre%256;
+  29   1        Work_Cb();
+  30   1      }
+  31          
+  32          extern idata uint8_t SupplyTestFinishedFlag;
+  33          void Timer1ISR(void) interrupt ISRTimer1
+  34          {// TF1 clear by hardware
+  35   1        TH1 = T1Fre/256;
+  36   1        TL1 = T1Fre%256;
+  37   1        
+  38   1        ChargeInit_Cb();
+  39   1        BurninInit_Cb();
+  40   1        
+  41   1        //P05^=1;
+  42   1        
+  43   1        if(SupplyTestFinishedFlag)Task_Roll();
+  44   1        else return;
+  45   1        
+  46   1        if(++TIM_Period.systick > 20)TIM_Period.systick = 0;
+  47   1        
+  48   1        Display_Cb();
+  49   1        FanWork_Cb();
+  50   1      }
+  51          
+  52          void TIMER2_Configuration(void)
+  53          {
+  54   1        // T1_Initial
+C51 COMPILER V9.60.7.0   TIMER                                                             04/16/2024 15:41:20 PAGE 2   
+
+  55   1        TH2 = T2Fre/256;
+  56   1        TL2 = T2Fre%256;
+  57   1        
+  58   1        T2CON = 0x05;
+  59   1        
+  60   1        //IEN1 |= 0x80;
+  61   1        
+  62   1        TF2 = 0;
+  63   1        
+  64   1        // Enable total/Timer2 interrupt
+  65   1        ET2 = 1;
+  66   1        
+  67   1      }
+  68          
+  69          void TIMER1_Configuration(void)
+  70          {
+  71   1        // T1_Initial
+  72   1        TH1 = T1Fre/256;
+  73   1        TL1 = T1Fre%256;
+  74   1        // T0 mode0 with gating clock by INT0, clock source from Fosc or FRTC
+  75   1        TMOD |= T1GATE|T1CT|T1M;
+  76   1        // Timer 1 enable. Clear TF1
+  77   1        TR1 = 1;
+  78   1        TF1 = 0;
+  79   1        // Enable T0/T1 interrupt
+  80   1        ET1 = 1;
+  81   1        //Enable total interrupt
+  82   1        EAL = 1;
+  83   1      }
+  84          
+  85          void TIMER0_Configuration(void)
+  86          {
+  87   1        // T1_Initial
+  88   1        TH0 = T0Fre/256;
+  89   1        TL0 = T0Fre%256;
+  90   1        // T0 mode0 with gating clock by INT0, clock source from Fosc or FRTC
+  91   1        TMOD |= T0GATE|T0CT|T0M;
+  92   1        // Timer 1 enable. Clear TF1
+  93   1        TR0 = 0;
+  94   1        TF0 = 0;
+  95   1        // Enable T0/T1 interrupt
+  96   1        ET0 = 1;
+  97   1        //Enable total interrupt
+  98   1        EAL = 1;
+  99   1      }
+ 100          
+ 101          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    292    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

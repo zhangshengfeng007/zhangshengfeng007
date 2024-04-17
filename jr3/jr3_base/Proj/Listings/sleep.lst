@@ -1,0 +1,71 @@
+C51 COMPILER V9.60.7.0   SLEEP                                                             04/16/2024 15:41:20 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE SLEEP
+OBJECT MODULE PLACED IN .\Objects\sleep.obj
+COMPILER INVOKED BY: F:\tool_start\keil_c51\C51\BIN\C51.EXE ..\App\sleep.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\App\inc;..
+                    -\Driver\inc) DEBUG OBJECTEXTEND PRINT(.\Listings\sleep.lst) TABS(2) OBJECT(.\Objects\sleep.obj)
+
+line level    source
+
+   1          #include "sleep.h"
+   2          
+   3          #define   SLEEP3MINCHACK    (180000/20)
+   4          #define   SLEEP30MINCHACK   (1800000/20)
+   5          
+   6          
+   7          xdata xSleepStatus_t sx_SleepStatus = {0};
+   8          
+   9          
+  10          void Sleep_Handler(void)
+  11          {
+  12   1        if(ErrorType_Get()/*&(ERROR_TYPE_VOLTAGE|ERROR_TYPE_SUPPLY)*/)
+  13   1          return;
+  14   1        
+  15   1        if(BurninEntering() || b_BurninFlag_Get())
+  16   1          return;
+  17   1        
+  18   1        if(b_OnOffFlag_Get())
+  19   1        {
+  20   2          if(sx_SleepStatus.l_NoninductivitCnt++>SLEEP3MINCHACK)
+  21   2          {
+  22   3            sx_SleepStatus.l_NoninductivitCnt = 0;
+  23   3            sx_SleepStatus.b_SleepMode = SLEEP_MODE_SLEEP;
+  24   3            PowerOnOff_Set(0);
+  25   3            FightLightReset();
+  26   3          }
+  27   2          if(sx_SleepStatus.l_MaximumWorkCnt++>SLEEP30MINCHACK)
+  28   2          {
+  29   3            sx_SleepStatus.l_MaximumWorkCnt = 0;
+  30   3            sx_SleepStatus.b_SleepMode = SLEEP_MODE_SLEEP;
+  31   3            PowerOnOff_Set(0);
+  32   3            FightLightReset();
+  33   3          }
+  34   2        }
+  35   1        else
+  36   1        {
+  37   2          sx_SleepStatus.l_NoninductivitCnt=0;
+  38   2          sx_SleepStatus.l_MaximumWorkCnt=0;
+  39   2        }
+  40   1      }
+  41          
+  42          
+  43          
+  44          
+  45          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    143    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =      9    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+C51 COMPILER V9.60.7.0   SLEEP                                                             04/16/2024 15:41:20 PAGE 2   
+
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

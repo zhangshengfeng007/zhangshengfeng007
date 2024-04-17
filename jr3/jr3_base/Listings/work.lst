@@ -1,0 +1,65 @@
+C51 COMPILER V9.60.0.0   WORK                                                              05/24/2022 18:18:56 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE WORK
+OBJECT MODULE PLACED IN .\Objects\work.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE App\work.c WARNINGLEVEL(1) OPTIMIZE(8,SPEED) BROWSE INCDIR(.\App\inc;.\D
+                    -river\inc) DEBUG OBJECTEXTEND PRINT(.\Listings\work.lst) OBJECT(.\Objects\work.obj)
+
+line level    source
+
+   1          #include "work.h"
+   2          
+   3          xdata uint16_t FightLightBuffer[]={     1100, 1500, 1800,
+   4                                                                                  1100, 1500, 1800,
+   5                                                                                  1100, 1500, 1800};
+   6          
+   7          sx_FightLightStatus_t sx_FightLightStatus={0,0,0,0};
+   8          void Fight_Light_Times(void);
+   9          
+  10          
+  11          void Work_Handler(void)
+  12          {
+  13   1              Fight_Light_Times();
+  14   1      //      if(vg_OldVersion_Get()){
+  15   1      //              sx_FightLightStatus.sl_AutolightTime=0;                 //停止出光时间
+  16   1      //              ul_SleepModeCnt_Set(0);
+  17   1      //      }
+  18   1      }
+  19          
+  20          void Trriger_Light(void)
+  21          {
+  22   1              GPIO_IPL_ON();
+*** WARNING C206 IN LINE 22 OF App\work.c: 'GPIO_IPL_ON': missing function-prototype
+  23   1              sx_FightLightStatus.b_FightLightFanBusy = true;
+  24   1              Pwm_Set(CHARGE_FRE,CHARGE_FRE+1);
+  25   1              //重置打光
+  26   1              sx_FightLightStatus.b_FightLightFlag=false;
+  27   1              sx_FightLightStatus.ul_FightLightCnt=0;
+  28   1              //开启定时器
+  29   1              //TIMER_Start(TIMER0);
+  30   1      }
+  31          
+  32          void Fight_Light_Times(void)
+  33          {
+  34   1              
+  35   1      }
+  36          
+  37          
+  38          
+  39          
+  40          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     37    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =     18    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      7    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

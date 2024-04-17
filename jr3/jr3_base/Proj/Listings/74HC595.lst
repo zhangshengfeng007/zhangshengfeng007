@@ -1,0 +1,121 @@
+C51 COMPILER V9.60.7.0   74HC595                                                           04/16/2024 15:41:21 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE 74HC595
+OBJECT MODULE PLACED IN .\Objects\74HC595.obj
+COMPILER INVOKED BY: F:\tool_start\keil_c51\C51\BIN\C51.EXE ..\Driver\74HC595.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\App\i
+                    -nc;..\Driver\inc) DEBUG OBJECTEXTEND PRINT(.\Listings\74HC595.lst) TABS(2) OBJECT(.\Objects\74HC595.obj)
+
+line level    source
+
+   1          #include "74HC595.h"
+   2          #include "bs83b.h"
+   3          
+   4          #define   SER_H()           (SER=1)
+   5          #define   SER_L()           (SER=0)
+   6          #define   SCK_H()           (SCK=1)
+   7          #define   SCK_L()           (SCK=0)
+   8          #define   RCK_H()           (RCK=1)
+   9          #define   RCK_L()           (RCK=0)
+  10          
+  11          uint8_t LED_send_buf = 0;
+  12          
+  13          
+  14          void SMG_Write_Byte(uint8_t dat)
+  15          {
+  16   1        uint8_t i;
+  17   1        
+  18   1      //  PW1M &= 0x7f;
+  19   1        /*
+  20   1        EAL = 0;
+  21   1        for(i=0x01;i!=0;i<<=1)
+  22   1        {
+  23   1          SCK_L();
+  24   1          (dat&i) ? SER_H():SER_L();
+  25   1          SCK_H();
+  26   1          SCK_L();
+  27   1          RCK_L();
+  28   1          RCK_H();
+  29   1          RCK_L();
+  30   1        }
+  31   1        EAL = 1;
+  32   1        */
+  33   1      //  EAL = 0;
+  34   1      //  for(i=0x01;i!=0;i<<=1)
+  35   1      //  {
+  36   1      //    SCK_L();
+  37   1      //    RCK_L();
+  38   1      //    (dat&i) ? SER_H():SER_L();
+  39   1      //    RCK_H();
+  40   1      //    SCK_H();
+  41   1      //  }
+  42   1      //  EAL = 1;
+  43   1      
+  44   1        EAL = 0;
+  45   1        for(i=0x01;i!=0;i<<=1)
+  46   1        {
+  47   2          SCK_L();
+  48   2          RCK_L();
+  49   2          (dat&i) ? SER_H():SER_L();
+  50   2          RCK_H();
+  51   2          SCK_H();
+  52   2        }
+  53   1        EAL = 1;
+  54   1      //  RCK_L();
+C51 COMPILER V9.60.7.0   74HC595                                                           04/16/2024 15:41:21 PAGE 2   
+
+  55   1      //  RCK_H();
+  56   1        //SCK_H();
+  57   1      //  for(i=0x01;i!=0;i<<=1)
+  58   1      //  {
+  59   1      //    RCK_L();
+  60   1      //    SCK_L();
+  61   1      //    (dat&i) ? SER_H():SER_L();
+  62   1      //    SCK_H();
+  63   1      //    RCK_H();
+  64   1      ////    RCK_H();
+  65   1      ////    RCK_L();
+  66   1      //  }
+  67   1        
+  68   1      //  for(i=0x01;i!=0x80;i<<=1)
+  69   1      //  {
+  70   1      //    (dat&i) ? SER_H():SER_L();
+  71   1      //    SCK_H();
+  72   1      //    SCK_L();
+  73   1      //    RCK_H();
+  74   1      //    RCK_L();
+  75   1      //  }
+  76   1      //  (dat&i) ? SER_H():SER_L();
+  77   1      //  for(i=0x01;i!=0;i<<=1)
+  78   1      //  {
+  79   1      //    (dat&i) ? SER_H():SER_L();
+  80   1      //    SCK_H();
+  81   1      //    SCK_L();
+  82   1      //    RCK_H();
+  83   1      //    RCK_L();
+  84   1      //  }
+  85   1      //  SCK_L();
+  86   1      //  RCK_L();
+  87   1      //  PW1M |= 0x80;
+  88   1      }
+  89          
+  90          
+  91          
+  92          
+  93          
+  94          
+  95          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     33    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      1    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

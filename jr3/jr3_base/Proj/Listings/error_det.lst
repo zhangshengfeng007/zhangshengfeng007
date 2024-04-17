@@ -1,0 +1,92 @@
+C51 COMPILER V9.60.7.0   ERROR_DET                                                         04/16/2024 15:41:20 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE ERROR_DET
+OBJECT MODULE PLACED IN .\Objects\error_det.obj
+COMPILER INVOKED BY: F:\tool_start\keil_c51\C51\BIN\C51.EXE ..\App\error_det.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\App\in
+                    -c;..\Driver\inc) DEBUG OBJECTEXTEND PRINT(.\Listings\error_det.lst) TABS(2) OBJECT(.\Objects\error_det.obj)
+
+line level    source
+
+   1          #include "error_det.h"
+   2          
+   3          xErrorStatus_t sx_ErrorStatus = {0};
+   4          
+   5          void ErrorType_Reset(uint8_t errortype)
+   6          {
+   7   1      //  if(errortype&ERROR_TYPE_FAN)//风扇报错
+   8   1      //    LED_MODE1_OFF();
+   9   1      //  if(errortype&ERROR_TYPE_VOLTAGE)//电压报错
+  10   1      //    LED_MODE2_OFF();
+  11   1      //  if(errortype&ERROR_TYPE_NTC)//温度报错
+  12   1      //    LED_MODE3_OFF();
+  13   1        sx_ErrorStatus.b_errortype &= (~errortype);
+  14   1      }
+  15          uint8_t errordisplay_buf = 0;
+  16          void Error_Det_Handler(void)
+  17          {
+  18   1        uint8_t errordisplay_flag = 0;
+  19   1        
+  20   1        if(sx_ErrorStatus.b_errortype)
+  21   1        {
+  22   2          if(++sx_ErrorStatus.uc_errorflashcnt==(200/20)){
+  23   3            sx_ErrorStatus.b_errorflashdir=1;
+  24   3            errordisplay_flag = 1;
+  25   3          }
+  26   2          if(sx_ErrorStatus.uc_errorflashcnt==(400/20)){
+  27   3            sx_ErrorStatus.uc_errorflashcnt=0;
+  28   3            sx_ErrorStatus.b_errorflashdir=0;
+  29   3            errordisplay_flag = 1;
+  30   3          }
+  31   2          errordisplay_buf = 0x00;
+  32   2          if(sx_ErrorStatus.b_errorflashdir){
+  33   3      //      if(sx_ErrorStatus.b_errortype&ERROR_TYPE_SUPPLY)//供电报错
+  34   3      //        errordisplay_buf |= LED_MODE_5;
+  35   3            if(sx_ErrorStatus.b_errortype&ERROR_TYPE_FAN)//风扇报错
+  36   3              errordisplay_buf |= LED_MODE_1 | LED_MODE_2;
+  37   3            if(sx_ErrorStatus.b_errortype&ERROR_TYPE_VOLTAGE)//电压报错
+  38   3              errordisplay_buf |= LED_MODE_1 | LED_MODE_2 | LED_MODE_3;
+  39   3            if(sx_ErrorStatus.b_errortype&ERROR_TYPE_NTC)//温度报错
+  40   3              errordisplay_buf |= LED_MODE_1 | LED_MODE_2 | LED_MODE_3 | LED_MODE_4;
+  41   3          }else{
+  42   3      //      if(sx_ErrorStatus.b_errortype&ERROR_TYPE_SUPPLY)//供电报错
+  43   3      //        errordisplay_buf &= ~LED_MODE_5;
+  44   3            if(sx_ErrorStatus.b_errortype&ERROR_TYPE_FAN)//风扇报错
+  45   3              errordisplay_buf &= ~(LED_MODE_1 | LED_MODE_2);
+  46   3            if(sx_ErrorStatus.b_errortype&ERROR_TYPE_VOLTAGE)//电压报错
+  47   3              errordisplay_buf &= ~(LED_MODE_1 | LED_MODE_2 | LED_MODE_3);
+  48   3            if(sx_ErrorStatus.b_errortype&ERROR_TYPE_NTC)//温度报错
+  49   3              errordisplay_buf &= ~(LED_MODE_1 | LED_MODE_2 | LED_MODE_3 | LED_MODE_4);
+  50   3          }
+  51   2      //    if(errordisplay_flag){
+  52   2      //      set_led_event(LED_EVENT_ERROR);
+  53   2      //      //SMG_Write_Byte(errordisplay_buf);
+  54   2      //    }
+C51 COMPILER V9.60.7.0   ERROR_DET                                                         04/16/2024 15:41:20 PAGE 2   
+
+  55   2        }
+  56   1      }
+  57          
+  58          
+  59          
+  60          
+  61          
+  62          
+  63          
+  64          
+  65          
+  66          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     99    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      6    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

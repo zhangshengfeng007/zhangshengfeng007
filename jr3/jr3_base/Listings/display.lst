@@ -1,0 +1,84 @@
+C51 COMPILER V9.60.0.0   DISPLAY                                                           05/24/2022 18:18:57 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE DISPLAY
+OBJECT MODULE PLACED IN .\Objects\display.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE App\display.c WARNINGLEVEL(1) OPTIMIZE(8,SPEED) BROWSE INCDIR(.\App\inc;
+                    -.\Driver\inc) DEBUG OBJECTEXTEND PRINT(.\Listings\display.lst) OBJECT(.\Objects\display.obj)
+
+line level    source
+
+   1          #include "display.h"
+   2          
+   3          xDisplayStatus_t sx_DisplayStatus_t={0};
+   4          
+   5          void Display_Handler(void)
+   6          {
+   7   1              if(sx_DisplayStatus_t.uc_Event & LED_EVENT_MODE)                //模式灯
+   8   1              {
+   9   2                      sx_DisplayStatus_t.uc_Event &= ~LED_EVENT_MODE;
+  10   2                      LED_MODE3_OFF();
+  11   2                      LED_MODE2_OFF();
+  12   2                      LED_MODE1_OFF();
+  13   2                      switch(uc_Mode_Get()+1)
+*** WARNING C206 IN LINE 13 OF App\display.c: 'uc_Mode_Get': missing function-prototype
+  14   2                      {
+  15   3                              case 0:break;
+  16   3                              case 1:LED_MODE1_ON();break;
+  17   3                              case 2:LED_MODE2_ON();break;
+  18   3                              case 3:LED_MODE3_ON();break;
+  19   3                      }
+  20   2              }
+  21   1              if(sx_DisplayStatus_t.uc_Event & LED_EVENT_AUTO)                //自动打光灯
+  22   1              {
+  23   2                      sx_DisplayStatus_t.uc_Event &= ~LED_EVENT_AUTO;
+  24   2                      if(b_AutoSwitchFlag_Get())
+*** WARNING C206 IN LINE 24 OF App\display.c: 'b_AutoSwitchFlag_Get': missing function-prototype
+  25   2                              LED_AUTO_ON();
+*** WARNING C206 IN LINE 25 OF App\display.c: 'LED_AUTO_ON': missing function-prototype
+  26   2                      else
+  27   2                              LED_AUTO_OFF();
+*** WARNING C206 IN LINE 27 OF App\display.c: 'LED_AUTO_OFF': missing function-prototype
+  28   2              }
+  29   1              if(sx_DisplayStatus_t.uc_Event & LED_EVENT_OFF)         //关闭所有灯
+  30   1              {
+  31   2                      sx_DisplayStatus_t.uc_Event &= ~LED_EVENT_OFF;
+  32   2                      LED_MODE3_OFF();LED_MODE2_OFF();LED_MODE1_OFF();
+  33   2                      LED_LEVEL1_OFF();LED_LEVEL2_OFF();LED_LEVEL3_OFF();LED_LEVEL4_OFF();LED_LEVEL5_OFF();LED_LEVEL6_OFF();
+  34   2              }
+  35   1      }
+  36          
+  37          void Display_Cb(void)
+  38          {
+  39   1              if(sx_DisplayStatus_t.b_InitFlag==LED_INIT_ON)
+  40   1                      sx_DisplayStatus_t.ul_InitCnt++;
+  41   1              else
+  42   1                      sx_DisplayStatus_t.ul_InitCnt = 0;
+  43   1              if(sx_DisplayStatus_t.ul_InitCnt>1600){
+  44   2                      sx_DisplayStatus_t.ul_InitCnt=0;
+  45   2                      sx_DisplayStatus_t.b_InitFlag=LED_INIT_FINISH;
+  46   2              }
+  47   1      }
+  48          
+  49          void Display_init(void)
+  50          {
+C51 COMPILER V9.60.0.0   DISPLAY                                                           05/24/2022 18:18:57 PAGE 2   
+
+  51   1              
+  52   1      }
+  53          
+  54          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    146    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      4    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  4 WARNING(S),  0 ERROR(S)
