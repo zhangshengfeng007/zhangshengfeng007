@@ -1,0 +1,326 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              04/16/2024 18:28:31 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\output\main.obj
+COMPILER INVOKED BY: F:\tool_start\keil_c51\C51\BIN\C51.EXE source\main.c OMF2 OPTIMIZE(8,SPEED) BROWSE DEBUG PRINT(.\ls
+                    -t\main.lst) TABS(2) OBJECT(.\output\main.obj)
+
+line level    source
+
+   1          #ifndef _MAIN_C_
+   2          #define _MAIN_C_
+   3          /*********************************************************************************************************
+             -************/
+   4          #include "include/ca51f1s6_config.h"    
+   5          #include "include/ca51f1s6sfr.h"
+   6          #include "include/ca51f1s6xsfr.h"
+   7          #include "include/gpiodef_f1s6.h"
+   8          #include "include/system_clock.h"
+   9          
+  10          #include "include/uart.h"
+  11          #include "include/delay.h"
+  12          
+  13          /*********************************************************************************************************
+             -************
+  14            INT2~INT4控制例程
+  15            1、INT0~1 支持上升沿、下降沿触发
+  16            2、INT2~4 支持上升沿、下降沿、双沿触发
+  17            3、INT0~3 中断输入引脚为固定引脚，
+  18            4、INT4   可配置信号引脚(P1.0~P1.7/P2.0~P2.7/P0.4~P0.7/P3.0/P3.1)作为中断输入引脚
+  19          **********************************************************************************************************
+             -***********/
+  20          
+  21          enum 
+  22          {
+  23            P10_INDEX = 0,
+  24            P11_INDEX = 1,
+  25            P12_INDEX = 2,
+  26            P13_INDEX = 3,
+  27            P14_INDEX = 4,
+  28            P15_INDEX = 5,
+  29            P16_INDEX = 6,
+  30            P17_INDEX = 7,
+  31            
+  32            P20_INDEX = 8,
+  33            P21_INDEX = 9,
+  34            P22_INDEX = 10,
+  35            P23_INDEX = 11,
+  36            P24_INDEX = 12,
+  37            P25_INDEX = 13,
+  38            P26_INDEX = 14,
+  39            P27_INDEX = 15,
+  40            
+  41            P04_INDEX = 16,
+  42            P05_INDEX = 17,
+  43            P06_INDEX = 18,
+  44            P07_INDEX = 19,
+  45            
+  46            P30_INDEX = 20,
+  47            P31_INDEX = 21,
+  48          };
+  49          
+  50          #define EPIE(n)     (n<<7)
+  51          #define EPPL(n)     (n<<5)
+C51 COMPILER V9.60.7.0   MAIN                                                              04/16/2024 18:28:31 PAGE 2   
+
+  52          #define EPPSEL(n)   (n<<0)
+  53          
+  54          //  equal == 74HC595
+  55          #define ANA_74HC595_DATA    (P17)
+  56          #define ANA_74HC595_CLK     (P15)
+  57          
+  58          char recv_led_data;
+  59          char recv_index = 0;
+  60          unsigned char recv_frame_buff[10] = {0};  // 10times_data same ,display
+  61          
+  62          
+  63          char disp_led_data = 0xff;
+  64          char last_disp_led_data = 0;
+  65          char recv_flag;
+  66          char recv_cnt;
+  67          unsigned int time_out_cnt = 0;
+  68          unsigned int disp_delay_cnt = 0;
+  69          unsigned int disp_delay_flag = 0;
+  70          
+  71          
+  72          
+  73          /*********************************************************************************************************
+             -************
+  74            本例程以P0.2为例，设置P0.2为不同模式，所有IO用法与P0.2相同。
+  75          **********************************************************************************************************
+             -***********/
+  76          
+  77          void System_Init(void)
+  78          {
+  79   1        LVDCON = 0xE2;          //设置LVD复位电压为2.7V
+  80   1      #ifdef SYSCLK_16MHZ         //系统时钟为16MHz,设置CKDIV为0
+  81   1        CKDIV = 0;
+  82   1      #endif
+  83   1        IHCFG = ReadIHCFG();
+  84   1        TKCCFG = ReadTKCCFG();
+  85   1      #ifdef UART1_EN
+  86   1        Uart1_Initial(UART1_BAUTRATE);
+  87   1      #endif  
+  88   1      #ifdef UART2_EN
+                Uart2_Initial(UART2_BAUTRATE);
+              #endif
+  91   1      }
+  92          
+  93          
+  94          /*外部中断4控制例程***************************************************************************************
+             -*************/
+  95          void INT4_Init(void)
+  96          {
+  97   1        P15F = INPUT;         //INT4可配置信号引脚(P1.0~P1.7/P2.0~P2.7/P0.4~P0.7/P3.0/P3.1)作为中断输入引脚   
+  98   1        EP2CON = EPIE(1) | EPPL(0) | EPPSEL(P15_INDEX); //使能外部中断，并选择下降沿触发, 设置P12为INT4中断引脚
+  99   1        INT4EN = 1;           //外部中断4中断使能
+ 100   1        
+ 101   1        //int4_flag = 0;
+ 102   1      }
+ 103          
+ 104          
+ 105          void main(void)
+ 106          {
+ 107   1        int  i = 0;
+ 108   1        System_Init();
+ 109   1      
+ 110   1        EA = 1;             //开全局中断
+C51 COMPILER V9.60.7.0   MAIN                                                              04/16/2024 18:28:31 PAGE 3   
+
+ 111   1      
+ 112   1      #ifdef PRINT_EN
+ 113   1        uart_printf("GPIO Demo Code\n");
+ 114   1      #endif
+ 115   1      
+ 116   1        INT4_Init();
+ 117   1      /***********************************************************************************/
+ 118   1      //  P02F = OUTPUT;      //P02设置为推挽输出模式
+ 119   1      //  while(1)
+ 120   1      //  {
+ 121   1      //    P02 = ~P02;     //P02取反输出
+ 122   1      //  }
+ 123   1        
+ 124   1        P21F = OUTPUT;
+ 125   1        P22F = OUTPUT;
+ 126   1        P23F = OUTPUT;
+ 127   1        
+ 128   1        P24F = OUTPUT;
+ 129   1        P25F = OUTPUT;
+ 130   1        P26F = OUTPUT;
+ 131   1        
+ 132   1        P27F = OUTPUT;
+ 133   1        
+ 134   1      /***********************************************************************************/   
+ 135   1      
+ 136   1      
+ 137   1      /***********************************************************************************/ 
+ 138   1      //  P21 = 1;
+ 139   1      //  P22 = 1;
+ 140   1      //  P23 = 1;
+ 141   1      
+ 142   1      //  P24 = 1;
+ 143   1      //  P25 = 1;
+ 144   1      //  P26 = 1;
+ 145   1      
+ 146   1      //  P27 = 1;
+ 147   1      //  P02F = INPUT;         //P02设置为输入模式
+ 148   1      //  P02F = INPUT | PU_EN;     //P02设置为输入模式，并使能上拉电阻
+ 149   1          P15F = INPUT | PU_EN; 
+ 150   1          P16F = INPUT | PU_EN; 
+ 151   1          P17F = INPUT | PU_EN; 
+ 152   1        while(1)
+ 153   1        {
+ 154   2      //    if(P02)
+ 155   2      //    {
+ 156   2      //    #ifdef PRINT_EN
+ 157   2      //      uart_printf("P02 Input High!\n");
+ 158   2      //    #endif
+ 159   2      //    }
+ 160   2      //    else
+ 161   2      //    {
+ 162   2      //    #ifdef PRINT_EN
+ 163   2      //      uart_printf("P02 Input Low!\n");
+ 164   2      //    #endif
+ 165   2      //    }
+ 166   2          
+ 167   2          {
+ 168   3            time_out_cnt ++;
+ 169   3      
+ 170   3      
+ 171   3            if(recv_cnt == 8)
+ 172   3            {
+C51 COMPILER V9.60.7.0   MAIN                                                              04/16/2024 18:28:31 PAGE 4   
+
+ 173   4      
+ 174   4      
+ 175   4              recv_index ++;
+ 176   4              recv_index %= 10;
+ 177   4              recv_frame_buff[recv_index] = recv_led_data;
+ 178   4              recv_cnt = 0;
+ 179   4              
+ 180   4              if(recv_index == 9)
+ 181   4              {
+ 182   5              
+ 183   5                #ifdef PRINT_EN
+ 184   5      //            uart_printf("buff[]:%d,:%d ,:%d, %d,%d \r\n", recv_frame_buff[0], recv_frame_buff[1], recv_frame_b
+             -uff[2], recv_frame_buff[3], 100);
+ 185   5                //uart_printf("   :%d,:%d ,:%d,%d,%d \r\n", recv_frame_buff[5], recv_frame_buff[6], recv_frame_buff[7
+             -], recv_frame_buff[8], recv_frame_buff[9]);
+ 186   5              //  Uart1_PutChar(recv_frame_buff[0]);
+ 187   5      //          Uart1_PutChar(recv_frame_buff[1]);
+ 188   5      //          Uart1_PutChar(recv_frame_buff[2]);
+ 189   5      //          Uart1_PutChar(recv_frame_buff[3]);
+ 190   5              //  Uart1_PutChar(recv_frame_buff[4]);
+ 191   5      //          Uart1_PutChar(recv_frame_buff[5]);
+ 192   5              //  Uart1_PutChar(recv_frame_buff[6]);
+ 193   5      //          Uart1_PutChar(recv_frame_buff[7]);
+ 194   5      //          Uart1_PutChar(recv_frame_buff[8]);
+ 195   5              //  Uart1_PutChar(recv_frame_buff[9]);
+ 196   5                #endif
+ 197   5              
+ 198   5                if((recv_frame_buff[0] == recv_frame_buff[1])\
+ 199   5                  && (recv_frame_buff[1] == recv_frame_buff[2])\
+ 200   5                  && (recv_frame_buff[2] == recv_frame_buff[3])\
+ 201   5                  && (recv_frame_buff[3] == recv_frame_buff[4])\
+ 202   5                  && (recv_frame_buff[4] == recv_frame_buff[5])\
+ 203   5                  && (recv_frame_buff[5] == recv_frame_buff[6])\
+ 204   5                  && (recv_frame_buff[6] == recv_frame_buff[7])\
+ 205   5                  && (recv_frame_buff[7] == recv_frame_buff[8])\
+ 206   5                  && (recv_frame_buff[8] == recv_frame_buff[9])\
+ 207   5                  )
+ 208   5                {
+ 209   6                
+ 210   6                  disp_delay_flag = 1;
+ 211   6                  disp_led_data = recv_frame_buff[5];
+ 212   6                //  Uart1_PutChar(0xf0);
+ 213   6                }
+ 214   5              }
+ 215   4            }
+ 216   3            
+ 217   3      
+ 218   3            if(disp_delay_flag)
+ 219   3            {
+ 220   4              if(disp_led_data != last_disp_led_data)
+ 221   4              {
+ 222   5              
+ 223   5                (disp_led_data & 0x80) ? (P26 = 1) : (P26 = 0);//
+ 224   5                (disp_led_data & 0x40) ? (P27 = 1) : (P27 = 0); //
+ 225   5                (disp_led_data & 0x20) ? (P24 = 1) : (P24 = 0);
+ 226   5                (disp_led_data & 0x10) ? (P25 = 1) : (P25 = 0);
+ 227   5                
+ 228   5                (disp_led_data & 0x08) ? (P22 = 1) : (P22 = 0);//
+ 229   5                (disp_led_data & 0x04) ? (P21 = 1) : (P21 = 0);//
+ 230   5                (disp_led_data & 0x02) ? (P23 = 1) : (P23 = 0);//
+ 231   5                
+ 232   5                Uart1_PutChar(0x5a);
+C51 COMPILER V9.60.7.0   MAIN                                                              04/16/2024 18:28:31 PAGE 5   
+
+ 233   5                Uart1_PutChar(0xa5);
+ 234   5                Uart1_PutChar(disp_led_data);
+ 235   5                last_disp_led_data = disp_led_data;
+ 236   5              }
+ 237   4              
+ 238   4              recv_cnt = 0;
+ 239   4              //recv_flag = 0;
+ 240   4              disp_delay_flag = 0;
+ 241   4      
+ 242   4            }
+ 243   3      
+ 244   3        }
+ 245   2          
+ 246   2        }
+ 247   1      /***********************************************************************************/ 
+ 248   1        
+ 249   1        
+ 250   1      /***********************************************************************************/ 
+ 251   1        //寄存器PnxC
+ 252   1        #define SMIT_EN(N)    (N<<6)    //N=0~1,为1输入的SMIT使能，为0输入是反相器使能
+ 253   1        #define SINK(N)     (N<<3)    //灌电流强度选择;P00C~P07C的SINK设置位为两位(SINK[1:0] = 0~3)，其它IO的SINK设置
+             -位为一位(SINK[0] = 0~1)
+ 254   1        #define SINK_EN(N)    (N<<2)    //N=0~1,大灌电流使能  
+ 255   1        #define DRV(N)      (N<<1)    //N=0~1,输出强度选择  
+ 256   1        #define SR(N)     (N<<0)    //N=0~1,输出斜率控制    0：最慢斜率控制   1：最快斜率控制
+ 257   1        
+ 258   1      //P02设置为推挽输出，并且设置为大灌电流模式，程序如下： 
+ 259   1        P02F = OUTPUT;                //P00设置为推挽输出模式
+ 260   1        P02C = (P02C&0x40) | SINK(3) | SINK_EN(1);  //P00使能高灌电流模式,灌电流强度设置为最大
+ 261   1      /***********************************************************************************/ 
+ 262   1        
+ 263   1      /***********************************************************************************/ 
+ 264   1      //P02设置为开漏输出，程序如下： 
+ 265   1        P02F = OP_EN | OUTPUT;
+ 266   1      /***********************************************************************************/
+ 267   1      
+ 268   1      /***********************************************************************************/ 
+ 269   1      //P02设置为开漏输出，并且打开上拉，程序如下：
+ 270   1        P02F = PU_EN | OP_EN | OUTPUT;
+ 271   1      /***********************************************************************************/ 
+ 272   1      
+ 273   1        while(1)
+ 274   1        {
+ 275   2          
+ 276   2        }
+ 277   1      }
+ 278          #endif
+*** WARNING C294 IN LINE 259 OF source\main.c: unreachable code
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    312    ----
+   CONSTANT SIZE    =     16    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     22       2
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+C51 COMPILER V9.60.7.0   MAIN                                                              04/16/2024 18:28:31 PAGE 6   
+
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

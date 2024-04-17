@@ -1,0 +1,123 @@
+C51 COMPILER V9.60.7.0   SYSTEM_CLOCK                                                      04/16/2024 14:07:43 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE SYSTEM_CLOCK
+OBJECT MODULE PLACED IN .\output\system_clock.obj
+COMPILER INVOKED BY: F:\tool_start\keil_c51\C51\BIN\C51.EXE source\system_clock.c OMF2 OPTIMIZE(8,SPEED) BROWSE DEBUG PR
+                    -INT(.\lst\system_clock.lst) TABS(2) OBJECT(.\output\system_clock.obj)
+
+line level    source
+
+   1          #ifndef _SYSTEM_CLOCK_C_
+   2          #define _SYSTEM_CLOCK_C_
+   3          /*********************************************************************************************************
+             -************/
+   4          #include "include/ca51f1s6_config.h"    
+   5          #include "include/ca51f1s6sfr.h"
+   6          #include "include/ca51f1s6xsfr.h"
+   7          #include "include/gpiodef_f1s6.h"
+   8          
+   9          #include "include/system_clock.h"
+  10          #include "include/delay.h"
+  11          /*********************************************************************************************************
+             -************/
+  12          
+  13          
+  14          /***********************************************************************************
+  15          函数名  ：    Sys_Clk_Set_IRCH                      
+  16          功能描述：    设置系统时钟为IRCH
+  17          输入参数：    无
+  18          返回值  ：    无
+  19          ***********************************************************************************/
+  20          void Sys_Clk_Set_IRCH(void)
+  21          {
+  22   1        CKCON |= IHCKE;                     //IRCH时钟使能
+  23   1        CKCON = (CKCON&0xFE) | CKSEL_IRCH;            //系统时钟切换到IRCH
+  24   1      }
+  25          /***********************************************************************************/
+  26          
+  27          
+  28          /***********************************************************************************
+  29          函数名  ：    Sys_Clk_Set_IRCL                      
+  30          功能描述：    设置系统时钟为IRCL
+  31          输入参数：    无
+  32          返回值  ：    无
+  33          ***********************************************************************************/
+  34          void Sys_Clk_Set_IRCL(void)
+  35          {
+  36   1        CKCON |= ILCKE;                     //IRCL时钟使能
+  37   1        Delay_ms(1);                      //使能IRCL后延时1ms，等待IRCL稳定
+  38   1        CKCON = (CKCON&0xFE) | CKSEL_IRCL;            //系统时钟切换到IRCL  
+  39   1      }
+  40          /***********************************************************************************/
+  41          
+  42          
+  43          /***********************************************************************************
+  44          函数名  ：    ReadIHCFG                     
+  45          功能描述：    
+  46          输入参数：    无
+  47          返回值  ：    无
+  48          ***********************************************************************************/
+  49          unsigned char ReadIHCFG(void)    
+  50          {
+  51   1        unsigned char D1,D2;
+  52   1        FSCMD = 0x80; 
+C51 COMPILER V9.60.7.0   SYSTEM_CLOCK                                                      04/16/2024 14:07:43 PAGE 2   
+
+  53   1        PTSH = 0x00;    
+  54   1        PTSL = 0x08;           
+  55   1        FSCMD = 0x81;      
+  56   1        D1 = FSDAT;
+  57   1        D2 = FSDAT;
+  58   1        FSCMD = 0;
+  59   1        if(D1 == 'H')
+  60   1        {
+  61   2          return D2;
+  62   2        }
+  63   1        return IHCFG;
+  64   1      }
+  65          
+  66          
+  67          /***********************************************************************************
+  68          函数名  ：    ReadTKCCFG                      
+  69          功能描述：    
+  70          输入参数：    无
+  71          返回值  ：    无
+  72          ***********************************************************************************/
+  73          unsigned char ReadTKCCFG(void)    
+  74          {
+  75   1        unsigned char D1,D2;
+  76   1        FSCMD = 0x80; 
+  77   1        PTSH = 0x00;    
+  78   1        PTSL = 0x06;           
+  79   1        FSCMD = 0x81;      
+  80   1        D1 = FSDAT;
+  81   1        D2 = FSDAT;
+  82   1        FSCMD = 0;
+  83   1        if(D1 == 'F')
+  84   1        {
+  85   2          return D2;
+  86   2        }
+  87   1        return TKCCFG;
+  88   1      }
+  89          /*********************************************************************************************************
+             -************/
+  90          #endif
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    114    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
