@@ -1,0 +1,83 @@
+C51 COMPILER V9.60.0.0   UART                                                              12/27/2023 10:47:57 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE UART
+OBJECT MODULE PLACED IN .\Objects\uart.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE ..\Driver\uart.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\App\inc;..\Driver\in
+                    -c) DEBUG OBJECTEXTEND PRINT(.\Listings\uart.lst) OBJECT(.\Objects\uart.obj)
+
+line level    source
+
+   1          #include "uart.h"
+   2          
+   3          
+   4          #define                         L_S0RELH_4800                           0x03
+   5          #define                         L_S0RELL_4800                           0x98
+   6          #define                         L_S0RELH_9600                           0x03
+   7          #define                         L_S0RELL_9600                           0xcc
+   8          #define                         L_S0RELH_19200                          0x03
+   9          #define                         L_S0RELL_19200                          0xe6
+  10          #define                         L_S0RELH_38400                          0x03
+  11          #define                         L_S0RELL_38400                          0xf3
+  12          #define                         L_S0RELH_56000                          0x03
+  13          #define                         L_S0RELL_56000                          0xee
+  14          #define                         L_S0RELH_57600                          0x03
+  15          #define                         L_S0RELL_57600                          0xef
+  16          #define                         L_S0RELH_115200                         0x03
+  17          #define                         L_S0RELL_115200                         0xf7
+  18          
+  19          void UartInit(void)
+  20          {
+  21   1              P00 = 1;
+  22   1              P0M |= 0x01;                                                                                                                                    //UTX初始化输出高       
+  23   1              P0M &= 0xfd;                                                                                                                                    //URX初始化数模模式
+  24   1              
+  25   1              SM0 = 0;                                                                                                                                                        //模式1
+  26   1              SM1 = 1;
+  27   1              REN0 = 1;                                                                                                                                                       //使能接收功能
+  28   1              
+  29   1              PCON &= 0x7f;                                                                                                           
+  30   1              BD = 1;                         
+  31   1              S0RELH = L_S0RELH_38400;
+  32   1              S0RELL = L_S0RELL_38400;
+  33   1              
+  34   1              //ES0 = 1;
+  35   1      }
+  36          
+  37          void UartSendByte(uint8_t txbuf)
+  38          {
+  39   1              S0BUF = txbuf;
+  40   1              while(!TI0);
+  41   1              TI0 = 0;
+  42   1      }
+  43          
+  44          //void UartIsr(void) interrupt ISRUart
+  45          //{
+  46          //      if(RI0 == 1)
+  47          //      {
+  48          //              RI0 = 0;
+  49          //              f_rx = 1;
+  50          //              r_urat_rx_data[r_uart_rx_length++] = S0BUF;
+  51          //      }
+  52          //}
+  53          
+  54          
+C51 COMPILER V9.60.0.0   UART                                                              12/27/2023 10:47:57 PAGE 2   
+
+  55          
+  56          
+  57          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     34    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

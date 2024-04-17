@@ -1,0 +1,306 @@
+C51 COMPILER V9.60.7.0   CHARGE                                                            04/16/2024 15:41:19 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE CHARGE
+OBJECT MODULE PLACED IN .\Objects\charge.obj
+COMPILER INVOKED BY: F:\tool_start\keil_c51\C51\BIN\C51.EXE ..\App\charge.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\App\inc;.
+                    -.\Driver\inc) DEBUG OBJECTEXTEND PRINT(.\Listings\charge.lst) TABS(2) OBJECT(.\Objects\charge.obj)
+
+line level    source
+
+   1          #include "charge.h"
+   2          #include <stdlib.h>
+   3          
+   4          //xdata uint16_t const Level_Duty[] = {     //电容目标电压
+   5          //                    240,240,293,240,240,245,
+   6          //                    272,272,310,272,272,259,
+   7          //                    298,298,336,300,300,271,
+   8          //                    320,320,340,320,320,273,
+   9          //                    343,344,343,341,343,278,
+  10          //                    362,364,364,362,362,298
+  11          //                  };
+  12          xdata uint16_t const Level_Duty[] = {     //电容目标电压
+  13                              225,225,270,225,225,225,
+  14                              245,245,280,245,245,235,
+  15                              270,270,290,270,270,245,
+  16                              290,290,300,290,290,250,
+  17                              305,305,305,305,305,260,
+  18                              320,320,320,320,320,270
+  19                            };
+  20          
+  21          
+  22          xChargeStatus_t sx_ChargeStatus = {0};
+  23          uint8_t vrefunstableflag = false;
+  24          static xdata uint8_t lastvaluetestcount = 0;  /* 電壓異常計數 */
+  25          static xdata uint8_t supplytestcnt = 0;     /* 上電供電測試周期 */
+  26          static uint8_t vreftestcnt = 0;
+  27          
+  28          void Charge_Duty_Set(uint8_t num)
+  29          {
+  30   1        sx_ChargeStatus.ul_current_duty=Level_Duty[num];
+  31   1      }
+  32          
+  33          void Charge_Handler(void)
+  34          { 
+  35   1        uint8_t i;
+  36   1        uint16_t tempbuf,tempmax=0,tempmin=4096;
+  37   1        uint32_t supplybuf = 0;
+  38   1        
+  39   1        if(ErrorType_Get()/*&(ERROR_TYPE_VOLTAGE|ERROR_TYPE_SUPPLY)*/)
+  40   1        {
+  41   2          Pwm_Close_Charge();
+  42   2          return;
+  43   2        }
+  44   1        if(b_SleepMode_Get()==SLEEP_MODE_SLEEP)
+  45   1          return;
+  46   1        
+  47   1        #if 1   /* 電容電壓 */
+  48   1        for(i=0;i<5;i++){
+  49   2          tempbuf = Get_ADC_Value(ADCChannel400V);
+  50   2          sx_ChargeStatus.ul_chargeBuff += tempbuf;
+  51   2          if(tempmax<tempbuf)
+  52   2            tempmax = tempbuf;
+  53   2          if(tempmin>tempbuf)
+  54   2            tempmin = tempbuf;
+C51 COMPILER V9.60.7.0   CHARGE                                                            04/16/2024 15:41:19 PAGE 2   
+
+  55   2        }
+  56   1        //test_chargeadc = (sx_ChargeStatus.ul_chargeBuff-tempmax-tempmin)/3;
+  57   1        sx_ChargeStatus.ul_chargevalue = (uint16_t)((sx_ChargeStatus.ul_chargeBuff-tempmax-tempmin)/3 * ADCREFRAT
+             -IO*(452.2/2.2)/4096.0 /1000);
+  58   1        //if(sx_ChargeStatus.ul_chargevalue>=5)sx_ChargeStatus.ul_chargevalue -= 5;
+  59   1        //sx_ChargeStatus.ul_chargevalue = (uint16_t)(test_chargeadc * ADCREFRATIO/4096.0);
+  60   1        sx_ChargeStatus.ul_chargeBuff = 0;
+  61   1        #endif
+  62   1        
+  63   1        #if 1   /* 供電 */
+  64   1        tempmax = 0;
+  65   1        tempmin = 0xffff;
+  66   1        for(i=0;i<3;i++){
+  67   2          tempbuf = Get_ADC_Value(ADCChannel12V);
+  68   2          supplybuf += tempbuf;
+  69   2          if(tempmax<tempbuf)
+  70   2            tempmax = tempbuf;
+  71   2          if(tempmin>tempbuf)
+  72   2            tempmin = tempbuf;
+  73   2        }
+  74   1        supplybuf = (supplybuf-tempmax-tempmin);
+  75   1        supplybuf = (uint16_t)(supplybuf * (ADCREFRATIO/4096.0 * 10.91));
+  76   1        supplybuf += 30;
+  77   1        #if 1   /* pwm */
+  78   1        if(b_OnOffFlag_Get())
+  79   1        {
+  80   2          if(IsChargeDelayOK())
+  81   2          {
+  82   3            if(sx_ChargeStatus.ul_chargevalue < sx_ChargeStatus.ul_current_duty)
+  83   3            {
+  84   4      //        if(supplybuf < 11400)//11000  //10400//8400
+  85   4      //        {
+  86   4      //          if(sx_ChargeStatus.uc_curpwmduty>=28)sx_ChargeStatus.uc_curpwmduty-=28;
+  87   4      //        }
+  88   4      //        else if(supplybuf > 11500)//11200 //10600//8600
+  89   4      //        {
+  90   4      //          if(supplybuf > 11800)i = 15;  //11800//11100//9100  //32
+  91   4      //          else if(supplybuf > 11700)i = 12; //11500//11000//9000  //28
+  92   4      //          else if(supplybuf > 11600)i = 10; //11400//10900//8900  //24
+  93   4      //          else i = 8;   //20
+  94   4      //          if(sx_ChargeStatus.uc_curpwmduty<401-i)sx_ChargeStatus.uc_curpwmduty+=i;//401   /* duty+1 */
+  95   4      //        }
+  96   4              if(supplybuf < 11500)//11000  //10400//8400
+  97   4              {
+  98   5                if(sx_ChargeStatus.uc_curpwmduty>=28)sx_ChargeStatus.uc_curpwmduty-=28;
+  99   5              }
+ 100   4              else if(supplybuf > 11600)//11200 //10600//8600
+ 101   4              {
+ 102   5                if(supplybuf > 11900)i = 10;  //11800//11100//9100  //32
+ 103   5                else if(supplybuf > 11800)i = 8;  //11500//11000//9000  //28
+ 104   5                else if(supplybuf > 11700)i = 6;  //11400//10900//8900  //24
+ 105   5                else i = 4;   //20
+ 106   5                if(sx_ChargeStatus.uc_curpwmduty<401-i)sx_ChargeStatus.uc_curpwmduty+=i;//401   /* duty+1 */
+ 107   5              }
+ 108   4            }
+ 109   3            else if(sx_ChargeStatus.ul_chargevalue > sx_ChargeStatus.ul_current_duty+5)
+ 110   3            {
+ 111   4              sx_ChargeStatus.uc_curpwmduty = 0;
+ 112   4            }
+ 113   3            else
+ 114   3            {
+ 115   4              sx_ChargeStatus.uc_curpwmduty = 8;
+C51 COMPILER V9.60.7.0   CHARGE                                                            04/16/2024 15:41:19 PAGE 3   
+
+ 116   4            }
+ 117   3            if(sx_ChargeStatus.ul_chargevalue >= sx_ChargeStatus.ul_current_duty-2)b_ChargeOkFlag_Set(1);
+ 118   3            else if(sx_ChargeStatus.ul_chargevalue < sx_ChargeStatus.ul_current_duty-5)b_ChargeOkFlag_Set(0);
+ 119   3            Pwm_Set(CHARGE_FRE,sx_ChargeStatus.uc_curpwmduty);
+ 120   3          }
+ 121   2          else
+ 122   2            sx_ChargeStatus.uc_curpwmduty = 100;//160 //CHARGE_FRE/2-CHARGE_FRE/100
+ 123   2        }
+ 124   1        #elif 0
+                UartSendByte((uint8_t)(supplybuf/10000+48));
+                UartSendByte((uint8_t)(supplybuf%10000/1000+48));
+                UartSendByte((uint8_t)(supplybuf%1000/100+48));
+                UartSendByte((uint8_t)(supplybuf%100/10+48));
+                UartSendByte((uint8_t)(supplybuf%10+48));
+                UartSendByte('\r');
+                UartSendByte('\n');
+                #endif
+ 133   1        
+ 134   1        #if 1
+ 135   1        if(b_DetInitFlag_Get()==DETECTIVE_INIT_FINISH && (sx_ChargeStatus.ul_chargevalue==0 || sx_ChargeStatus.ul
+             -_chargevalue>400) && !BurninEntering())
+ 136   1        {
+ 137   2      //        tempvrefdata = Get_ADC_Value(0x0c);
+ 138   2      //        
+ 139   2      //          if(!Supply_Test()&&tempvrefdata>4000)
+ 140   2      //            sx_ChargeStatus.uc_supplytestandlastvaluetestcnt++;
+ 141   2          if(!vrefunstableflag)
+ 142   2            lastvaluetestcount++;
+ 143   2          //tempbuf = Get_ADC_Value(ADCChannel400V);
+ 144   2          //sx_ChargeStatus.ul_chargevalue = (uint16_t)((tempbuf-tempmax-tempmin)/3 * ADCREFRATIO*(452.2/2.2)/4096
+             -.0 /1000);
+ 145   2          //if(sx_ChargeStatus.ul_chargevalue==0 || sx_ChargeStatus.ul_chargevalue>440){
+ 146   2          if(lastvaluetestcount==100){
+ 147   3            b_ChargeOkFlag_Set(1);
+ 148   3            ErrorType_Set(ERROR_TYPE_VOLTAGE);
+ 149   3            PowerOnOff_Set(0);
+ 150   3          }
+ 151   2          //}
+ 152   2        }else// if(b_DetInitFlag_Get()==DETECTIVE_INIT_FINISH)
+ 153   1          lastvaluetestcount = 0;
+ 154   1        #endif
+ 155   1        
+ 156   1        
+ 157   1        
+ 158   1        #endif
+ 159   1        
+ 160   1      }
+ 161          
+ 162          
+ 163          void VDD_Test_Handler(void)
+ 164          {
+ 165   1      //  uint8_t i;
+ 166   1      //  uint16_t tempbuf,tempmax=0,tempmin=4096;
+ 167   1        uint32_t supplybuf = 0;
+ 168   1        
+ 169   1        VREFH |= 0x04;    /* Vref = VDD  AIN14 = 2V */
+ 170   1        VREFH &= ~0x03;
+ 171   1        
+ 172   1      //  for(i=0;i<3;i++){
+ 173   1      //    tempbuf = Get_ADC_Value(ADCChannel12);
+ 174   1      //    supplybuf += tempbuf;
+ 175   1      //    if(tempmax<tempbuf)
+C51 COMPILER V9.60.7.0   CHARGE                                                            04/16/2024 15:41:19 PAGE 4   
+
+ 176   1      //      tempmax = tempbuf;
+ 177   1      //    if(tempmin>tempbuf)
+ 178   1      //      tempmin = tempbuf;
+ 179   1      //  }
+ 180   1      //  supplybuf = (supplybuf-tempmax-tempmin);
+ 181   1        
+ 182   1        supplybuf = Get_ADC_Value(ADCChannel12);
+ 183   1        supplybuf = (uint16_t)(8192000/supplybuf);
+ 184   1        if(supplybuf < 3500 || supplybuf > 6000)
+ 185   1          vrefunstableflag = true;
+ 186   1        else if(supplybuf > 4000)
+ 187   1          vrefunstableflag = false;
+ 188   1        VREFH &= ~0x04;
+ 189   1        VREFH = VREFH &~0x01 |0x02;
+ 190   1      }
+ 191          
+ 192          /* 開機供電波動 */
+ 193          static uint16_t vreftesttimeout = 0;
+ 194          void Charge_Init(void)
+ 195          {
+ 196   1        uint8_t vrefstabletimes = 0;
+ 197   1        uint16_t tempbuf=0, tempmax=0, tempmin=0xffff;
+ 198   1        uint32_t curvalue=0;
+ 199   1        
+ 200   1        sx_ChargeStatus.ul_current_duty=Level_Duty[0];
+ 201   1        sx_ChargeStatus.uc_curpwmduty = 0;
+ 202   1        
+ 203   1        /* 上電穩壓檢測 */
+ 204   1        #if 0
+                VREFH |= 0x04;    /* Vref = VDD  AIN14 = 2V */
+                VREFH &= ~0x03;
+                while(1)
+                {
+                  if(vreftestcnt)
+                  {
+                    vreftesttimeout++;
+                    curvalue = (uint16_t)(4096000.0/Get_ADC_Value(ADCChannel12)*2);   /* 计算公式：VDD = 4096/r_ad_value3 *(
+             -2V/3V/4V) */
+                    if(curvalue < 3500){if(vrefstabletimes)vrefstabletimes--;}
+                    else if(curvalue > 6000){if(vrefstabletimes)vrefstabletimes--;}
+                    else if(curvalue > 4000){vrefstabletimes++;vreftesttimeout = 0;}
+                    if(vrefstabletimes >= 100)break;
+                    vreftestcnt = 0;
+                    if(vreftesttimeout >= 5000)
+                    {
+              //        ErrorType_Set(ERROR_TYPE_SUPPLY);
+              //        Display_Event_Set(LED_EVENT_ERROREN, 0);
+              //        break;
+                      SRST = 0x01;SRST = 0x01;
+                    }
+                    
+                    break;
+                  }
+                }
+                VREFH &= ~0x04;
+                VREFH = VREFH &~0x01 |0x02;
+                #endif
+ 232   1        
+ 233   1        /* 供電檢測 */
+ 234   1        #if 0
+                curvalue = 0;
+                tempmax = 0;
+C51 COMPILER V9.60.7.0   CHARGE                                                            04/16/2024 15:41:19 PAGE 5   
+
+                tempmin = 0xffff;
+                for(i=0;i<10;i++){
+                  tempbuf = Get_ADC_Value(ADCChannel12V);
+                  curvalue += tempbuf;
+                  if(tempmax<tempbuf)
+                    tempmax = tempbuf;
+                  if(tempmin>tempbuf)
+                    tempmin = tempbuf;
+                }
+                curvalue = (curvalue-tempmax-tempmin)>>3;
+                curvalue = (uint16_t)(curvalue * (ADCREFRATIO/4096.0));
+                
+                
+                if(curvalue < 916)    /* 18V */
+                {
+                  ErrorType_Set(ERROR_TYPE_SUPPLY);
+                  //Display_Event_Set(LED_EVENT_ERROREN, 0);
+                }
+                #endif
+ 256   1        
+ 257   1        //Pwm_Open_Charge();
+ 258   1      }
+ 259          
+ 260          void ChargeInit_Cb(void)
+ 261          {
+ 262   1        if(vreftestcnt<100)vreftestcnt++;
+ 263   1      }
+ 264          
+ 265          
+ 266          
+ 267          
+ 268          
+ 269          
+ 270          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1033    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =     74    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     17      26
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

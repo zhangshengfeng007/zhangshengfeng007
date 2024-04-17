@@ -1,0 +1,212 @@
+C51 COMPILER V9.60.7.0   BS83B                                                             04/16/2024 15:41:20 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE BS83B
+OBJECT MODULE PLACED IN .\Objects\bs83b.obj
+COMPILER INVOKED BY: F:\tool_start\keil_c51\C51\BIN\C51.EXE ..\Driver\bs83b.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\App\inc
+                    -;..\Driver\inc) DEBUG OBJECTEXTEND PRINT(.\Listings\bs83b.lst) TABS(2) OBJECT(.\Objects\bs83b.obj)
+
+line level    source
+
+   1          #include "bs83b.h"
+   2          
+   3          #define   SDA_H()     (SDA=1)
+   4          #define   SDA_L()     (SDA=0)
+   5          #define   SCL_H()     (SCL=1)
+   6          #define   SCL_L()     (SCL=0)
+   7          #define   SDA_IN()    (P0M&=~0x04)
+   8          #define   SDA_OUT()   (P0M|=0x04)
+   9          
+  10          //void Delay_us(uint8_t us);
+  11          //void Delay500ms()
+  12          //{
+  13          //  unsigned char i, j, k;
+  14          
+  15          //  _nop_();
+  16          //  _nop_();
+  17          //  i = 63;
+  18          //  j = 179;
+  19          //  k = 82;
+  20          //  do
+  21          //  {
+  22          //    do
+  23          //    {
+  24          //      while (--k);
+  25          //    } while (--j);
+  26          //  } while (--i);
+  27          //}
+  28          
+  29          void Delay_us(uint8_t us)
+  30          {
+  31   1        switch(us)
+  32   1        {
+  33   2          case 1:us=14;break;
+  34   2          case 2:us=14;break;
+  35   2          case 3:us=250;break;  //22
+  36   2          default:break;
+  37   2        }
+  38   1        while(us--);
+  39   1      }
+  40          
+  41          void IIC_Wave(void)
+  42          {
+  43   1        //SCL_L();
+  44   1        Delay_us(1);
+  45   1        SCL_H();
+  46   1        Delay_us(1);
+  47   1      }
+  48          
+  49          
+  50          uint8_t IIC_Test(void)
+  51          {
+  52   1        //uint8_t i, j=0;
+  53   1        uint16_t dat = 0x0000;
+  54   1        
+C51 COMPILER V9.60.7.0   BS83B                                                             04/16/2024 15:41:20 PAGE 2   
+
+  55   1      //  for(i=0;i<16;i++){
+  56   1      //    SCL_H();
+  57   1      //    Delay_us(1);
+  58   1      //    SCL_L();
+  59   1      //    if(i<8){
+  60   1      //      if(!SDA) dat|=0x01;
+  61   1      //      dat<<=1;
+  62   1      //    }
+  63   1      //    Delay_us(1);
+  64   1      //  }
+  65   1        #if 1
+  66   1        SCL_L();_nop_();
+  67   1        if(SDA) dat|=0x01;
+  68   1        dat<<=1;
+  69   1        IIC_Wave();
+  70   1        SCL_L();_nop_();
+  71   1        if(SDA) dat|=0x01;
+  72   1        dat<<=1;
+  73   1        IIC_Wave();
+  74   1        SCL_L();_nop_();
+  75   1        if(SDA) dat|=0x01;
+  76   1        dat<<=1;
+  77   1        IIC_Wave();
+  78   1        SCL_L();_nop_();
+  79   1        if(SDA) dat|=0x01;
+  80   1        dat<<=1;
+  81   1        IIC_Wave();
+  82   1        SCL_L();_nop_();
+  83   1        if(SDA) dat|=0x01;
+  84   1        dat<<=1;
+  85   1        IIC_Wave();
+  86   1        SCL_L();_nop_();
+  87   1        if(SDA) dat|=0x01;
+  88   1        dat<<=1;
+  89   1        IIC_Wave();
+  90   1        SCL_L();_nop_();
+  91   1        if(SDA) dat|=0x01;
+  92   1        dat<<=1;
+  93   1        IIC_Wave();
+  94   1        SCL_L();_nop_();
+  95   1        if(SDA) dat|=0x01;
+  96   1        dat<<=1;
+  97   1        IIC_Wave();
+  98   1        SCL_L();_nop_();
+  99   1        if(SDA) dat|=0x01;
+ 100   1        dat<<=1;
+ 101   1        IIC_Wave();
+ 102   1        SCL_L();_nop_();
+ 103   1        if(SDA) dat|=0x01;
+ 104   1        dat<<=1;
+ 105   1        IIC_Wave();
+ 106   1        SCL_L();_nop_();
+ 107   1        if(SDA) dat|=0x01;
+ 108   1        dat<<=1;
+ 109   1        IIC_Wave();
+ 110   1        SCL_L();_nop_();
+ 111   1        if(SDA) dat|=0x01;
+ 112   1        dat<<=1;
+ 113   1        IIC_Wave();
+ 114   1        SCL_L();_nop_();
+ 115   1        if(SDA) dat|=0x01;
+ 116   1        dat<<=1;
+C51 COMPILER V9.60.7.0   BS83B                                                             04/16/2024 15:41:20 PAGE 3   
+
+ 117   1        IIC_Wave();
+ 118   1        SCL_L();_nop_();
+ 119   1        if(SDA) dat|=0x01;
+ 120   1        dat<<=1;
+ 121   1        IIC_Wave();
+ 122   1        SCL_L();_nop_();
+ 123   1        if(SDA) dat|=0x01;
+ 124   1        dat<<=1;
+ 125   1        IIC_Wave();
+ 126   1        SCL_L();_nop_();
+ 127   1        if(SDA) dat|=0x01;
+ 128   1        //dat<<=1;
+ 129   1        IIC_Wave();
+ 130   1        #else
+                #endif
+ 132   1        SCL_H();
+ 133   1        
+ 134   1        if((dat&0xff)==0xc2){
+ 135   2          dat >>= 8;
+ 136   2          dat = ~dat;
+ 137   2      //    for(i=0x01;i!=0;i<<=1)
+ 138   2      //    {
+ 139   2      //      if(i&dat)
+ 140   2      //        j++;
+ 141   2      //    }
+ 142   2      //    if(j==1)
+ 143   2            return dat;
+ 144   2      //    else
+ 145   2      //      return 0xff;
+ 146   2        }else
+ 147   1          return 0xff;
+ 148   1        
+ 149   1      //  switch(dat)
+ 150   1      //  {
+ 151   1      //    case 0x05ff: dat = 0x0000;break;
+ 152   1      //    case 0x70bf: dat = 0x0001;break;
+ 153   1      //    case 0x785f: dat = 0x0002;break;
+ 154   1      //    case 0x7f0b: dat = 0x0004;break;
+ 155   1      //    case 0x617f: dat = 0x0008;break;
+ 156   1      //    case 0x7f85: dat = 0x0010;break;
+ 157   1      //    case 0x7e17: dat = 0x0020;break;
+ 158   1      //    default: dat = 0x0000;break;
+ 159   1      //  }
+ 160   1        
+ 161   1        //dat &= 0xfd;
+ 162   1        
+ 163   1      }
+ 164          
+ 165          
+ 166          void IIC_Init(void)
+ 167          {
+ 168   1        SCL_H();
+ 169   1        Delay_us(2);
+ 170   1        SDA_H();
+ 171   1        Delay_us(2);
+ 172   1        SDA_IN();
+ 173   1      }
+ 174          
+ 175          
+ 176          
+ 177          
+ 178          
+C51 COMPILER V9.60.7.0   BS83B                                                             04/16/2024 15:41:20 PAGE 4   
+
+ 179          
+ 180          
+ 181          
+ 182          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    273    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

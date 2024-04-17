@@ -1,0 +1,200 @@
+C51 COMPILER V9.60.7.0   WORK                                                              04/16/2024 15:41:18 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE WORK
+OBJECT MODULE PLACED IN .\Objects\work.obj
+COMPILER INVOKED BY: F:\tool_start\keil_c51\C51\BIN\C51.EXE ..\App\work.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\App\inc;..\
+                    -Driver\inc) DEBUG OBJECTEXTEND PRINT(.\Listings\work.lst) TABS(2) OBJECT(.\Objects\work.obj)
+
+line level    source
+
+   1          #include "work.h"
+   2          
+   3          #define   AUTOLIGHTTIME   (30000/10)
+   4          
+   5          #define   IPL_ON()          IPL=1
+   6          #define   IPL_OFF()         IPL=0
+   7          
+   8          xdata uint16_t FightLightBuffer[]={ 770, 770, 1180, 770, 770, 770,
+   9                            1010, 1010, 1330, 1010, 1010, 910,
+  10                            1220, 1220, 1600, 1220, 1220, 920,
+  11                            1440, 1490, 1680, 1460, 1490, 1100,
+  12                            1710, 1750, 1750, 1710, 1740, 1200,
+  13                            1880, 1880, 1900, 1880, 1870, 1200};
+  14          
+  15          sx_FightLightStatus_t sx_FightLightStatus={0,0,0,0};
+  16          
+  17          uint16_t ChargeDelayCount = 0;
+  18          
+  19          void Fight_Light_Times(void);
+  20          void Trriger_Light(void);
+  21          
+  22          uint8_t IsChargeDelayOK(void)
+  23          {
+  24   1        return (!!ChargeDelayCount);
+  25   1      }
+  26          
+  27          void Work_Handler(void)
+  28          {
+  29   1        if(ErrorType_Get()/*&(ERROR_TYPE_VOLTAGE|ERROR_TYPE_SUPPLY)*/)
+  30   1          return;
+  31   1        if(b_SleepMode_Get()==SLEEP_MODE_SLEEP)
+  32   1          return;
+  33   1        Fight_Light_Times();
+  34   1        if(b_OnOffFlag_Get() && sx_FightLightStatus.b_ChargeOkFlag && sx_FightLightStatus.b_FightLightFlag)
+  35   1        {
+  36   2          if(b_BurninFlag_Get())    
+  37   2          {
+  38   3            if(!b_BurninMode_Get()){    //老化模式
+  39   4              if(b_BurninStart_Get()){
+  40   5                if(++sx_BurninStatus_t.ul_BurninTestCnt==400)//40
+  41   5                { 
+  42   6                  uc_Mode_Set(0);uc_Level_Set(1);uc_LevelSum_Set(0);
+  43   6                }
+  44   5                else if(sx_BurninStatus_t.ul_BurninTestCnt==500)//50
+  45   5                { 
+  46   6                  b_BurninStart_Set(0);
+  47   6                }
+  48   5                Trriger_Light();
+  49   5              }
+  50   4            }else{    //寿命模式
+  51   4              if(!b_LifeTestMode_Get() && b_BurninStart_Get())
+  52   4                Trriger_Light();
+  53   4            }
+  54   3          }
+C51 COMPILER V9.60.7.0   WORK                                                              04/16/2024 15:41:18 PAGE 2   
+
+  55   2          else
+  56   2          {
+  57   3            if(b_TouchFlag_Get())   // 非老化必须触摸
+  58   3            {
+  59   4              if(b_AutoSwitchFlag_Get()){
+  60   5                //ul_SleepModeCnt_Set(0);
+  61   5                //sx_FightLightStatus.sl_AutolightTime=0;   //改到触摸
+  62   5                Trriger_Light();
+  63   5              }else{
+  64   5                if(sx_FightLightStatus.b_KeyPressFlag)    // 按键按下
+  65   5                {
+  66   6                  Trriger_Light();
+  67   6                  sx_FightLightStatus.b_KeyPressFlag=0;
+  68   6                }
+  69   5              }
+  70   4            }else// if(sx_FightLightStatus.b_KeyPressFlag)
+  71   3              sx_FightLightStatus.b_KeyPressFlag=0;
+  72   3          }
+  73   2          
+  74   2        }
+  75   1      }
+  76          
+  77          void Trriger_Light(void)
+  78          {
+  79   1        Pwm_Set(CHARGE_FRE,0);
+  80   1        sx_ChargeStatus.uc_curpwmduty = 0;
+  81   1        IPL_ON();
+  82   1        
+  83   1        Delay_us(3);
+  84   1        Display_Handler();
+  85   1        Delay_us(3);
+  86   1        Display_Handler();
+  87   1        
+  88   1        sx_FightLightStatus.b_IPLWorking = true;
+  89   1        sx_FightLightStatus.b_FightLightTouchFanBusy = true;
+  90   1        sx_FightLightStatus.b_FightDisplayBusy = true;
+  91   1        
+  92   1        //重置打光
+  93   1        sx_FightLightStatus.b_FightLightFlag=false;
+  94   1        sx_FightLightStatus.ul_FightLightCnt=0;
+  95   1        //开启定时器
+  96   1        TR0 = 1;
+  97   1        sx_FightLightStatus.sl_AutolightTime=0;
+  98   1      }
+  99          
+ 100          void Fight_Light_Times(void)
+ 101          {
+ 102   1        //充电时间
+ 103   1        sx_FightLightStatus.ul_FightLightCnt++;
+ 104   1        if(sx_FightLightStatus.ul_FightLightCnt>=sx_FightLightStatus.uc_FightLightTime)
+ 105   1          sx_FightLightStatus.ul_FightLightCnt=sx_FightLightStatus.uc_FightLightTime;
+ 106   1        //异常检测初始化时间
+ 107   1        if(sx_FightLightStatus.b_DetInitFlag==DETECTIVE_INIT_ON)
+ 108   1          sx_FightLightStatus.uc_DetInitCnt++;
+ 109   1        else
+ 110   1          sx_FightLightStatus.uc_DetInitCnt = 0;
+ 111   1      //  if(sx_FightLightStatus.uc_DetInitCnt>100)
+ 112   1      //    sx_FightLightStatus.b_DetInitFlag=DETECTIVE_INIT_SUPPLY;
+ 113   1      //  if(sx_FightLightStatus.uc_DetInitCnt>310)
+ 114   1      //    sx_FightLightStatus.b_DetInitFlag=DETECTIVE_INIT_DISPLAY;
+ 115   1        if(sx_FightLightStatus.uc_DetInitCnt>500){
+ 116   2          sx_FightLightStatus.uc_DetInitCnt=0;
+C51 COMPILER V9.60.7.0   WORK                                                              04/16/2024 15:41:18 PAGE 3   
+
+ 117   2          sx_FightLightStatus.b_DetInitFlag=DETECTIVE_INIT_FINISH;
+ 118   2        }
+ 119   1        //没有感应退出自动打光
+ 120   1        if(b_AutoSwitchFlag_Get())
+ 121   1          sx_FightLightStatus.sl_AutolightTime++;
+ 122   1        else
+ 123   1          sx_FightLightStatus.sl_AutolightTime=0;
+ 124   1        if(sx_FightLightStatus.sl_AutolightTime>AUTOLIGHTTIME){
+ 125   2          sx_FightLightStatus.sl_AutolightTime = 0;
+ 126   2          b_AutoSwitchFlag_Set(0);
+ 127   2          set_led_event(LED_EVENT_AUTO);
+ 128   2          //sx_FightLightStatus.sl_FightNum = 0;
+ 129   2        }
+ 130   1        //if(ChargeDelayCount < 10)
+ 131   1        ChargeDelayCount = 1;
+ 132   1        
+ 133   1        if(sx_FightLightStatus.b_FightLightFlag==false){
+ 134   2          if(sx_FightLightStatus.ul_FightLightCnt==2){
+ 135   3            sx_FightLightStatus.b_FightLightTouchFanBusy = false;
+ 136   3          }
+ 137   2          if(sx_FightLightStatus.ul_FightLightCnt==5){
+ 138   3            sx_FightLightStatus.b_FightDisplayBusy = false;
+ 139   3          }
+ 140   2          if(sx_FightLightStatus.ul_FightLightCnt>=sx_FightLightStatus.uc_FightLightTime)
+ 141   2          {
+ 142   3            sx_FightLightStatus.b_FightLightFlag=true;
+ 143   3            sx_FightLightStatus.ul_FightLightCnt=0;
+ 144   3          }
+ 145   2        }
+ 146   1      }
+ 147          
+ 148          
+ 149          void Work_Cb(void)
+ 150          {
+ 151   1        IPL_OFF();
+ 152   1        sx_FightLightStatus.b_IPLWorking = false;
+ 153   1        ChargeDelayCount = 0;
+ 154   1      
+ 155   1      //  sx_DisplayStatus_t.b_ScanCnt = 5;
+ 156   1      }
+ 157          
+ 158          void Work_Init(void)
+ 159          {
+ 160   1        sx_FightLightStatus.uc_FightLightTime = FightLightBuffer[0]/10;
+ 161   1        ChargeDelayCount = 1;
+ 162   1      }
+ 163          
+ 164          void Fight_Light_Time_Set(uint8_t num)
+ 165          {
+ 166   1        sx_FightLightStatus.uc_FightLightTime = FightLightBuffer[num]/10;
+ 167   1      }
+ 168          
+ 169          
+ 170          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    476    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =     72    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     14    ----
+C51 COMPILER V9.60.7.0   WORK                                                              04/16/2024 15:41:18 PAGE 4   
+
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

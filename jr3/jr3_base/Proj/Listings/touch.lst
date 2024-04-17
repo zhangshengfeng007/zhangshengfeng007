@@ -1,0 +1,85 @@
+C51 COMPILER V9.60.7.0   TOUCH                                                             04/16/2024 15:41:19 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE TOUCH
+OBJECT MODULE PLACED IN .\Objects\touch.obj
+COMPILER INVOKED BY: F:\tool_start\keil_c51\C51\BIN\C51.EXE ..\App\touch.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\App\inc;..
+                    -\Driver\inc) DEBUG OBJECTEXTEND PRINT(.\Listings\touch.lst) TABS(2) OBJECT(.\Objects\touch.obj)
+
+line level    source
+
+   1          #include "touch.h"
+   2          
+   3          
+   4          #define   LIGHTTOUCH    (20/10)
+   5          
+   6          xTouchStatus_t sx_TouchStatus = {0};
+   7          
+   8          void Touch_Handler(void)
+   9          {
+  10   1        if(ErrorType_Get()/*&(ERROR_TYPE_VOLTAGE|ERROR_TYPE_SUPPLY)*/)
+  11   1          return;
+  12   1        
+  13   1        if(BurninEntering() || b_BurninFlag_Get())
+  14   1          return;
+  15   1        
+  16   1        if(b_SleepMode_Get()==SLEEP_MODE_SLEEP)
+  17   1          return;
+  18   1        
+  19   1      //  if(!b_FightLighTouchFanBusy_Get())
+  20   1      //  {
+  21   1          //if(1/*TOUCH==0*/)
+  22   1          if(TOUCH==0)
+  23   1          {
+  24   2            if(sx_TouchStatus.uc_TouchTimeCnt++>=LIGHTTOUCH)
+  25   2            {
+  26   3              sx_TouchStatus.uc_TouchTimeCnt = 0;
+  27   3              if(LED_SensetypeFlag_Get()==LED_SENSE_ON && b_OnOffFlag_Get())
+  28   3                LED_SensetypeFlag_Set(LED_SENSE_TOUCH);
+  29   3      //        if(b_OnOffFlag_Get()&&!sx_TouchStatus.b_TouchFlag)
+  30   3      //          set_led_event(LED_SENSE_TOUCH);
+  31   3              //sl_AutolightTime_Set(0);
+  32   3              ul_SleepModeCnt_Set(0);
+  33   3              sx_TouchStatus.b_TouchFlag=true;
+  34   3            }
+  35   2      //      else if(sx_TouchStatus.uc_TouchTimeCnt>=LIGHTTOUCH*2)
+  36   2      //        sx_TouchStatus.uc_TouchTimeCnt = 0;
+  37   2          }
+  38   1          else
+  39   1          {
+  40   2            if(sx_TouchStatus.uc_TouchTimeCnt++>=LIGHTTOUCH){
+  41   3              sx_TouchStatus.uc_TouchTimeCnt= 0;
+  42   3              if(LED_SensetypeFlag_Get()==LED_SENSE_TOUCH && b_OnOffFlag_Get())
+  43   3                LED_SensetypeFlag_Set(LED_SENSE_ON);
+  44   3      //        if(b_OnOffFlag_Get()&&sx_TouchStatus.b_TouchFlag)
+  45   3      //          set_led_event(LED_EVENT_SENCE);
+  46   3              sx_TouchStatus.b_TouchFlag=false;
+  47   3            }
+  48   2            
+  49   2          }
+  50   1      //  }
+  51   1      }
+  52          
+  53          
+  54          
+C51 COMPILER V9.60.7.0   TOUCH                                                             04/16/2024 15:41:19 PAGE 2   
+
+  55          
+  56          
+  57          
+  58          
+  59          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    142    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      1    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

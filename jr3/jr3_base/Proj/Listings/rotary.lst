@@ -1,0 +1,149 @@
+C51 COMPILER V9.60.7.0   ROTARY                                                            04/16/2024 15:41:21 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE ROTARY
+OBJECT MODULE PLACED IN .\Objects\rotary.obj
+COMPILER INVOKED BY: F:\tool_start\keil_c51\C51\BIN\C51.EXE ..\Driver\rotary.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\App\in
+                    -c;..\Driver\inc) DEBUG OBJECTEXTEND PRINT(.\Listings\rotary.lst) TABS(2) OBJECT(.\Objects\rotary.obj)
+
+line level    source
+
+   1          #include "rotary.h"
+   2          
+   3          xRotaryStatus_t xRotaryStatus = {0};
+   4          
+   5          uint8_t Rotary_Read(void)
+   6          {
+   7   1        uint8_t a,b,c,d;
+   8   1        
+   9   1        a=ROTARY_0;
+  10   1        b=ROTARY_1;
+  11   1        c=ROTARY_2;
+  12   1        d=((c<<2)+(b<<1)+(a<<0))&0xff;
+  13   1        switch(d)
+  14   1        {
+  15   2          case 0x04:return ROTARY_LEVEL_OFF;
+  16   2          case 0x05:return ROTARY_LEVEL_1;
+  17   2          case 0x06:return ROTARY_LEVEL_2;
+  18   2          case 0x07:return ROTARY_LEVEL_3;
+  19   2          case 0x01:return ROTARY_LEVEL_4;
+  20   2          case 0x02:return ROTARY_LEVEL_5;
+  21   2          case 0x03:return ROTARY_LEVEL_6;
+  22   2          default: return 0;
+  23   2        }
+  24   1      
+  25   1      }
+  26          
+  27          void Rotary_Handler(void)
+  28          {
+  29   1        if(ErrorType_Get()/*&(ERROR_TYPE_VOLTAGE|ERROR_TYPE_SUPPLY)*/)
+  30   1          return;
+  31   1        
+  32   1        if(BurninEntering())
+  33   1          return;
+  34   1        
+  35   1          
+  36   1      //    for(k=0;k<2;k++)
+  37   1      //      xRotaryStatus.bRKbuf = xRotaryStatus.bRKbuf[k+1];
+  38   1        xRotaryStatus.bRKbuf = Rotary_Read();
+  39   1      //    for(k=0;k<2;k++){
+  40   1      //      if(xRotaryStatus.bRKbuf != xRotaryStatus.bRKbuf[k+1])
+  41   1      //        break;
+  42   1      //    }
+  43   1        if(!b_BurninFlag_Get())
+  44   1        {
+  45   2          #if 0
+                  switch(xRotaryStatus.bRKbuf)
+                  {
+                    case 1:SMG_Write_Byte(LED_MODE_1);break;
+                    case 2:SMG_Write_Byte(LED_MODE_2);break;
+                    case 3:SMG_Write_Byte(LED_MODE_3);break;
+                    case 4:SMG_Write_Byte(LED_MODE_4);break;
+                    case 5:SMG_Write_Byte(LED_MODE_5);break;
+                    case 6:SMG_Write_Byte(LED_MODE_6);break;
+                    case 7:SMG_Write_Byte(LED_AUTO);break;
+C51 COMPILER V9.60.7.0   ROTARY                                                            04/16/2024 15:41:21 PAGE 2   
+
+                  }
+                  
+                  #else
+  58   2          if(uc_Level_Get()){
+  59   3            if(uc_Level_Get()!=xRotaryStatus.bRKbuf){
+  60   4              if(xRotaryStatus.bRKbuf>0&&xRotaryStatus.bRKbuf<7){   //换挡
+  61   5      //            LED_SenseCnt_Reset();
+  62   5      //            LED_SensetypeFlag_Set(LED_SENSE_FLASH);
+  63   5                if(b_SleepMode_Get()==SLEEP_MODE_SLEEP){
+  64   6                  //唤醒
+  65   6                  PowerOnOff_Set(1);
+  66   6                  set_led_event(LED_EVENT_MODE);
+  67   6                }
+  68   5                LED_SensetypeFlag_Set(LED_SENSE_ROTARY);
+  69   5                uc_Level_Set(xRotaryStatus.bRKbuf);
+  70   5                uc_LevelSum_Set(uc_Mode_Get()+6*(uc_Level_Get()-1));
+  71   5                ul_SleepModeCnt_Set(0);
+  72   5              }else if(xRotaryStatus.bRKbuf==7){    //关机
+  73   5                b_SleepMode_Set(SLEEP_MODE_WAKE);
+  74   5                PowerOnOff_Set(0);
+  75   5                LED_SensetypeFlag_Set(LED_SENSE_ON);
+  76   5                uc_Level_Set(0);
+  77   5                uc_LevelSum_Set(uc_Mode_Get());
+  78   5              }
+  79   4            }
+  80   3          }else{
+  81   3            if(xRotaryStatus.bRKbuf>0&&xRotaryStatus.bRKbuf<7){   //开机
+  82   4              uc_Level_Set(xRotaryStatus.bRKbuf);
+  83   4              uc_LevelSum_Set(uc_Mode_Get()+6*(uc_Level_Get()-1));
+  84   4              PowerOnOff_Set(1);
+  85   4              if(b_IsPowerOnFlag_Get())
+  86   4                LED_SensetypeFlag_Set(LED_SENSE_ROTARY);
+  87   4              set_led_event(LED_EVENT_MODE);
+  88   4            }
+  89   3          }
+  90   2          #endif
+  91   2          b_IsPowerOnFlag_Set(1);
+  92   2        }
+  93   1        else
+  94   1        {
+  95   2          if((xRotaryStatus.bRKbuf!=0) && (b_BurninLastMode_Get()!=xRotaryStatus.bRKbuf))
+  96   2          {
+  97   3            if(b_BurninStart_Get())
+  98   3            {
+  99   4              LED_SensetypeFlag_Set(LED_SENSE_ON);
+ 100   4              PowerOnOff_Set(0);
+ 101   4            }
+ 102   3            if(xRotaryStatus.bRKbuf==7){
+ 103   4              //if(b_BurninMode_Get()){
+ 104   4                b_BurninStart_Set(0);
+ 105   4                b_BurninMode_Set(0);
+ 106   4              //}
+ 107   4            }else{
+ 108   4              //if(!b_BurninMode_Get()){
+ 109   4                b_BurninStart_Set(0);
+ 110   4                b_BurninMode_Set(1);
+ 111   4              //}
+ 112   4            }
+ 113   3            set_led_event(LED_EVENT_BURNIN);
+ 114   3            b_BurninLastMode_Set(xRotaryStatus.bRKbuf);
+ 115   3          }
+ 116   2        }
+C51 COMPILER V9.60.7.0   ROTARY                                                            04/16/2024 15:41:21 PAGE 3   
+
+ 117   1        
+ 118   1      }
+ 119          
+ 120          
+ 121          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    392    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      1    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
