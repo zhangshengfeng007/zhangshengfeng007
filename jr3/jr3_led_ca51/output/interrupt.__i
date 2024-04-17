@@ -1,0 +1,1 @@
+"source\interrupt.c" OMF2 OPTIMIZE (8,SPEED) BROWSE DEBUG PRINT(.\lst\interrupt.lst) TABS (2) OBJECT(.\output\interrupt.obj)
