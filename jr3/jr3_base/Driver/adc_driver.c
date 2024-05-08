@@ -13,7 +13,7 @@
 void ADCInit(void)
 {
 	ADM &= ~0x0c;
-	// set AIN5 pin¡¯s mode at pure analog pin
+	// set AIN5 pinâ€™s mode at pure analog pin
 	P2CON |= 0x0d; 	//AIN0/P20 AIN2/P22 AIN3/P23
 	P1CON |= 0x80;	//AIN6/P17
 	// configure ADC channel and enable ADC.

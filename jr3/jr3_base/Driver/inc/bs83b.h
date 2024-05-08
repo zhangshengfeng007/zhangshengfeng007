@@ -2,7 +2,7 @@
 #define _BS83B_H
 
 #include "system.h"
-//´¥Ãþ°´¼üÇý¶¯
+//è§¦æ‘¸æŒ‰é”®é©±åŠ¨
 #define		IIC_PA				(0x14)
 #define		IIC_PAC				(0x15)
 #define		IIC_PB				(0x20)

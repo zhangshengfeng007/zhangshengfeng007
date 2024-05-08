@@ -20,7 +20,7 @@ void Touch_Key_Handler(void)
 
 	#if 0
 	if(b_OnOffFlag_Get()){
-		for(i=0x01,j=0;i!=0x40;i<<1,j++)		//Ä£Ê½¼ü
+		for(i=0x01,j=0;i!=0x40;i<<1,j++)		//æ¨¡å¼é”®
 		{
 			if(sx_TKStatus.ucTKValue&i){
 				uc_Mode_Set(j);
@@ -29,7 +29,7 @@ void Touch_Key_Handler(void)
 				break;
 			}
 		}
-		if(sx_TKStatus.ucTKValue&0x40){			//×Ô¶¯´ò¹â¼ü
+		if(sx_TKStatus.ucTKValue&0x40){			//è‡ªåŠ¨æ‰“å…‰é”®
 			b_AutoSwitchFlag_Set(!b_AutoSwitchFlag_Get());
 			set_led_event(LED_EVENT_AUTO);
 		}
@@ -42,7 +42,7 @@ void Touch_Key_Handler(void)
 		case 0x20:j=1;break;
 		case 0x10:j=0;break;
 		case 0x40:j=2;break;
-		case 0x02:		/* ×Ô¶¯´ò¹â¼ü */
+		case 0x02:		/* è‡ªåŠ¨æ‰“å…‰é”® */
 		{
 			if(!sx_TKStatus.bTKPressFlag)
 			{
@@ -72,7 +72,7 @@ void Touch_Key_Handler(void)
 		default:j=0xff;break;
 	}
 
-	if(j<6 && sx_TKStatus.ucTKCode!=iic_data){		//Ä£Ê½¼ü
+	if(j<6 && sx_TKStatus.ucTKCode!=iic_data){		//æ¨¡å¼é”®
 		if(++sx_TKStatus.bTKModeScanCnt==2){
 			sx_TKStatus.bTKModeScanCnt = 0;
 			if(b_OnOffFlag_Get()/* || b_SleepMode_Get()==SLEEP_MODE_SLEEP*/){
@@ -90,7 +90,7 @@ void Touch_Key_Handler(void)
 //	if(j==7)
 //		sx_TKStatus.bTKPressFlag = false;
 	sx_TKStatus.bTKAutoScanCnt = 0;
-//	if(j==6)		//×Ô¶¯´ò¹â¼ü
+//	if(j==6)		//è‡ªåŠ¨æ‰“å…‰é”®
 //	{
 //		if(!sx_TKStatus.bTKPressFlag)
 //		{

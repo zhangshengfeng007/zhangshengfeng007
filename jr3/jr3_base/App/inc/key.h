@@ -11,10 +11,10 @@
 #define CBIT_03		0x08
 
 
-#define CKCONFIRM_TIMES		DFAULT_CKCONFIRM_TIMES		//³öÓĞĞ§¼üÖµÉ¨Ãè´ÎÊı
-#define CHOLDKEY_TIME		(1500/10)	//³ö³¤°´¼üÑ¹ÖÆÊ±¼ä(ms)
-#define CPRESSKEY_TIME		(800/10)		//³ö¶Ì°´¼üÑ¹ÖÆÊ±¼ä(ms)
-#define CHOLDRPTKEY_TIME	(700/10)		//³ö³¤°´Á¬Ğø¼ü¼ä¸ôÊ±¼ä(ms)
+#define CKCONFIRM_TIMES		DFAULT_CKCONFIRM_TIMES		//å‡ºæœ‰æ•ˆé”®å€¼æ‰«ææ¬¡æ•°
+#define CHOLDKEY_TIME		(1500/10)	//å‡ºé•¿æŒ‰é”®å‹åˆ¶æ—¶é—´(ms)
+#define CPRESSKEY_TIME		(800/10)		//å‡ºçŸ­æŒ‰é”®å‹åˆ¶æ—¶é—´(ms)
+#define CHOLDRPTKEY_TIME	(700/10)		//å‡ºé•¿æŒ‰è¿ç»­é”®é—´éš”æ—¶é—´(ms)
 #define DFAULT_CKCONFIRM_TIMES		(30/10)
 
 //#define OS_TICKS_PER_SEC	1000    		/* Set the number of ticks in one second                        */
@@ -31,21 +31,21 @@ enum
 
 typedef struct tag_strKSCtrl
 {
-	uint8_t ucScanStep;			//É¨Ãè×´Ì¬
-	uint8_t ulKeyCode;			//É¨Ãè¼üÖµ
-	uint8_t ulCodeTemp;			//ÁÙÊ±¼üÖµ
-	uint8_t ulKeyCur;			//ÁÙÊ±¼üÖµ
-	//uint8_t ulKIOState;			//¼üÅÌIO×´Ì¬±¸·İ
-	//uint16_t usHoldTime;			//hold³ö¼ü¼ä¸ô
-	//uint16_t usHoldRPTTime;		//holdrepeat³ö¼ü¼ä¸ô
-	uint16_t ucScanCnt;			//É¨Ãè¼ÆÊı
+	uint8_t ucScanStep;			//æ‰«æçŠ¶æ€
+	uint8_t ulKeyCode;			//æ‰«æé”®å€¼
+	uint8_t ulCodeTemp;			//ä¸´æ—¶é”®å€¼
+	uint8_t ulKeyCur;			//ä¸´æ—¶é”®å€¼
+	//uint8_t ulKIOState;			//é”®ç›˜IOçŠ¶æ€å¤‡ä»½
+	//uint16_t usHoldTime;			//holdå‡ºé”®é—´éš”
+	//uint16_t usHoldRPTTime;		//holdrepeatå‡ºé”®é—´éš”
+	uint16_t ucScanCnt;			//æ‰«æè®¡æ•°
 }type_sKSCtrl;
 
-#define CBit_PressEnable		CBIT_00		//°´ÏÂ¼´ÓĞ¼üÖµÊä³ö
-#define CBit_HoldEnable			CBIT_01		//³¤°´ÓĞÖµÊä³ö£¬´ËÊ±ÓÉusHoldTimeÖµ¾ö¶¨Ğø¼ü¼ä¸ôÊ±¼ä
-#define CBit_HoldRPTEnable		CBIT_02		//³¤°´ÓĞÁ¬Ğø¼üÖµÊä³ö£¬´ËÊ±ÓÉusHoldRPTTimeÖµ¾ö¶¨Ğø¼ü¼ä¸ôÊ±¼ä
-#define CBit_ReleaseEnable		CBIT_03		//·ÅÊÖÓĞ¼üÖµÊä³ö
-#define CBit_MultiKeyEnable		CBIT_04		//ÈİĞí¶à¼ü°´ÏÂÓĞ¼üÖµÊä³ö,´ËÊ±²»Ö§³Ö·ÅÊÖ¼üÖµ£¨£¡Ôİ²»Ö§³Ö£¡£©
+#define CBit_PressEnable		CBIT_00		//æŒ‰ä¸‹å³æœ‰é”®å€¼è¾“å‡º
+#define CBit_HoldEnable			CBIT_01		//é•¿æŒ‰æœ‰å€¼è¾“å‡ºï¼Œæ­¤æ—¶ç”±usHoldTimeå€¼å†³å®šç»­é”®é—´éš”æ—¶é—´
+#define CBit_HoldRPTEnable		CBIT_02		//é•¿æŒ‰æœ‰è¿ç»­é”®å€¼è¾“å‡ºï¼Œæ­¤æ—¶ç”±usHoldRPTTimeå€¼å†³å®šç»­é”®é—´éš”æ—¶é—´
+#define CBit_ReleaseEnable		CBIT_03		//æ”¾æ‰‹æœ‰é”®å€¼è¾“å‡º
+#define CBit_MultiKeyEnable		CBIT_04		//å®¹è®¸å¤šé”®æŒ‰ä¸‹æœ‰é”®å€¼è¾“å‡º,æ­¤æ—¶ä¸æ”¯æŒæ”¾æ‰‹é”®å€¼ï¼ˆï¼æš‚ä¸æ”¯æŒï¼ï¼‰
 
 //key press
 #define CKEY_S1			CBIT_00
@@ -74,13 +74,13 @@ typedef enum
 
 typedef struct xSysStatus_t_
 {
-	uint8_t b_OnOffFlag;			// ¿ª¹Ø»ú
-	uint8_t b_AutoSwitchFlag;		// ÊÖ×Ô¶¯
-	uint8_t b_OldVersionFlag;		// ÀÏ»¯Ä£Ê½
-	uint8_t uc_Level;				// µµÎ»
-	uint8_t uc_Mode;				// Ä£Ê½
-	uint8_t uc_LevelSum;			// µçÑ¹×Üµ²Î»
-	uint16_t ul_OldCnt;				// Ê±¼ä¼ÆÊı
+	uint8_t b_OnOffFlag;			// å¼€å…³æœº
+	uint8_t b_AutoSwitchFlag;		// æ‰‹è‡ªåŠ¨
+	uint8_t b_OldVersionFlag;		// è€åŒ–æ¨¡å¼
+	uint8_t uc_Level;				// æ¡£ä½
+	uint8_t uc_Mode;				// æ¨¡å¼
+	uint8_t uc_LevelSum;			// ç”µå‹æ€»æŒ¡ä½
+	uint16_t ul_OldCnt;				// æ—¶é—´è®¡æ•°
 }xSysStatus_t;
 
 extern xSysStatus_t sx_SysStatus;

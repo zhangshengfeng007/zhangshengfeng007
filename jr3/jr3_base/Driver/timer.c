@@ -3,7 +3,7 @@
 #define		T1Fre			(65535-1000*32/12)
 #define		T1GATE			(0<<7)
 #define		T1CT			(0<<6)			//Ftimer = Fcpu / 12
-#define		T1M				(0x01<<4)		//16 位向上计数定时器
+#define		T1M				(0x01<<4)		//16 浣嶅悜涓婅鏁板畾鏃跺櫒
 
 #define		T0Fre			(62868)		//2ms
 #define		T0GATE			(0<<3)

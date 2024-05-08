@@ -57,11 +57,11 @@ void Rotary_Handler(void)
 		#else
 		if(uc_Level_Get()){
 			if(uc_Level_Get()!=xRotaryStatus.bRKbuf){
-				if(xRotaryStatus.bRKbuf>0&&xRotaryStatus.bRKbuf<7){		//»»µ²
+				if(xRotaryStatus.bRKbuf>0&&xRotaryStatus.bRKbuf<7){		//æ¢æŒ¡
 //						LED_SenseCnt_Reset();
 //						LED_SensetypeFlag_Set(LED_SENSE_FLASH);
 					if(b_SleepMode_Get()==SLEEP_MODE_SLEEP){
-						//»½ÐÑ
+						//å”¤é†’
 						PowerOnOff_Set(1);
 						set_led_event(LED_EVENT_MODE);
 					}
@@ -69,7 +69,7 @@ void Rotary_Handler(void)
 					uc_Level_Set(xRotaryStatus.bRKbuf);
 					uc_LevelSum_Set(uc_Mode_Get()+6*(uc_Level_Get()-1));
 					ul_SleepModeCnt_Set(0);
-				}else if(xRotaryStatus.bRKbuf==7){		//¹Ø»ú
+				}else if(xRotaryStatus.bRKbuf==7){		//å…³æœº
 					b_SleepMode_Set(SLEEP_MODE_WAKE);
 					PowerOnOff_Set(0);
 					LED_SensetypeFlag_Set(LED_SENSE_ON);
@@ -78,7 +78,7 @@ void Rotary_Handler(void)
 				}
 			}
 		}else{
-			if(xRotaryStatus.bRKbuf>0&&xRotaryStatus.bRKbuf<7){		//¿ª»ú
+			if(xRotaryStatus.bRKbuf>0&&xRotaryStatus.bRKbuf<7){		//å¼€æœº
 				uc_Level_Set(xRotaryStatus.bRKbuf);
 				uc_LevelSum_Set(uc_Mode_Get()+6*(uc_Level_Get()-1));
 				PowerOnOff_Set(1);
