@@ -4,11 +4,11 @@ xErrorStatus_t sx_ErrorStatus = {0};
 
 void ErrorType_Reset(uint8_t errortype)
 {
-//	if(errortype&ERROR_TYPE_FAN)//风扇报错
+//	if(errortype&ERROR_TYPE_FAN)//椋庢墖鎶ラ敊
 //		LED_MODE1_OFF();
-//	if(errortype&ERROR_TYPE_VOLTAGE)//电压报错
+//	if(errortype&ERROR_TYPE_VOLTAGE)//鐢靛帇鎶ラ敊
 //		LED_MODE2_OFF();
-//	if(errortype&ERROR_TYPE_NTC)//温度报错
+//	if(errortype&ERROR_TYPE_NTC)//娓╁害鎶ラ敊
 //		LED_MODE3_OFF();
 	sx_ErrorStatus.b_errortype &= (~errortype);
 }
@@ -30,22 +30,22 @@ void Error_Det_Handler(void)
 		}
 		errordisplay_buf = 0x00;
 		if(sx_ErrorStatus.b_errorflashdir){
-//			if(sx_ErrorStatus.b_errortype&ERROR_TYPE_SUPPLY)//供电报错
+//			if(sx_ErrorStatus.b_errortype&ERROR_TYPE_SUPPLY)//渚涚數鎶ラ敊
 //				errordisplay_buf |= LED_MODE_5;
-			if(sx_ErrorStatus.b_errortype&ERROR_TYPE_FAN)//风扇报错
+			if(sx_ErrorStatus.b_errortype&ERROR_TYPE_FAN)//椋庢墖鎶ラ敊
 				errordisplay_buf |= LED_MODE_1 | LED_MODE_2;
-			if(sx_ErrorStatus.b_errortype&ERROR_TYPE_VOLTAGE)//电压报错
+			if(sx_ErrorStatus.b_errortype&ERROR_TYPE_VOLTAGE)//鐢靛帇鎶ラ敊
 				errordisplay_buf |= LED_MODE_1 | LED_MODE_2 | LED_MODE_3;
-			if(sx_ErrorStatus.b_errortype&ERROR_TYPE_NTC)//温度报错
+			if(sx_ErrorStatus.b_errortype&ERROR_TYPE_NTC)//娓╁害鎶ラ敊
 				errordisplay_buf |= LED_MODE_1 | LED_MODE_2 | LED_MODE_3 | LED_MODE_4;
 		}else{
-//			if(sx_ErrorStatus.b_errortype&ERROR_TYPE_SUPPLY)//供电报错
+//			if(sx_ErrorStatus.b_errortype&ERROR_TYPE_SUPPLY)//渚涚數鎶ラ敊
 //				errordisplay_buf &= ~LED_MODE_5;
-			if(sx_ErrorStatus.b_errortype&ERROR_TYPE_FAN)//风扇报错
+			if(sx_ErrorStatus.b_errortype&ERROR_TYPE_FAN)//椋庢墖鎶ラ敊
 				errordisplay_buf &= ~(LED_MODE_1 | LED_MODE_2);
-			if(sx_ErrorStatus.b_errortype&ERROR_TYPE_VOLTAGE)//电压报错
+			if(sx_ErrorStatus.b_errortype&ERROR_TYPE_VOLTAGE)//鐢靛帇鎶ラ敊
 				errordisplay_buf &= ~(LED_MODE_1 | LED_MODE_2 | LED_MODE_3);
-			if(sx_ErrorStatus.b_errortype&ERROR_TYPE_NTC)//温度报错
+			if(sx_ErrorStatus.b_errortype&ERROR_TYPE_NTC)//娓╁害鎶ラ敊
 				errordisplay_buf &= ~(LED_MODE_1 | LED_MODE_2 | LED_MODE_3 | LED_MODE_4);
 		}
 //		if(errordisplay_flag){

@@ -17,17 +17,17 @@ typedef struct sx_FightLightStatus_t_
 	//uint8_t b_FightLightFanBusy:1;
 	uint8_t b_FightLightTouchFanBusy:1;
 	uint8_t b_FightDisplayBusy:1;
-	uint8_t b_KeyPressFlag:1;			// ÊÖ¶¯´ò¹â°´¼ü°´ÏÂ±êÖ¾Î»
-	uint8_t b_ChargeOkFlag:1;			// ³äµçÍê³É±êÖ¾Î»
-	uint8_t b_FightLightFlag:1;			// ´ò¹â±êÖ¾
-	uint8_t b_IPLWorking:1;				// ÕıÔÚ´ò¹â
-	uint8_t b_DetInitFlag:3;			// ¼ì²â³õÊ¼»¯
+	uint8_t b_KeyPressFlag:1;			// æ‰‹åŠ¨æ‰“å…‰æŒ‰é”®æŒ‰ä¸‹æ ‡å¿—ä½
+	uint8_t b_ChargeOkFlag:1;			// å……ç”µå®Œæˆæ ‡å¿—ä½
+	uint8_t b_FightLightFlag:1;			// æ‰“å…‰æ ‡å¿—
+	uint8_t b_IPLWorking:1;				// æ­£åœ¨æ‰“å…‰
+	uint8_t b_DetInitFlag:3;			// æ£€æµ‹åˆå§‹åŒ–
 	uint8_t b_IsPowerOnFlag;
 	uint8_t uc_FightRefightCnt;
-	//uint8_t sl_FightNum;				//×Ô¶¯´ò¹â´ÎÊı
+	//uint8_t sl_FightNum;				//è‡ªåŠ¨æ‰“å…‰æ¬¡æ•°
 	uint16_t uc_DetInitCnt;
-	uint16_t ul_FightLightCnt:12;		// ´ò¹âÊ±¼ä¼ä¸ô¼ÆÊı
-	uint16_t sl_AutolightTime;			//×Ô¶¯´ò¹âÊ±¼ä
+	uint16_t ul_FightLightCnt:12;		// æ‰“å…‰æ—¶é—´é—´éš”è®¡æ•°
+	uint16_t sl_AutolightTime;			//è‡ªåŠ¨æ‰“å…‰æ—¶é—´
 	uint16_t uc_FightLightTime;
 }sx_FightLightStatus_t;
 

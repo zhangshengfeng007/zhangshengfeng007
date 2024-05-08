@@ -15,7 +15,7 @@ void PowerOnOff_Set(uint8_t value)
 	b_KeyPressFlag_Set(0);
 	//if(b_SleepMode_Get()!=SLEEP_MODE_SLEEP)
 	ul_SleepModeCnt_Set(0);
-	if(value){		//¿ª»ú
+	if(value){		//å¼€æœº
 		LED_SensetypeFlag_Set(LED_SENSE_ON);
 		b_SleepMode_Set(SLEEP_MODE_WAKE);
 		b_DetInitFlag_Set(DETECTIVE_INIT_ON);
@@ -24,7 +24,7 @@ void PowerOnOff_Set(uint8_t value)
 		uc_Level_Set(sx_SysStatus.uc_Level);
 		uc_LevelSum_Set(uc_Mode_Get()+6*(sx_SysStatus.uc_Level-1));
 		//set_led_event(LED_EVENT_SENCE);
-	}else{			//¹Ø»ú
+	}else{			//å…³æœº
 		if(b_SleepMode_Get()==SLEEP_MODE_SLEEP)
 			LED_SensetypeFlag_Set(LED_SENSE_SLEEP);
 		else
@@ -132,7 +132,7 @@ uint32_t Key_Scan()
 	uint8_t ul;
 	uint8_t bFlag,bRetFlag;
 
-	bRetFlag = false;	//¼Ù¶¨ÎŞÓĞĞ§¼üÊä³ö
+	bRetFlag = false;	//å‡å®šæ— æœ‰æ•ˆé”®è¾“å‡º
 
 	//scan board and get physical key code
     bFlag = false;
@@ -140,7 +140,7 @@ uint32_t Key_Scan()
 	{
 		Key_Data = 0xff;
 		if(!KEY_LIGHT)
-			Key_Data &= ~(0x01<<0);		//´ò¹â¼ü
+			Key_Data &= ~(0x01<<0);		//æ‰“å…‰é”®
 			
 		Key_Data = ~Key_Data;
 			
@@ -151,16 +151,16 @@ uint32_t Key_Scan()
 		if(ulTemp != ulKIO)
 			break;
 		
-		//Á¬ĞøÊı´ÎºóÈÏÎªÒ»´ÎÎÈ¶¨ÎïÀíÊäÈë
+		//è¿ç»­æ•°æ¬¡åè®¤ä¸ºä¸€æ¬¡ç¨³å®šç‰©ç†è¾“å…¥
 		bFlag = true;
 		break;
 	}
-	//µÃµ½Ô­Ê¼ÎïÀí¼üÖµ
+	//å¾—åˆ°åŸå§‹ç‰©ç†é”®å€¼
 	if(!bFlag)
-		return CKEY_NULL;	//¼üÅÌÃ»ÓĞÒ»¸öÎÈ¶¨×´Ì¬£¬ºöÂÇ
+		return CKEY_NULL;	//é”®ç›˜æ²¡æœ‰ä¸€ä¸ªç¨³å®šçŠ¶æ€ï¼Œå¿½è™‘
 
 	
-	//µÃµ½Ò»´ÎÎÈ¶¨×´Ì¬£¬¿ªÊ¼Âß¼­ÅĞ¶Ï
+	//å¾—åˆ°ä¸€æ¬¡ç¨³å®šçŠ¶æ€ï¼Œå¼€å§‹é€»è¾‘åˆ¤æ–­
 	//strKSCtrl.ulKIOState = ulKIO;
 	
 
@@ -170,7 +170,7 @@ uint32_t Key_Scan()
 	{
 	case CKSTEP_NULL:
 		if(strKSCtrl.ulKeyCur == 0x00)
-			break;	//Ã»ÓĞÈÎºÎ¼üÑ¹ÏÂ
+			break;	//æ²¡æœ‰ä»»ä½•é”®å‹ä¸‹
 		
 		strKSCtrl.ulCodeTemp = strKSCtrl.ulKeyCur;
 		strKSCtrl.ucScanCnt = 1;
@@ -229,7 +229,7 @@ uint32_t Key_Scan()
 
 	case CKSTEP_RLS:
 		if(strKSCtrl.ulKeyCur == 0x00)
-		{	//ÎŞÈÎºÎ¼ü°´ÏÂ
+		{	//æ— ä»»ä½•é”®æŒ‰ä¸‹
 			
 			if(strKSCtrl.ucScanCnt++ >= CKCONFIRM_TIMES+CKCONFIRM_TIMES)
 			{
@@ -252,14 +252,14 @@ uint32_t Key_Scan()
 			}
 		}
 		else
-		{	//ÈÔÓĞ¼ü±»Ñ¹ÏÂ
+		{	//ä»æœ‰é”®è¢«å‹ä¸‹
 //			if(strKSCtrl.ulKeyCur != strKSCtrl.ulCodeTemp)
-//			{	//Î´·ÅÊÖÓÖÓĞĞÂµÄ¼ü±»Ñ¹ÏÂ
+//			{	//æœªæ”¾æ‰‹åˆæœ‰æ–°çš„é”®è¢«å‹ä¸‹
 //				strKSCtrl.ulCodeTemp = CKEY_NULL;
 //				strKSCtrl.ucScanCnt = 0;
 //				strKSCtrl.ucScanStep = CKSTEP_NULL;
 //			}
-			//else ÈÔÈ»ÊÇÉÏ´Î°´¼üÎ´·Å¿ª£¬ÎŞ¶¯×÷£»Ö±µ½·Å¿ª»òĞÂµÄ°´ÏÂ
+			//else ä»ç„¶æ˜¯ä¸Šæ¬¡æŒ‰é”®æœªæ”¾å¼€ï¼Œæ— åŠ¨ä½œï¼›ç›´åˆ°æ”¾å¼€æˆ–æ–°çš„æŒ‰ä¸‹
 		}
 
 		break;

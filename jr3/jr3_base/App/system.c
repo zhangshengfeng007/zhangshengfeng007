@@ -1,6 +1,6 @@
 #include "system.h"
 
-//0:ÊäÈëÄ£Ê½ 1:Êä³öÄ£Ê½
+//0:è¾“å…¥æ¨¡å¼ 1:è¾“å‡ºæ¨¡å¼
 #define		P00M		0
 #define		P01M		0
 #define		P02M		0		//T_DATA
@@ -29,7 +29,7 @@ void GPIO_Init(void)
 {
 	P0=0;P1=0;P2=0;
 	P0M=0;P1M=0;P2M=0;
-	//ÊäÈëÊä³öÄ£Ê½
+	//è¾“å…¥è¾“å‡ºæ¨¡å¼
 	P0M = P00M|(P01M<<1)|(P02M<<2)|(P03M<<3)|(P04M<<4)|(P05M<<5)|(P06M<<6)|(P07M<<7);
 	P1M = P10M|(P11M<<1)|(P12M<<2)|(P13M<<3)|(P14M<<4)|(P15M<<5)|(P16M<<6)|(P17M<<7);
 	P2M |= P20M|(P22M<<2)|(P23M<<3)|(P24M<<4)|(P25M<<5);
@@ -69,15 +69,15 @@ static TASK Task_Register(uint8_t FLAGS, void(*HANDLE)(void))
 	return (task);
 }
 
-void Task_Handle(void)// ÈÎÎñÖ´ĞĞº¯Êı£¬°´ÈÎÎñµÄ´´½¨Ë³ĞòÖ´ĞĞÈÎÎñ£»                     
+void Task_Handle(void)// ä»»åŠ¡æ‰§è¡Œå‡½æ•°ï¼ŒæŒ‰ä»»åŠ¡çš„åˆ›å»ºé¡ºåºæ‰§è¡Œä»»åŠ¡ï¼›                     
 {
 	static uint8_t taskindex;
 	for(taskindex=0; taskindex<ARRAY_SIZE; taskindex++)
 	{
-		if (tasks[taskindex].flags==1)                    // ²éÑ¯ÈÎÎñÊ±¼äÊÇ·ñµ½
+		if (tasks[taskindex].flags==1)                    // æŸ¥è¯¢ä»»åŠ¡æ—¶é—´æ˜¯å¦åˆ°
 		{
-			(*tasks[taskindex].handle)();                  // Ö´ĞĞÈÎÎñ
-			tasks[taskindex].flags = 0;                    // Ïû³ıÈÎÎñ±ê¼ÇÎ»
+			(*tasks[taskindex].handle)();                  // æ‰§è¡Œä»»åŠ¡
+			tasks[taskindex].flags = 0;                    // æ¶ˆé™¤ä»»åŠ¡æ ‡è®°ä½
 		}
 	}
 }
@@ -90,19 +90,19 @@ void System_Run(void)
 
 void Task_Init(void)
 {
-	tasks[0] = Task_Register(0, Work_Handler);					/* ´ò¹â */
-	tasks[1] = Task_Register(0, Charge_Handler);				/* ëŠÈİ³äëŠ */
-	tasks[2] = Task_Register(0, Key_Handler);					/* °´æI’ßÃè */
-	tasks[3] = Task_Register(0, Rotary_Handler);				/* ĞıâoÅĞ”à */
-	tasks[4] = Task_Register(0, Touch_Key_Handler);				/* Ó|Ãş°´æI’ßÃè */
-	tasks[5] = Task_Register(0, VDD_Test_Handler);				/* ¹©ëŠ·€¶¨™zœy */
-	tasks[6] = Task_Register(0, Fan_Handler);					/* ïLÉÈÈÎ„Õ */
-	tasks[7] = Task_Register(0, NTC_Handler);					/* œØ¶Èˆó¾¯ÈÎ„Õ */
-	tasks[8] = Task_Register(0, Error_Det_Handler);				/* åeÕ`ˆó¾¯ÈÎ„Õ */
-	tasks[9] = Task_Register(0, Display_Handler);				/* ï@Ê¾ÈÎ„Õ */
-	tasks[10] = Task_Register(0, Sleep_Handler);				/* ĞİÃßÈÎ„Õ */
-	tasks[11] = Task_Register(0, Touch_Handler);				/* Ó|ÃşÈÎ„Õ */
-	tasks[12] = Task_Register(0, Burnin_Handler);				/* ÀÏ»¯Ä£Ê½ */
+	tasks[0] = Task_Register(0, Work_Handler);					/* æ‰“å…‰ */
+	tasks[1] = Task_Register(0, Charge_Handler);				/* é›»å®¹å……é›» */
+	tasks[2] = Task_Register(0, Key_Handler);					/* æŒ‰éµæƒæ */
+	tasks[3] = Task_Register(0, Rotary_Handler);				/* æ—‹éˆ•åˆ¤æ–· */
+	tasks[4] = Task_Register(0, Touch_Key_Handler);				/* è§¸æ‘¸æŒ‰éµæƒæ */
+	tasks[5] = Task_Register(0, VDD_Test_Handler);				/* ä¾›é›»ç©©å®šæª¢æ¸¬ */
+	tasks[6] = Task_Register(0, Fan_Handler);					/* é¢¨æ‰‡ä»»å‹™ */
+	tasks[7] = Task_Register(0, NTC_Handler);					/* æº«åº¦å ±è­¦ä»»å‹™ */
+	tasks[8] = Task_Register(0, Error_Det_Handler);				/* éŒ¯èª¤å ±è­¦ä»»å‹™ */
+	tasks[9] = Task_Register(0, Display_Handler);				/* é¡¯ç¤ºä»»å‹™ */
+	tasks[10] = Task_Register(0, Sleep_Handler);				/* ä¼‘çœ ä»»å‹™ */
+	tasks[11] = Task_Register(0, Touch_Handler);				/* è§¸æ‘¸ä»»å‹™ */
+	tasks[12] = Task_Register(0, Burnin_Handler);				/* è€åŒ–æ¨¡å¼ */
 }
 
 void Task_Roll(void)

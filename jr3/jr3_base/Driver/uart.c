@@ -19,12 +19,12 @@
 void UartInit(void)
 {
 	P00 = 1;
-	P0M |= 0x01; 																	//UTX��ʼ�������	
-	P0M &= 0xfd; 																	//URX��ʼ����ģģʽ
+	P0M |= 0x01; 																	//UTX初始化输出高	
+	P0M &= 0xfd; 																	//URX初始化数模模式
 	
-	SM0 = 0;																			//ģʽ1
+	SM0 = 0;																			//模式1
 	SM1 = 1;
-	REN0 = 1;																			//ʹ�ܽ��չ���
+	REN0 = 1;																			//使能接收功能
 	
 	PCON &= 0x7f;       													
 	BD = 1;				

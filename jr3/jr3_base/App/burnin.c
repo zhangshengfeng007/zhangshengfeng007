@@ -12,7 +12,7 @@ xBurninStatus_t sx_BurninStatus_t = {0};
 
 void BurninInit_Cb(void)
 {
-	//ÉÏµç°´¼ü¼ì²â
+	//ä¸Šç”µæŒ‰é”®æ£€æµ‹
 	if(sx_BurninStatus_t.OnTestCnt<60)
 		sx_BurninStatus_t.OnTestCnt++;
 }
@@ -44,7 +44,7 @@ void Burnin_Handler(void)
 	if(!sx_BurninStatus_t.b_BurninReadyFlag && !sx_BurninStatus_t.b_BurninFlag)
 		return;
 	
-	/* ÀÏ»¯Ä£Ê½½øÈë¼ì²â */
+	/* è€åŒ–æ¨¡å¼è¿›å…¥æ£€æµ‹ */
 	if(sx_BurninStatus_t.b_BurninReadyFlag && !sx_BurninStatus_t.b_BurninFlag){
 		iic_data = IIC_Test();
 		for(ul=0; ul<20; ul++);
@@ -66,24 +66,24 @@ void Burnin_Handler(void)
 		}
 	}
 	
-	/* ÊÙÃü¼ÆÊı */
+	/* å¯¿å‘½è®¡æ•° */
 	if(sx_BurninStatus_t.b_BurninMode && sx_BurninStatus_t.b_BurninStart)
 		sx_BurninStatus_t.uc_LifeTesttimeCnt++;
 	else
 		sx_BurninStatus_t.uc_LifeTesttimeCnt = 0;
-	if(!sx_BurninStatus_t.b_LifeTestMode){		//´ò¹âÊ±¼ä
+	if(!sx_BurninStatus_t.b_LifeTestMode){		//æ‰“å…‰æ—¶é—´
 		if(sx_BurninStatus_t.uc_LifeTesttimeCnt > BURNINLIFEWORKTIME){
 			sx_BurninStatus_t.uc_LifeTesttimeCnt = 0;
 			sx_BurninStatus_t.b_LifeTestMode = 1;
 		}
-	}else{		//¹Ø±ÕÊ±¼ä
+	}else{		//å…³é—­æ—¶é—´
 		if(sx_BurninStatus_t.uc_LifeTesttimeCnt > BURNINLIFESTAYTIME){
 			sx_BurninStatus_t.uc_LifeTesttimeCnt = 0;
 			sx_BurninStatus_t.b_LifeTestMode = 0;
 		}
 	}
 	
-	/* Æô¶¯¼ÆÊ± */
+	/* å¯åŠ¨è®¡æ—¶ */
 	if(sx_BurninStatus_t.b_BurninCntStart)
 		sx_BurninStatus_t.BurninCntStartCnt++;
 	else return;
@@ -92,16 +92,16 @@ void Burnin_Handler(void)
 		sx_BurninStatus_t.b_BurninCntStart = false;
 		sx_BurninStatus_t.BurninCntStartCnt = 0;
 		//LED_SensetypeFlag_Set(LED_SENSE_TOUCH);
-		//ÀÏ»¯
+		//è€åŒ–
 		sx_BurninStatus_t.ul_BurninTestCnt = 0;
-		//ÊÙÃü
+		//å¯¿å‘½
 		sx_BurninStatus_t.uc_LifeTesttimeCnt = 0;
 		sx_BurninStatus_t.b_LifeTestMode = 0;
 		
 		uc_Mode_Set(0);uc_Level_Set(6);uc_LevelSum_Set(30);
 	}
 	
-	/* ÀÏ»¯Ä£Ê½ */
+	/* è€åŒ–æ¨¡å¼ */
 	if(sx_BurninStatus_t.b_BurninFlag){
 		if(!sx_BurninStatus_t.b_BurninStart){
 			if(!sx_BurninStatus_t.b_BurninMode){

@@ -20,7 +20,7 @@ void Display_Handler(void)
 		}
 		#if 1
 		//if(b_DetInitFlag_Get()==DETECTIVE_INIT_FINISH){
-			if(sx_DisplayStatus_t.b_Event & LED_EVENT_MODE)		//Ä£Ê½µÆ
+			if(sx_DisplayStatus_t.b_Event & LED_EVENT_MODE)		//æ¨¡å¼ç¯
 			{
 				sx_DisplayStatus_t.b_Event &= ~LED_EVENT_MODE;
 				LED_send_buf&=~LED_MODE;
@@ -37,7 +37,7 @@ void Display_Handler(void)
 //				SMG_Write_Byte(LED_send_buf);
 //				return;
 			}
-			if(sx_DisplayStatus_t.b_Event & LED_EVENT_AUTO)		//×Ô¶¯´ò¹âµÆ
+			if(sx_DisplayStatus_t.b_Event & LED_EVENT_AUTO)		//è‡ªåŠ¨æ‰“å…‰ç¯
 			{
 				sx_DisplayStatus_t.b_Event &= ~LED_EVENT_AUTO;
 				LED_send_buf&=~LED_AUTO;
@@ -48,7 +48,7 @@ void Display_Handler(void)
 //				return;
 			}
 		//}
-		if(sx_DisplayStatus_t.b_Event & LED_EVENT_BURNIN)		//ÀÏ»¯Ä£Ê½
+		if(sx_DisplayStatus_t.b_Event & LED_EVENT_BURNIN)		//è€åŒ–æ¨¡å¼
 		{
 			sx_DisplayStatus_t.b_Event &= ~LED_EVENT_BURNIN;
 			LED_send_buf&=~LED_ALL;
@@ -61,7 +61,7 @@ void Display_Handler(void)
 //			SMG_Write_Byte(LED_send_buf);
 //			return;
 		}
-		if(sx_DisplayStatus_t.b_Event & LED_EVENT_OFF)		//¹Ø±ÕËùÓĞµÆ
+		if(sx_DisplayStatus_t.b_Event & LED_EVENT_OFF)		//å…³é—­æ‰€æœ‰ç¯
 		{
 			sx_DisplayStatus_t.b_Event &= ~LED_EVENT_OFF;
 			LED_send_buf&=(LED_OFF);
@@ -70,7 +70,7 @@ void Display_Handler(void)
 //			SMG_Write_Byte(LED_send_buf);
 //			return;
 		}
-		if(sx_DisplayStatus_t.b_sensetype==LED_SENSE_SLEEP)		//ºôÎüµÆ
+		if(sx_DisplayStatus_t.b_sensetype==LED_SENSE_SLEEP)		//å‘¼å¸ç¯
 		{
 			sx_DisplayStatus_t.b_Event &= ~LED_EVENT_SENCE;
 //			if(/*sx_DisplayStatus_t.b_senseonoffflag&&*/sx_DisplayStatus_t.b_sensebreathduty!=0&&sx_DisplayStatus_t.b_sensebreathduty!=20){
@@ -94,7 +94,7 @@ void Display_Handler(void)
 //				displayflag = true;
 //			}
 		}
-		if(sx_DisplayStatus_t.b_Event & LED_EVENT_SENCE)		//¸ĞÓ¦µÆ
+		if(sx_DisplayStatus_t.b_Event & LED_EVENT_SENCE)		//æ„Ÿåº”ç¯
 		{
 			sx_DisplayStatus_t.b_Event &= ~LED_EVENT_SENCE;
 			switch(sx_DisplayStatus_t.b_sensetype)
@@ -157,7 +157,7 @@ void Display_Cb(void)
 {
 	//uint16_t sense_fre = 0;
 	
-	//¸ĞÓ¦µÆ
+	//æ„Ÿåº”ç¯
 	if((sx_DisplayStatus_t.b_sensetype==LED_SENSE_ROTARY ||  sx_DisplayStatus_t.b_sensetype==LED_SENSE_TOUCH) \
 				/*&& b_OnOffFlag_Get() && (!(sx_DisplayStatus_t.b_Event & LED_EVENT_SENCE))*/)
 	{

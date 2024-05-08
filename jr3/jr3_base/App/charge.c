@@ -1,7 +1,7 @@
 #include "charge.h"
 #include <stdlib.h>
 
-//xdata uint16_t const Level_Duty[] = {			//电容目标电压
+//xdata uint16_t const Level_Duty[] = {			//鐢靛鐩爣鐢靛帇
 //										240,240,293,240,240,245,
 //										272,272,310,272,272,259,
 //										298,298,336,300,300,271,
@@ -9,7 +9,7 @@
 //										343,344,343,341,343,278,
 //										362,364,364,362,362,298
 //									};
-xdata uint16_t const Level_Duty[] = {			//电容目标电压
+xdata uint16_t const Level_Duty[] = {			//鐢靛鐩爣鐢靛帇
 										225,225,270,225,225,225,
 										245,245,280,245,245,235,
 										270,270,290,270,270,245,
@@ -21,8 +21,8 @@ xdata uint16_t const Level_Duty[] = {			//电容目标电压
 
 xChargeStatus_t sx_ChargeStatus = {0};
 uint8_t vrefunstableflag = false;
-static xdata uint8_t lastvaluetestcount = 0;	/* 電壓異常計數 */
-static xdata uint8_t supplytestcnt = 0;			/* 上電供電測試周期 */
+static xdata uint8_t lastvaluetestcount = 0;	/* 闆诲鐣板父瑷堟暩 */
+static xdata uint8_t supplytestcnt = 0;			/* 涓婇浕渚涢浕娓│鍛ㄦ湡 */
 static uint8_t vreftestcnt = 0;
 
 void Charge_Duty_Set(uint8_t num)
@@ -44,7 +44,7 @@ void Charge_Handler(void)
 	if(b_SleepMode_Get()==SLEEP_MODE_SLEEP)
 		return;
 	
-	#if 1		/* 電容電壓 */
+	#if 1		/* 闆诲闆诲 */
 	for(i=0;i<5;i++){
 		tempbuf = Get_ADC_Value(ADCChannel400V);
 		sx_ChargeStatus.ul_chargeBuff += tempbuf;
@@ -60,7 +60,7 @@ void Charge_Handler(void)
 	sx_ChargeStatus.ul_chargeBuff = 0;
 	#endif
 	
-	#if 1		/* 供電 */
+	#if 1		/* 渚涢浕 */
 	tempmax = 0;
 	tempmin = 0xffff;
 	for(i=0;i<3;i++){
@@ -189,7 +189,7 @@ void VDD_Test_Handler(void)
 	VREFH = VREFH &~0x01 |0x02;
 }
 
-/* 開機供電波動 */
+/* 闁嬫渚涢浕娉㈠嫊 */
 static uint16_t vreftesttimeout = 0;
 void Charge_Init(void)
 {
@@ -200,7 +200,7 @@ void Charge_Init(void)
 	sx_ChargeStatus.ul_current_duty=Level_Duty[0];
 	sx_ChargeStatus.uc_curpwmduty = 0;
 	
-	/* 上電穩壓檢測 */
+	/* 涓婇浕绌╁妾㈡脯 */
 	#if 0
 	VREFH |= 0x04;		/* Vref = VDD  AIN14 = 2V */
 	VREFH &= ~0x03;
@@ -209,7 +209,7 @@ void Charge_Init(void)
 		if(vreftestcnt)
 		{
 			vreftesttimeout++;
-			curvalue = (uint16_t)(4096000.0/Get_ADC_Value(ADCChannel12)*2);		/* 计算公式：VDD = 4096/r_ad_value3 *(2V/3V/4V) */
+			curvalue = (uint16_t)(4096000.0/Get_ADC_Value(ADCChannel12)*2);		/* 璁＄畻鍏紡锛歏DD = 4096/r_ad_value3 *(2V/3V/4V) */
 			if(curvalue < 3500){if(vrefstabletimes)vrefstabletimes--;}
 			else if(curvalue > 6000){if(vrefstabletimes)vrefstabletimes--;}
 			else if(curvalue > 4000){vrefstabletimes++;vreftesttimeout = 0;}
@@ -230,7 +230,7 @@ void Charge_Init(void)
 	VREFH = VREFH &~0x01 |0x02;
 	#endif
 	
-	/* 供電檢測 */
+	/* 渚涢浕妾㈡脯 */
 	#if 0
 	curvalue = 0;
 	tempmax = 0;
