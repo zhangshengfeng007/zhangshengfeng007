@@ -6,16 +6,16 @@
 
 typedef enum
 {
-    SLEEP_MODE_NULL,        //Õı³£²Ù×÷Ä£Ê½
-    SLEEP_MODE_WAKE,        //»½ĞÑÄ£Ê½
-    SLEEP_MODE_SLEEP        //´ı»úÄ£Ê½
+    SLEEP_MODE_NULL,        //æ­£å¸¸æ“ä½œæ¨¡å¼
+    SLEEP_MODE_WAKE,        //å”¤é†’æ¨¡å¼
+    SLEEP_MODE_SLEEP        //å¾…æœºæ¨¡å¼
 }sleep_mode_type;
 
 typedef struct xSleepStatus_t_
 {
 	uint8_t b_SleepMode;
-	uint32_t l_MaximumWorkCnt;			//×î³¤¹¤×÷Ê±¼ä¼ÆÊ±
-	uint32_t l_NoninductivitCnt;		//ÎŞ¸ĞÓ¦²Ù×÷¼ÆÊ±
+	uint32_t l_MaximumWorkCnt;			//æœ€é•¿å·¥ä½œæ—¶é—´è®¡æ—¶
+	uint32_t l_NoninductivitCnt;		//æ— æ„Ÿåº”æ“ä½œè®¡æ—¶
 }xSleepStatus_t;
 
 

@@ -18,8 +18,8 @@ typedef struct xChargeStatus_t_
 	//uint8_t uc_supplyerrortimes;
 	uint16_t uc_curpwmduty;
 	uint16_t ul_current_duty;
-	uint16_t ul_chargevalue;		// adc´óµçÈİµçÑ¹
-	uint32_t ul_chargeBuff;		// ³äµç400V¼ì²â12¸öÖµÀÛ¼ÓÖµ
+	uint16_t ul_chargevalue;		// adcå¤§ç”µå®¹ç”µå‹
+	uint32_t ul_chargeBuff;		// å……ç”µ400Væ£€æµ‹12ä¸ªå€¼ç´¯åŠ å€¼
 }xChargeStatus_t;
 
 extern xChargeStatus_t sx_ChargeStatus;

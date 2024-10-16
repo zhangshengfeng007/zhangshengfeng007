@@ -11,7 +11,7 @@ void Fan_Handler(void)
 {
 	//uint8_t i;
 	
-	//·çÉÈÒì³£²âÊÔ
+	//é£Žæ‰‡å¼‚å¸¸æµ‹è¯•
 //		if(b_FightLighTouchFanBusy_Get()){
 //			xFanStatus.ul_fanTestTimeCnt = 0;
 //			xFanStatus.ul_RotateCntBuff = 0;
@@ -44,14 +44,14 @@ void Fan_Handler(void)
 					xFanStatus.uc_RotateAbnormalTimes = 0;
 					xFanStatus.b_RotateErrorFlag = true;
 					ErrorType_Set(ERROR_TYPE_FAN);
-					//¹Ø»ú
+					//å…³æœº
 					PowerOnOff_Set(0);
 					b_SleepMode_Set(SLEEP_MODE_WAKE);
 					FightLightReset();
 				}
 				//PA1 = 0;
 			}
-			else{		//5s×Ô¶¯ÍË³ö(²âÊÔ)
+			else{		//5sè‡ªåŠ¨é€€å‡º(æµ‹è¯•)
 				xFanStatus.uc_RotateNormalTimes++;
 				xFanStatus.uc_RotateAbnormalTimes = 0;
 				if(xFanStatus.uc_RotateNormalTimes>=50){
@@ -73,12 +73,12 @@ void Fan_Handler(void)
 		#endif
 	}
 	#endif
-	//¹Ø»úÔËÐÐÊ±¼ä
+	//å…³æœºè¿è¡Œæ—¶é—´
 	if(xFanStatus.b_RotateKeepworkFlag==FAN_OFF)
 		xFanStatus.ul_RotateKeepworkCnt++;
 	else
 		xFanStatus.ul_RotateKeepworkCnt=0;
-	//ÐÝÃßÅÐ¶Ï
+	//ä¼‘çœ åˆ¤æ–­
 	if(xFanStatus.ul_RotateKeepworkCnt > ROTATESLEEPKEEPTIME){
 		xFanStatus.b_RotateKeepworkFlag = FAN_BOOT;
 		FAN_OFF();

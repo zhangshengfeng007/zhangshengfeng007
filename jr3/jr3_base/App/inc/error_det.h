@@ -15,7 +15,7 @@ typedef enum
 
 typedef struct xErrorStatus_t_
 {
-	uint8_t b_errorflashdir:1;			//0Ãğ1ÁÁ
+	uint8_t b_errorflashdir:1;			//0ç­1äº®
 	uint8_t b_errortype;
 	uint8_t b_errorsupplytestcnt;
 	uint16_t uc_errorflashcnt;

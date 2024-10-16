@@ -35,7 +35,7 @@ void Work_Handler(void)
 	{
 		if(b_BurninFlag_Get())		
 		{
-			if(!b_BurninMode_Get()){		//ÀÏ»¯Ä£Ê½
+			if(!b_BurninMode_Get()){		//è€åŒ–æ¨¡å¼
 				if(b_BurninStart_Get()){
 					if(++sx_BurninStatus_t.ul_BurninTestCnt==400)//40
 					{	
@@ -47,21 +47,21 @@ void Work_Handler(void)
 					}
 					Trriger_Light();
 				}
-			}else{		//ÊÙÃüÄ£Ê½
+			}else{		//å¯¿å‘½æ¨¡å¼
 				if(!b_LifeTestMode_Get() && b_BurninStart_Get())
 					Trriger_Light();
 			}
 		}
 		else
 		{
-			if(b_TouchFlag_Get())		// ·ÇÀÏ»¯±ØĞë´¥Ãş
+			if(b_TouchFlag_Get())		// éè€åŒ–å¿…é¡»è§¦æ‘¸
 			{
 				if(b_AutoSwitchFlag_Get()){
 					//ul_SleepModeCnt_Set(0);
-					//sx_FightLightStatus.sl_AutolightTime=0;		//¸Äµ½´¥Ãş
+					//sx_FightLightStatus.sl_AutolightTime=0;		//æ”¹åˆ°è§¦æ‘¸
 					Trriger_Light();
 				}else{
-					if(sx_FightLightStatus.b_KeyPressFlag)		// °´¼ü°´ÏÂ
+					if(sx_FightLightStatus.b_KeyPressFlag)		// æŒ‰é”®æŒ‰ä¸‹
 					{
 						Trriger_Light();
 						sx_FightLightStatus.b_KeyPressFlag=0;
@@ -89,21 +89,21 @@ void Trriger_Light(void)
 	sx_FightLightStatus.b_FightLightTouchFanBusy = true;
 	sx_FightLightStatus.b_FightDisplayBusy = true;
 	
-	//ÖØÖÃ´ò¹â
+	//é‡ç½®æ‰“å…‰
 	sx_FightLightStatus.b_FightLightFlag=false;
 	sx_FightLightStatus.ul_FightLightCnt=0;
-	//¿ªÆô¶¨Ê±Æ÷
+	//å¼€å¯å®šæ—¶å™¨
 	TR0 = 1;
 	sx_FightLightStatus.sl_AutolightTime=0;
 }
 
 void Fight_Light_Times(void)
 {
-	//³äµçÊ±¼ä
+	//å……ç”µæ—¶é—´
 	sx_FightLightStatus.ul_FightLightCnt++;
 	if(sx_FightLightStatus.ul_FightLightCnt>=sx_FightLightStatus.uc_FightLightTime)
 		sx_FightLightStatus.ul_FightLightCnt=sx_FightLightStatus.uc_FightLightTime;
-	//Òì³£¼ì²â³õÊ¼»¯Ê±¼ä
+	//å¼‚å¸¸æ£€æµ‹åˆå§‹åŒ–æ—¶é—´
 	if(sx_FightLightStatus.b_DetInitFlag==DETECTIVE_INIT_ON)
 		sx_FightLightStatus.uc_DetInitCnt++;
 	else
@@ -116,7 +116,7 @@ void Fight_Light_Times(void)
 		sx_FightLightStatus.uc_DetInitCnt=0;
 		sx_FightLightStatus.b_DetInitFlag=DETECTIVE_INIT_FINISH;
 	}
-	//Ã»ÓĞ¸ĞÓ¦ÍË³ö×Ô¶¯´ò¹â
+	//æ²¡æœ‰æ„Ÿåº”é€€å‡ºè‡ªåŠ¨æ‰“å…‰
 	if(b_AutoSwitchFlag_Get())
 		sx_FightLightStatus.sl_AutolightTime++;
 	else

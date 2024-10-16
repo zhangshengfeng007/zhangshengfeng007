@@ -9,15 +9,15 @@ enum FANONOFFTYPE{FAN_BOOT, FAN_OFF, FAN_ON};
 
 typedef struct xFanStatus_t_
 {
-	uint8_t b_RotateErrorFlag:1;		/* ·çÉÈÒì³£ */
-	uint8_t b_halfspeedflag;			/* °ëËÙ˜ËÖ¾ */
-	uint8_t b_RotateKeepworkFlag:3;		/* ¹Ø»ú³ÖĞø¹¤×÷˜ËÖ¾ */
+	uint8_t b_RotateErrorFlag:1;		/* é£æ‰‡å¼‚å¸¸ */
+	uint8_t b_halfspeedflag;			/* åŠé€Ÿæ¨™å¿— */
+	uint8_t b_RotateKeepworkFlag:3;		/* å…³æœºæŒç»­å·¥ä½œæ¨™å¿— */
 	uint8_t uc_RotateNormalTimes;
 	uint8_t uc_RotateAbnormalTimes;
 	uint8_t uc_half_worktime_count;
-	uint16_t ul_RotateKeepworkCnt;		/* ¹Ø»ú³ÖĞø¹¤×÷Ê±¼ä¼ÆÊı */
+	uint16_t ul_RotateKeepworkCnt;		/* å…³æœºæŒç»­å·¥ä½œæ—¶é—´è®¡æ•° */
 	uint16_t ul_fanadcvalue;
-	uint16_t ul_fanadcbuff;		//¸ü¸Ä
+	uint16_t ul_fanadcbuff;		//æ›´æ”¹
 	
 }xFanStatus_t_;
 

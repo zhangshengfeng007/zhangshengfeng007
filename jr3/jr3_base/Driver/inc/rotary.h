@@ -2,7 +2,7 @@
 #define _ROTARY_H
 
 #include "system.h"
-//ÐýÅ¥
+//æ—‹é’®
 
 
 

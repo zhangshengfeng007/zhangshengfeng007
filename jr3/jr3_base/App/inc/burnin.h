@@ -5,18 +5,18 @@
 
 typedef struct xBurninStatus_t_
 {
-	uint8_t b_BurninFlag:1;				// ÀÏ»¯Ä£Ê½
+	uint8_t b_BurninFlag:1;				// è€åŒ–æ¨¡å¼
 	uint8_t b_BurninReadyFlag:1;
-	uint8_t b_BurninMode:1;				//0:ÀÏ»¯Ä£Ê½ 1:ÊÙÃüÄ£Ê½
-	uint8_t b_LifeTestMode:1;			//0:´ò¹â  1:Í£Ö¹
+	uint8_t b_BurninMode:1;				//0:è€åŒ–æ¨¡å¼ 1:å¯¿å‘½æ¨¡å¼
+	uint8_t b_LifeTestMode:1;			//0:æ‰“å…‰  1:åœæ­¢
 	uint8_t b_BurninLastMode;
-	uint8_t b_BurninStart;				//ÆôÍ£±êÖ¾
-	uint8_t OnTestCnt;					//ÀÏ»¯Ä£Ê½½øÈë¼ÆÊı
-	uint8_t OnTouchTimes;				//´¥Ãş¼ÆÊı
-	uint8_t b_BurninCntStart;			//´ò¹â¿ªÆô¼ì²â±êÖ¾
-	uint16_t BurninCntStartCnt;			//´ò¹â¿ªÆô¼ì²â¼ÆÊı
-	uint16_t ul_BurninTestCnt;			//ÀÏ»¯¼ÆÊı
-	uint32_t uc_LifeTesttimeCnt;		//ÊÙÃü¼ÆÊı
+	uint8_t b_BurninStart;				//å¯åœæ ‡å¿—
+	uint8_t OnTestCnt;					//è€åŒ–æ¨¡å¼è¿›å…¥è®¡æ•°
+	uint8_t OnTouchTimes;				//è§¦æ‘¸è®¡æ•°
+	uint8_t b_BurninCntStart;			//æ‰“å…‰å¼€å¯æ£€æµ‹æ ‡å¿—
+	uint16_t BurninCntStartCnt;			//æ‰“å…‰å¼€å¯æ£€æµ‹è®¡æ•°
+	uint16_t ul_BurninTestCnt;			//è€åŒ–è®¡æ•°
+	uint32_t uc_LifeTesttimeCnt;		//å¯¿å‘½è®¡æ•°
 }xBurninStatus_t;
 
 extern xBurninStatus_t sx_BurninStatus_t;

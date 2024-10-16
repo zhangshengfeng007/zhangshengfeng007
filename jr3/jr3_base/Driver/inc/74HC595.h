@@ -2,7 +2,7 @@
 #define _74HC595_H
 
 #include "system.h"
-//LEDÇý¶¯
+//LEDé©±åŠ¨
 
 //enum LEDMODETYPE{	LED_OFF			=0x00,
 //					LED_MODE_6		=0x40,

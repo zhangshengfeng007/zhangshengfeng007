@@ -15,8 +15,8 @@ void Pwm_Init(void)
 	PW1DL = 0x00;		//Duty = 1
 	
 	PW1BH = PW1DH;
-	PW1BL = PW1DL;		//死区B
-	PW1A = 0x00;		//死区A
+	PW1BL = PW1DL;		//姝诲尯B
+	PW1A = 0x00;		//姝诲尯A
 	
 	//PW1CH =  0x77;
 	PW1CH = 0;
@@ -41,8 +41,8 @@ void Pwm_Set(uint16_t Frq_value,uint16_t duty_value)
 	PW1DH = temp_cnt>>8;
 	PW1DL = temp_cnt&0xff;
 	PW1BH = PW1DH;
-	PW1BL = PW1DL;		//死区B
-	PW1A = 0x00;		//死区A
+	PW1BL = PW1DL;		//姝诲尯B
+	PW1A = 0x00;		//姝诲尯A
 	
 	PW1M = PW1En | PWN1RATE | PWNV2 | PWNV1;
 }
