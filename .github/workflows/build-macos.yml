@@ -1,0 +1,33 @@
+name: Build macOS Executable
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pyinstaller pillow openpyxl
+
+    - name: Run build script
+      run: chmod +x build_image_gray_check_macos_v201.sh && ./build_image_gray_check_macos_v201.sh
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: macos-executable
+        path: dist-macos-v201/
